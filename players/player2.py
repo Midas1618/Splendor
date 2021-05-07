@@ -1,6 +1,6 @@
 from base import player
 
-player_02 = player.Player("Trang", 0)
+player_02 = player.Player("T", 0)
 
 def action(Board,arr_player):
   return 0

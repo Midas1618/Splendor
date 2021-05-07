@@ -9,7 +9,7 @@ class Card:
 class Card_Stock(Card):
     def __init__(self, type_stock, score, dict_buy):
         super().__init__(score, dict_buy)
-        self.type_stock = type_stock
+        self.type_stock = type_stock.replace("type_","")
 
     
 class Card_Noble(Card):

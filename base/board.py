@@ -12,6 +12,7 @@ def getType(dict_type):
 
 class Board:
     def __init__(self):
+        self.name = "Board"
         self.stocks = {
             "red": 7,
             "blue": 7,
@@ -85,7 +86,7 @@ class Board:
     
 
 # Lấy thông tin các thẻ trên bàn
-    def getInforCard(self):
+    def getInforCards(self):
         return self.dict_Card_Stocks_Show
 
 # Trả lại thẻ

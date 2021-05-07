@@ -23,6 +23,7 @@ class Player:
         }
         self.card_open = []
         self.card_upside_down = []
+        self.card_noble = []
 
 # Lấy 3 nguyên liệu
     def getThreeStocks(self, color_1, color_2, color_3, board, dict_return):
@@ -94,20 +95,20 @@ class Player:
 # Kiểm tra xem có lật được thẻ hay không
     def checkGetCard(self, Card):
         auto_color = self.stocks["auto_color"]
-        for i in Card.stock:
-            if self.stocks[i] < Card.stocks[i]:
-                if self.stocks[i] + auto_color > Card.stocks[i]:
-                    auto_color = self.stocks[i] + auto_color - Card.stocks[i]
+        for i in Card.stocks:
+            if self.stocks[i] + self.stocks_const[i] < Card.stocks[i]:
+                if self.stocks[i] + self.stocks_const[i] + auto_color > Card.stocks[i]:
+                    auto_color = self.stocks[i] + self.stocks_const[i] + auto_color - Card.stocks[i]
                 else:
                     return False
         return True
 
 # Lật thẻ
-    def getCard(self, Card, board):
+    def getCard(self, Card, board, mine, key):
         '''
           Đây là hàm lấy thẻ cần 1 tham số truyền vào là Card_Stock
         '''
-        if checkGetCard(Card, self) == False:
+        if self.checkGetCard(Card) == False:
             return None
         else:
             stock_return = {"red": 0,
@@ -115,26 +116,38 @@ class Player:
                             "green": 0,
                             "white": 0,
                             "black": 0,
-                            "auto_color": 0, }
+                            "auto_color": 0,}
             self.card_open.append(Card)
             self.score += Card.score
             for i in Card.stocks.keys():
                 stocks_late = self.stocks[i]
                 if stocks_late + self.stocks_const[i] < Card.stocks[i]:
                     auto_color = self.stocks["auto_color"]
-                    self.stocks["auto_color"] = self.stocks["auto_color"] - \
-                        (Card.stocks[i] -
-                         self.stocks[i] - self.stocks_const[i])
-                    self.stocks[i] = self.stocks[i] + auto_color + \
-                        self.stocks_const[i] - Card.stocks[i]
-                    stock_return["auto_color"] = auto_color - \
-                        self.stocks["auto_color"]
+                    self.stocks["auto_color"] = self.stocks["auto_color"] - (Card.stocks[i] - self.stocks[i] - self.stocks_const[i])
+                    self.stocks[i] = self.stocks[i] + auto_color + self.stocks_const[i] - Card.stocks[i]
+                    stock_return["auto_color"] = auto_color - self.stocks["auto_color"]
+                    stock_return[i] = stocks_late
                 else:
-                    self.stocks[i] = stocks_late + \
-                        self.stocks_const[i] - Card.stocks[i]
-                stock_return[i] = stocks_late
+                    self.stocks[i] = stocks_late + self.stocks_const[i] - Card.stocks[i]
+                    stock_return[i] = stocks_late - self.stocks[i]
             self.stocks_const[Card.type_stock] += 1
-            return board
+            if mine == False:
+                board.deleteUpCard(key, Card)
+            else:
+                self.card_upside_down.remove(Card)
+            board = self.getNoble(board) 
+            return board.postStock(stock_return)
+
+# Lấy thẻ Quý tộc nếu có thể
+def getNoble(self,board):
+    for card_Noble in board.dict_Card_Stocks_Show["Noble"]:
+        for i in card_Noble.stocks.keys():
+            if self.stocks_const[i] < card_Noble.stocks[i]:
+                continue
+        self.score += card_Noble.score
+        self.card_noble.append(card_Noble)
+        board.dict_Card_Stocks_Show["Noble"].remove(card_Noble)
+    return board
 
 # Kiểm tra xem có úp được thẻ nữa hay không
     def checkUpsiteDown(self):
@@ -143,6 +156,7 @@ class Player:
         else:
             return False
 
+# Kiểm tra xem có lấy được 3 nguyên liệu hay không
     def checkThreeStocks(self, board, color_1, color_2, color_3):
         if board.stocks[color_1] == 0:
             return False
@@ -152,8 +166,6 @@ class Player:
             return False
         return True
 
-# Kiểm tra xem có lấy được 3 nguyên liệu hay không
-    
 # Kiểm tra xem có lấy được 1 nguyên liệu hay không
     def checkOneStock(self, board, color_1):
         if board.stocks[color_1] <= 3:
