@@ -24,7 +24,6 @@ class Player:
         self.card_open = []
         self.card_upside_down = []
         self.card_noble = []
-
 # Lấy 3 nguyên liệu
     def getThreeStocks(self, color_1, color_2, color_3, board, dict_return):
         '''
@@ -39,7 +38,6 @@ class Player:
             return board.getStock({color_1: 1, color_2: 1, color_3: 1})
         else:
             return None
-
 # Lấy 1 nguyên liệu
     def getOneStock(self, color_1, board, dict_return):
         '''
@@ -52,7 +50,6 @@ class Player:
             return board.getStock({color_1: 2})
         else:
             return None
-
 # Úp thẻ
     def getUpsideDown(self, Card, board, show, key, dict_return):
         '''
@@ -76,22 +73,26 @@ class Player:
                 self.card_upside_down.append(board.dict_Card_Stocks_UpsiteDown[key][0])
                 board.deleteCardInUpsiteDown(key,board.dict_Card_Stocks_UpsiteDown[key][0])
                 return board.getStock({"auto_color": auto_color})
-            
         return board
-
 # Trả thẻ thừa
     def returnStock(self, dict_return, board):
         '''Trả thẻ nếu thừa\n 
         amount là số lượng thẻ trả \n
         dict_return danh sách chọn các thẻ trả'''
         if sum(self.stocks.values()) > 10:
-            if sum(dict_return.values()) == sum(self.stocks.values()) - 10:
+            if sum(dict_return.values()) == sum(self.stocks.values()) - 10 and self.CheckReturn(dict_return):
                 for i in dict_return.keys():
                     self.stocks[i] = self.stocks[i] - dict_return[i]
+                return board.postStock(dict_return)
             else:
-                print("Số lượng thẻ bỏ chưa đúng, Cần sửa lại ngay")
-            return board.postStock(dict_return)
-
+                print("Số lượng thẻ bỏ chưa đúng hoặc số thẻ trả bị âm, Cần sửa lại ngay")
+                return None
+#Kiểm tra thỏa mãn điều kiện trả thẻ hay chưa
+    def CheckReturn(self,dict_return):
+        for i in dict_return.keys():
+            if self.stocks[i] - dict_return[i] < 0:
+                return False
+        return True
 # Kiểm tra xem có lật được thẻ hay không
     def checkGetCard(self, Card):
         auto_color = self.stocks["auto_color"]
@@ -139,15 +140,15 @@ class Player:
             return board.postStock(stock_return)
 
 # Lấy thẻ Quý tộc nếu có thể
-def getNoble(self,board):
-    for card_Noble in board.dict_Card_Stocks_Show["Noble"]:
-        for i in card_Noble.stocks.keys():
-            if self.stocks_const[i] < card_Noble.stocks[i]:
-                continue
-        self.score += card_Noble.score
-        self.card_noble.append(card_Noble)
-        board.dict_Card_Stocks_Show["Noble"].remove(card_Noble)
-    return board
+    def getNoble(self,board):
+        for card_Noble in board.dict_Card_Stocks_Show["Noble"]:
+            for i in card_Noble.stocks.keys():
+                if self.stocks_const[i] < card_Noble.stocks[i]:
+                    continue
+            self.score += card_Noble.score
+            self.card_noble.append(card_Noble)
+            board.dict_Card_Stocks_Show["Noble"].remove(card_Noble)
+        return board
 
 # Kiểm tra xem có úp được thẻ nữa hay không
     def checkUpsiteDown(self):

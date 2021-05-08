@@ -59,7 +59,7 @@ class Board:
         for key in self.dict_Card_Stocks_Show.keys():
             for i in range(4):
                 self.dict_Card_Stocks_Show[key].append(
-                    self.dict_Card_Stocks_UpsiteDown[key][i])
+                    self.dict_Card_Stocks_UpsiteDown[key][0])
                 self.dict_Card_Stocks_UpsiteDown[key].remove(
                     self.dict_Card_Stocks_UpsiteDown[key][0])
         self.dict_Card_Stocks_Show["Noble"].append(

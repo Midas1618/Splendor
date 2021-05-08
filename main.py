@@ -5,6 +5,7 @@ from players import player3 as p3
 from players import player4 as p4
 import pandas as pd
 pVictory = None
+
 def Victory(arr):
     arr_point = [i.score for i in arr]
     max_point = max(arr_point)
@@ -32,27 +33,39 @@ def save_excel(b ,arr):
     result[i.name + " Upsite Down"] = [j.id for j in i.card_upside_down]
   return result
 
-# khởi tạo bàn chơi
+# Khởi tạo bàn chơi
+
 b = board.Board()
 b.LoadBase()
 b.setupCard()
-
-
-
+# Tạo gốc chơi
 result_turn = []
 turn = 1
 
-while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
-    b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-    b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
-    b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
-    b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
-    turn += 1
-    result_turn.append({ "Turn": turn,
-    "Data" : save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])})
+b.hien_the()
+print(b.stocks)
+print(p1.player_01.stocks)
+print(p1.player_01.card_upside_down)
+b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04],True)
+b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04],True)
+b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04],True)
+b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04],False)
+b.hien_the()
+print(b.stocks)
+print(p1.player_01.stocks)
+# print(p1.player_01.card_upside_down[0].id)
 
-data = pd.json_normalize(result_turn,max_level=1)
-data.to_csv("test.csv", index=False)
+# while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
+#     b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+#     b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+#     b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+#     b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+#     turn += 1
+#     result_turn.append({ "Turn": turn,
+#     "Data" : save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])})
+
+# data = pd.json_normalize(result_turn,max_level=1)
+# data.to_csv("test.csv", index=False)
 
 
 
