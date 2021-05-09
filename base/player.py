@@ -73,7 +73,6 @@ class Player:
                 self.card_upside_down.append(board.dict_Card_Stocks_UpsiteDown[key][0])
                 board.deleteCardInUpsiteDown(key,board.dict_Card_Stocks_UpsiteDown[key][0])
                 return board.getStock({"auto_color": auto_color})
-        return board
 # Trả thẻ thừa
     def returnStock(self, dict_return, board):
         '''Trả thẻ nếu thừa\n 
@@ -107,7 +106,11 @@ class Player:
 # Lật thẻ
     def getCard(self, Card, board, mine, key):
         '''
-          Đây là hàm lấy thẻ cần 1 tham số truyền vào là Card_Stock
+          Đây là hàm lật thẻ
+          Card là thẻ\n
+          board là bàn chơi \n 
+          mine là chọn trồng bài đã mở hay thẻ úp của thân hay tên bàn. True thì sẽ lấy thẻ của bản thân, False thì sẽ lấy trong các thẻ trên bàn \n
+          key là loại thẻ cần lấy
         '''
         if self.checkGetCard(Card) == False:
             return None
