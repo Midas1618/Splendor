@@ -40,19 +40,29 @@ b.LoadBase()
 b.setupCard()
 turn = 1
 result_turn = []
+b.hien_the()
+# print(p1.player_01.stocks)
 
-while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
-    print(turn)
-    b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-    b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
-    b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
-    b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
-    turn += 1
-    result_turn.append({ "Turn": turn,
-    "Data" : save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])})
+# b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+# print("done")
+# b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
 
-data = pd.json_normalize(result_turn,max_level=1)
-data.to_csv("test.csv", index=False)
+# print(p1.player_01.stocks)
+# print(b.stocks)
+
+
+# while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
+#     print(turn)
+#     b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+#     b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+#     b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+#     b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+#     turn += 1
+#     result_turn.append({ "Turn": turn,
+#     "Data" : save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])})
+
+# data = pd.json_normalize(result_turn,max_level=1)
+# data.to_csv("test.csv", index=False)
 
 
 

@@ -51,13 +51,11 @@ class Player:
         else:
             return None
 # Úp thẻ
-    def getUpsideDown(self, Card, board, show, key, dict_return):
+    def getUpsideDown(self, Card, board, dict_return):
         '''
           Đây là hàm lấy thẻ úp
           Card là thẻ\n
           board là bàn chơi \n 
-          show là chọn trồng bài đã mở hay thẻ úp. True thì sẽ lấy thẻ trên bàn, False thì sẽ lấy trong chồng bài úp \n
-          key là loại thẻ cần lấy
         '''
         if self.checkUpsiteDown():
             auto_color = 0
@@ -65,13 +63,17 @@ class Player:
                 auto_color = 1
                 self.stocks["auto_color"] += 1
             self.returnStock(dict_return,board)
+            # -------
+            a = self.getPositionCard(board,Card)
+            show = a["show"]
+            key = a["key"]
             if show == True:
                 self.card_upside_down.append(Card)
                 board.deleteUpCard(key, Card)
                 return board.getStock({"auto_color": auto_color})
             else:
-                self.card_upside_down.append(board.dict_Card_Stocks_UpsiteDown[key][0])
-                board.deleteCardInUpsiteDown(key,board.dict_Card_Stocks_UpsiteDown[key][0])
+                self.card_upside_down.append(board.dict_Card_Stocks_UpsiteDown[key][1])
+                board.deleteCardInUpsiteDown(key,board.dict_Card_Stocks_UpsiteDown[key][1])
                 return board.getStock({"auto_color": auto_color})
 # Trả thẻ thừa
     def returnStock(self, dict_return, board):
@@ -95,22 +97,20 @@ class Player:
 # Kiểm tra xem có lật được thẻ hay không
     def checkGetCard(self, Card):
         auto_color = self.stocks["auto_color"]
-        for i in Card.stocks:
+        for i in Card.stocks.keys():
             if self.stocks[i] + self.stocks_const[i] < Card.stocks[i]:
-                if self.stocks[i] + self.stocks_const[i] + auto_color > Card.stocks[i]:
+                if self.stocks[i] + self.stocks_const[i] + auto_color >= Card.stocks[i]:
                     auto_color = self.stocks[i] + self.stocks_const[i] + auto_color - Card.stocks[i]
                 else:
                     return False
         return True
 
 # Lật thẻ
-    def getCard(self, Card, board, mine, key):
+    def getCard(self, Card, board):
         '''
           Đây là hàm lật thẻ
           Card là thẻ\n
           board là bàn chơi \n 
-          mine là chọn trồng bài đã mở hay thẻ úp của thân hay tên bàn. True thì sẽ lấy thẻ của bản thân, False thì sẽ lấy trong các thẻ trên bàn \n
-          key là loại thẻ cần lấy
         '''
         if self.checkGetCard(Card) == False:
             return None
@@ -135,12 +135,38 @@ class Player:
                     self.stocks[i] = stocks_late + self.stocks_const[i] - Card.stocks[i]
                     stock_return[i] = stocks_late - self.stocks[i]
             self.stocks_const[Card.type_stock] += 1
+            # ------------
+            a = self.getPositionCard(board,Card)
+            mine = a["mine"]
             if mine == False:
-                board.deleteUpCard(key, Card)
+                board.deleteUpCard(a["key"], Card)
             else:
                 self.card_upside_down.remove(Card)
             board = self.getNoble(board) 
             return board.postStock(stock_return)
+
+            
+    def getPositionCard(self, board, card):
+        for i in self.card_upside_down:
+            if i.id == card.id:
+                return {
+                    "mine": True,
+                }
+        for i in board.dict_Card_Stocks_Show.keys():
+            for j in board.dict_Card_Stocks_Show[i]:
+                if j.id == card.id:
+                    return{
+                        "key": i,
+                        "mine": False,
+                        "show": True,
+                    }
+        for i in board.dict_Card_Stocks_UpsiteDown.keys():
+            for j in board.dict_Card_Stocks_UpsiteDown[i]:
+                if j.id == card.id:
+                    return{
+                        "key": i,
+                        "show": False,
+                    }
 
 # Lấy thẻ Quý tộc nếu có thể
     def getNoble(self,board):

@@ -50,12 +50,17 @@ class Board:
             else:
                 c = card.Card_Noble(i["score"], i["stock"])
                 self.dict_Card_Stocks_UpsiteDown["Noble"].append(c)
+
+
+    def randomCard(self):
         for i in self.dict_Card_Stocks_UpsiteDown.keys():
             random.shuffle(self.dict_Card_Stocks_UpsiteDown[i])
+        
 
 # Cài đặt cho các thẻ trong bàn chơi
     def setupCard(self):
         '''Thiết lập thẻ cho bàn chơi'''
+        self.randomCard()
         for key in self.dict_Card_Stocks_Show.keys():
             for i in range(4):
                 self.dict_Card_Stocks_Show[key].append(
