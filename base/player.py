@@ -35,6 +35,7 @@ class Player:
             self.stocks[color_2] += 1
             self.stocks[color_3] += 1
             self.returnStock(dict_return,board)
+            print(self.name, "Lấy 3 nguyên liệu thành công")
             return board.getStock({color_1: 1, color_2: 1, color_3: 1})
         else:
             return None
@@ -47,6 +48,7 @@ class Player:
         if self.checkOneStock(board,color_1):
             self.stocks[color_1] += 2
             self.returnStock(dict_return,board)
+            print(self.name,"Lấy 1 nguyên liệu thành công")
             return board.getStock({color_1: 2})
         else:
             return None
@@ -70,11 +72,11 @@ class Player:
             if show == True:
                 self.card_upside_down.append(Card)
                 board.deleteUpCard(key, Card)
-                return board.getStock({"auto_color": auto_color})
             else:
                 self.card_upside_down.append(board.dict_Card_Stocks_UpsiteDown[key][1])
                 board.deleteCardInUpsiteDown(key,board.dict_Card_Stocks_UpsiteDown[key][1])
-                return board.getStock({"auto_color": auto_color})
+            print(self.name,"Úp thẻ ",Card.id," thành công")
+            return board.getStock({"auto_color": auto_color})
 # Trả thẻ thừa
     def returnStock(self, dict_return, board):
         '''Trả thẻ nếu thừa\n 
@@ -142,10 +144,9 @@ class Player:
                 board.deleteUpCard(a["key"], Card)
             else:
                 self.card_upside_down.remove(Card)
-            board = self.getNoble(board) 
-            return board.postStock(stock_return)
-
-            
+            board = self.getNoble(board)
+            print(self.name,"Lật thẻ",Card.id,"thành công")
+            return board.postStock(stock_return)            
     def getPositionCard(self, board, card):
         for i in self.card_upside_down:
             if i.id == card.id:
@@ -167,16 +168,20 @@ class Player:
                         "key": i,
                         "show": False,
                     }
+        print("Thẻ có lẽ đã được lật, nên không tìm thấy trong bài úp, trên bàn chơi.")
 
 # Lấy thẻ Quý tộc nếu có thể
     def getNoble(self,board):
+        card_noble = []
         for card_Noble in board.dict_Card_Stocks_Show["Noble"]:
             for i in card_Noble.stocks.keys():
                 if self.stocks_const[i] < card_Noble.stocks[i]:
-                    continue
+                    return board
             self.score += card_Noble.score
-            self.card_noble.append(card_Noble)
-            board.dict_Card_Stocks_Show["Noble"].remove(card_Noble)
+            card_noble.append(card_Noble)
+            print(self.name,"Nhận được ",card_Noble.score,"điểm từ thẻ quý tộc",card_Noble.id)
+        for i in card_noble:
+            board.dict_Card_Stocks_Show["Noble"].remove(i)
         return board
 
 # Kiểm tra xem có úp được thẻ nữa hay không

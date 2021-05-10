@@ -38,98 +38,53 @@ def save_excel(b ,arr):
 b = board.Board()
 b.LoadBase()
 b.setupCard()
-# Tạo gốc chơi
-result_turn = []
 turn = 1
+result_turn = []
+# b.hien_the()
 
-b.hien_the()
-print(b.stocks)
-print(p1.player_01.stocks)
-print(p1.player_01.card_upside_down)
-
-# nguyên liệu còn 
-def nguyenlieuconlai():
-  nguyenlieucon = []
-  for nguyenlieu in b.stocks:
-    if b.stocks[nguyenlieu] > 0:
-      nguyenlieucon.append(nguyenlieu)
-  nguyenlieucon.remove("auto_color")
-  return nguyenlieucon
-def nguyenlieucan():
-  nguyenlieucan = {}
-  for nguyenlieuconxot in nguyenlieuconlai():
-    if p1.player_01.card_upside_down[0].stocks[nguyenlieuconxot] > 0:
-      nguyenlieucan[nguyenlieuconxot] = p1.player_01.card_upside_down[0].stocks[nguyenlieuconxot]
-  return nguyenlieucan
 def nguyenlieucannhat():
-  luongcan = 0
   nguyenlieucannhat = None
-  for nguyenlieu in nguyenlieucan().keys():
-    if nguyenlieucan()[nguyenlieu] >luongcan:
-      luongcan = nguyenlieucan()[nguyenlieu]
+  soluongcan = 0
+  for nguyenlieu in p1.player_01.card_upside_down[0].stocks.keys():
+    if p1.player_01.card_upside_down[0].stocks[nguyenlieu] > soluongcan:
+      soluongcan = p1.player_01.card_upside_down[0].stocks[nguyenlieu]
       nguyenlieucannhat = nguyenlieu
   return nguyenlieucannhat
+def nguyenlieucon():
+  nguyenlieucon = []
+  for nguyenlieu in b.stocks.keys():
+    if b.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color" and nguyenlieu != nguyenlieucannhat():
+      nguyenlieucon.append(nguyenlieu)
+  return nguyenlieucon
 def nguyenlieucannhi():
-  if len(nguyenlieucan()) > 1:
-    for nguyenlieu in nguyenlieucan():
-      if nguyenlieu != nguyenlieucannhat():
-        if p1.player_01.card_upside_down[0].stocks[nguyenlieu] > p1.player_01.stocks[nguyenlieu]:
-          break
-    return nguyenlieu
-  else:
-    songuyenlieu = 10
-    nguyenlieunhi = None
-    for nguyenlieu in nguyenlieuconlai():
-      if b.stocks[nguyenlieu] < songuyenlieu:
-        songuyenlieu = b.stocks[nguyenlieu]
-        nguyenlieunhi = nguyenlieu
-    return nguyenlieunhi
-def nguyenlieuthuba():
-  if len(nguyenlieucan()) ==3:
-    for nguyenlieuba in nguyenlieucan():
-      if nguyenlieuba != nguyenlieucannhat() and nguyenlieuba != nguyenlieucannhi() and nguyenlieuba in nguyenlieuconlai():
-        return nguyenlieuba
-  else:
-    soluong = 10
-    nguyenlieu3 = None
-    for nguyenlieuitnhat in nguyenlieuconlai():
-      if b.stocks[nguyenlieuitnhat] <soluong and nguyenlieuitnhat != nguyenlieucannhat() and nguyenlieuitnhat != nguyenlieucannhi():
-        soluong = b.stocks[nguyenlieuitnhat]
-        nguyenlieu3 = nguyenlieuitnhat
-    return nguyenlieu3
-def nguyenlieubo1():
-  bo = {}
-  for nguyenlieu in [nguyenlieucannhat(),nguyenlieucannhi(),nguyenlieuthuba()]:
-    if nguyenlieu not in nguyenlieucan():
-      bo[nguyenlieu] = 1
+  luongnguyenlieu = 10
+  nguyenlieuthu2 = None
+  for nguyenlieu in nguyenlieucon():
+    if p1.player_01.card_upside_down[0].stocks[nguyenlieu]>0:
+      return nguyenlieu
+      luongnguyenlieu = -1
       break
-  return bo
-def nguyenlieubo2():
-  bo = {}
-  for nguyenlieu in [nguyenlieucannhat(),nguyenlieucannhi(),nguyenlieuthuba()]:
-    if nguyenlieu not in nguyenlieucan():
-      bo[nguyenlieu] = 1
-  if len(bo) == 1:
-    for nguyenlieu in p1.player_01.stocks.keys():
-      if nguyenlieu not in nguyenlieucan():
-        if nguyenlieu in bo.keys():
-          bo[nguyenlieu] = 2
-        else:
-          bo[nguyenlieu] = 1
+    else:
+      if b.stocks[nguyenlieu] < luongnguyenlieu:
+        luongnguyenlieu = b.stocks[nguyenlieu]
+        nguyenlieuthu2 = nguyenlieu
+  if luongnguyenlieu != -1:
+    return nguyenlieuthu2
+def nguyenlieucanba():
+  luongnguyenlieu = 10
+  nguyenlieuthu3 = None
+  for nguyenlieu in nguyenlieucon():
+    if nguyenlieu != nguyenlieucannhi():
+      if p1.player_01.card_upside_down[0].stocks[nguyenlieu]>0:
+        return nguyenlieu
+        luongnguyenlieu = -1
         break
-  return bo
-def nguyenlieubo3():
-  bo = nguyenlieubo2()
-  for nguyenlieu in p1.player_01.stocks.keys():
-    if nguyenlieu not in nguyenlieucan():
-      if nguyenlieu in bo.keys():
-        if nguyenlieu not in nguyenlieubo1():
-          if p1.player_01.stocks[nguyenlieu] > bo[nguyenlieu]:
-            bo[nguyenlieu] = bo[nguyenlieu] + 1
-            break
-      bo[nguyenlieu] = 1
-      break
-  return bo
+      else:
+        if b.stocks[nguyenlieu] < luongnguyenlieu:
+          luongnguyenlieu = b.stocks[nguyenlieu]
+          nguyenlieuthu3 = nguyenlieu
+  if luongnguyenlieu != -1:
+    return nguyenlieuthu3
 #turn1
 #nếu k có thẻ nào trên tay:
 def moiturn():
@@ -143,54 +98,74 @@ def moiturn():
       if sum(a.stocks.values()) == 10:
         thesenhat = a
     if thesenhat != None:
-      b = p1.player_01.getUpsideDown(thesenhat,b,True,"II","")
+      b = p1.player_01.getUpsideDown(thesenhat,b,{})
     else:
-      IIlonnhat = 0
+      IIlonnhat = -1
       for a in b.dict_Card_Stocks_Show["II"]:
         if a.score > IIlonnhat:
           IIlonnhat = a.score
           thesenhat = a
-      b = p1.player_01.getUpsideDown(thesenhat,b,True,"II","")
-  # nếu có thẻ
+      b = p1.player_01.getUpsideDown(thesenhat,b,{})
   else:
+    # mua thẻ
     if p1.player_01.checkGetCard(p1.player_01.card_upside_down[0]) == True:
-      print("lấy thẻ")
-      p1.player_01.getCard(p1.player_01.card_upside_down[0],b,True,"")
+      print("mua thẻ")
+      p1.player_01.getCard(p1.player_01.card_upside_down[0],b)
+    #nhặt nguyên liệu
+    #nhặt 2 nguyên liệu
     else:
-    #lấy nguyên liệu
-      # tìm nguyên liệu cần nhất trong các nguyên liệu cần
       if p1.player_01.checkOneStock(b,nguyenlieucannhat()) == True:
-        print("lấy 2 nguyên liệu", nguyenlieucannhat())
         p1.player_01.getOneStock(nguyenlieucannhat(),b,{})
       else:
-        #lấy 3 nguyên liệu
-        bo = {}
-        if sum(p1.player_01.stocks.values()) == 8:
-          bo = nguyenlieubo1()
-        if sum(p1.player_01.stocks.values()) == 9:
-          bo = nguyenlieubo2()
-        if sum(p1.player_01.stocks.values()) == 10:
-          bo = nguyenlieubo3()
-
-        print("bỏ",bo)
-        print("lấy 3 nguyên liệu", nguyenlieucannhat(),nguyenlieucannhi(),nguyenlieuthuba())
-        p1.player_01.getThreeStocks(nguyenlieucannhat(),nguyenlieucannhi(),nguyenlieuthuba(),b,bo)
-
-
-for luot in range(7):
+        #úp thẻ nếu có từ 9 nguyên liệu trở lên
+        # tìm nguyên liệu dư
+        if sum(p1.player_01.stocks.values()) > 8:
+          for nguyenlieu in p1.player_01.stocks.keys():
+            if p1.player_01.card_upside_down[0].stocks[nguyenlieu] == 0:
+              bo1 = {nguyenlieu:1}
+              break
+          theseup = None
+          for the in b.dict_Card_Stocks_Show["III"]:
+            if sum(the.stocks.values()) == 7:
+              theseup = the
+          for the in b.dict_Card_Stocks_Show["III"]:
+            if sum(the.stocks.values()) == 10:
+              theseup = the
+          if theseup != None:
+            b = p1.player_01.getUpsideDown(theseup,b,bo1)
+          else:
+            IIlon = 0
+            for the in b.dict_Card_Stocks_Show["II"]:
+              if the.score > IIlon:
+                IIlon = the.score
+                theseup = the
+            b = p1.player_01.getUpsideDown(theseup,b,bo1)
+      # nhặt 3 nguyên liệu
+        else:
+          if p1.player_01.checkThreeStocks(b,nguyenlieucannhat(),nguyenlieucannhi(),nguyenlieucanba()) == True:
+            bo = {}
+            if sum(p1.player_01.stocks.values()) ==8:
+              bo = {nguyenlieucanba():1}
+            p1.player_01.getThreeStocks(nguyenlieucannhat(),nguyenlieucannhi(),nguyenlieucanba(),b,bo)
+b.hien_the() 
+for turn in range(7):
+  print("Lượt: ",turn)
+  # print(p1.player_01.stocks)
   moiturn()
-  print(p1.player_01.stocks)
-# print (b.stocks)
-b.hien_the()
-print(p1.player_01.card_upside_down[0].stocks)
-
+  # print("NL Người chơi: ", p1.player_01.stocks)
+# print(p1.player_01.card_upside_down[0].stocks)
+  print("Điểm :", p1.player_01.score)
+  # print("----------------------------")
 # b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-# b.hien_the()
-# print(b.stocks)
+# print("done")
+# b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+
 # print(p1.player_01.stocks)
-# print(p1.player_01.card_upside_down[0])
+# print(b.stocks)
+
 
 # while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
+#     print(turn)
 #     b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
 #     b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
 #     b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
