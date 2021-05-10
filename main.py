@@ -37,7 +37,7 @@ def save_excel(b ,arr):
 
 b = board.Board()
 b.LoadBase()
-# b.setupCard()
+b.setupCard()
 turn = 1
 result_turn = []
 b.hien_the()
@@ -45,7 +45,7 @@ print(p1.player_01.stocks)
 
 b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
 print("done")
-b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+# b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
 
 print(p1.player_01.stocks, p1.player_01.stocks_const, p1.player_01.score)
 print(b.stocks)
