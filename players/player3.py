@@ -74,7 +74,6 @@ def moiturn(board):
                 if a.score > IIlonnhat:
                     IIlonnhat = a.score
                     thesenhat = a
-            print(thesenhat)
             return player_03.getUpsideDown(thesenhat, board, {})
     else:
         # mua thẻ
