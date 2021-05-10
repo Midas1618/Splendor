@@ -7,12 +7,13 @@ import pandas as pd
 pVictory = None
 
 def Victory(arr):
+    global pVictory
     arr_point = [i.score for i in arr]
     max_point = max(arr_point)
     if max_point > 15:
       arr_point = [1 if i == max else 0 for i in arr_point]
       arr_amount_card = [len(i.card_open) for i in arr]
-      for i in len(arr_point):
+      for i in range(len(arr_point)):
         if arr_point[i] == 1 and arr_amount_card[i] < min:
           min = arr_amount_card[i]
           pVictory = arr[i]
@@ -41,28 +42,28 @@ b.setupCard()
 turn = 1
 result_turn = []
 b.hien_the()
-print(p1.player_01.stocks)
+# print(p1.player_01.stocks)
 
-b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-print("done")
+# b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+# print("done")
 # b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
 
-print(p1.player_01.stocks, p1.player_01.stocks_const, p1.player_01.score)
-print(b.stocks)
+# print(p1.player_01.stocks, p1.player_01.stocks_const, p1.player_01.score)
+# print(b.stocks)
 
 
-# while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
-#     print(turn)
-#     b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-#     b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
-#     b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
-#     b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
-#     turn += 1
-#     result_turn.append({ "Turn": turn,
-#     "Data" : save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])})
+while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
+    print("Lượt:",turn)
+    b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+    b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+    b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+    b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+    turn += 1
+    result_turn.append({ "Turn": turn,
+    "Data" : save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])})
 
-# data = pd.json_normalize(result_turn,max_level=1)
-# data.to_csv("test.csv", index=False)
+data = pd.json_normalize(result_turn,max_level=1)
+data.to_csv("test.csv", index=False)
 
 
 
