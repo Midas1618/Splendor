@@ -160,7 +160,7 @@ class Player:
             a = self.getPositionCard(board, Card)
             mine = a["mine"]
             if mine == False:
-                board.deleteUpCard(a["key"], Card)
+                board = board.deleteUpCard(a["key"], Card)
             else:
                 self.card_upside_down.remove(Card)
             board = self.getNoble(board)
@@ -192,19 +192,21 @@ class Player:
 
 # Lấy thẻ Quý tộc nếu có thể
     def getNoble(self, board):
-        card_noble = []
+        b = []
         for card_Noble in board.dict_Card_Stocks_Show["Noble"]:
+            check = True
             for i in card_Noble.stocks.keys():
                 if self.stocks_const[i] < card_Noble.stocks[i]:
-                    return board
-            self.score += card_Noble.score
-            card_noble.append(card_Noble)
-            error.successColor(self.name + "Nhận được " + str(card_Noble.score)+
-                  "điểm từ thẻ quý tộc" + str(card_Noble.id))
-        for i in card_noble:
-            board.dict_Card_Stocks_Show["Noble"].remove(i)
+                    check = False
+            b.append(check)
+        for i in range(len(b)):
+            if b[i] == True:
+                card_Noble = board.dict_Card_Stocks_Show["Noble"][i]
+                self.score += card_Noble.score
+                self.card_noble.append(card_Noble)
+                error.successColor(self.name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
+                board.deleteCardNoble(card_Noble)
         return board
-
 # Kiểm tra xem có úp được thẻ nữa hay không
     def checkUpsiteDown(self):
         try:

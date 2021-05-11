@@ -35,7 +35,6 @@ class Board:
         }
 
 # Khởi bàn chơi
-
     def LoadBase(self):
         '''
         Hàm tạo ra bàn chơi và 
@@ -76,6 +75,13 @@ class Board:
     def deleteCardInUpsiteDown(self, key, card_stock):
         try:
             self.dict_Card_Stocks_UpsiteDown[key].remove(card_stock)
+        except:
+            pass      
+        return self
+    
+    def deleteCardNoble(self, CardNoble):
+        try:
+            self.dict_Card_Stocks_Show["Noble"].remove(CardNoble)
         except:
             pass      
         return self
