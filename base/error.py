@@ -7,3 +7,7 @@ def errorColor(message):
 def successColor(message):
   print(Fore.GREEN + message, end='')
   print(Style.RESET_ALL)
+
+def RecommendColor(message):
+  print(Fore.YELLOW + message, end='')
+  print(Style.RESET_ALL)

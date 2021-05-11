@@ -144,18 +144,17 @@ class Player:
                 stocks_late = self.stocks[i]
                 if stocks_late + self.stocks_const[i] < Card.stocks[i]:
                     auto_color = self.stocks["auto_color"]
-                    self.stocks["auto_color"] = self.stocks["auto_color"] - \
-                        (Card.stocks[i] - self.stocks[i] -
+                    self.stocks["auto_color"] = self.stocks["auto_color"] - (Card.stocks[i] - self.stocks[i] -
                          self.stocks_const[i])
-                    self.stocks[i] = self.stocks[i] + auto_color + \
-                        self.stocks_const[i] - Card.stocks[i]
-                    stock_return["auto_color"] = auto_color - \
-                        self.stocks["auto_color"]
+                    self.stocks[i] = self.stocks[i] + auto_color + self.stocks_const[i] - Card.stocks[i]
+                    stock_return["auto_color"] = auto_color - self.stocks["auto_color"]
                     stock_return[i] = stocks_late
                 else:
-                    self.stocks[i] = stocks_late + \
-                        self.stocks_const[i] - Card.stocks[i]
-                    stock_return[i] = stocks_late - self.stocks[i]
+                    if self.stocks_const[i] >= Card.stocks[i]:
+                        stock_return[i] = 0
+                    else:
+                        self.stocks[i] = stocks_late + self.stocks_const[i] - Card.stocks[i]
+                        stock_return[i] = stocks_late - self.stocks[i]
             self.stocks_const[Card.type_stock] += 1
             # ------------
             a = self.getPositionCard(board, Card)

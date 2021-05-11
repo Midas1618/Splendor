@@ -2,7 +2,7 @@ import pandas as pd
 from base import card
 import json
 import random
-
+from base import error
 
 def getType(dict_type):
     for j in dict_type.keys():
@@ -74,19 +74,36 @@ class Board:
 
 # Xóa thẻ trong trồng úp
     def deleteCardInUpsiteDown(self, key, card_stock):
-        self.dict_Card_Stocks_UpsiteDown[key].remove(card_stock)
+        try:
+            self.dict_Card_Stocks_UpsiteDown[key].remove(card_stock)
+        except:
+            pass      
         return self
 
 # Thêm thẻ Nguyên liệu
     def appendUpCard(self, key, card_stock):
-        self.dict_Card_Stocks_Show[key].append(card_stock)
-        self.deleteCardInUpsiteDown(key, card_stock)
+        try:
+            self.dict_Card_Stocks_Show[key].append(card_stock)
+            self.deleteCardInUpsiteDown(key, card_stock)
+        except:
+            error.RecommendColor("Hết thẻ rồi, Không thêm nguyên liệu được nữa đâu")
         return self
 
 # Xóa thẻ trên bàn chơi
     def deleteUpCard(self, key, card_stock):
-        self.dict_Card_Stocks_Show[key] = [self.dict_Card_Stocks_UpsiteDown[key][0] if i.id == card_stock.id else i for i in self.dict_Card_Stocks_Show[key] ]
-        self.deleteCardInUpsiteDown(key,self.dict_Card_Stocks_UpsiteDown[key][0])
+        try:
+            try:
+                a = self.dict_Card_Stocks_UpsiteDown[key][0]
+            except:
+                a = None
+            if a != None:
+                self.dict_Card_Stocks_Show[key] = [a if i.id == card_stock.id else i for i in self.dict_Card_Stocks_Show[key] ]
+                self.deleteCardInUpsiteDown(key,a)
+            else:
+                self.dict_Card_Stocks_Show[key].remove(card_stock)
+        except:
+            error.RecommendColor("Không thể xóa thẻ trên bàn vì chắc chẳng còn thẻ đâu")
+            pass
         return self
     
 
