@@ -1,6 +1,6 @@
 from base import player
 import random
-player_04 = player.Player("TH", 0)
+player_04 = player.Player("Thao", 0)
 
 def action(board, arr_player):
     return moiturn(board)

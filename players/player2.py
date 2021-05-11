@@ -1,6 +1,6 @@
 from base import player
 import random
-player_02 = player.Player("T", 0)
+player_02 = player.Player("Trang", 0)
 
 
 def action(board, arr_player):

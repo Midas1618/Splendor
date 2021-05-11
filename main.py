@@ -4,6 +4,7 @@ from players import player2 as p2
 from players import player3 as p3
 from players import player4 as p4
 import pandas as pd
+import random
 pVictory = None
 
 def Victory(arr):
@@ -36,6 +37,8 @@ def save_excel(b ,arr):
     result[i.name + " Upsite Down"] = [j.id for j in i.card_upside_down]
   return result
 
+
+
 # Khởi tạo bàn chơi
 
 b = board.Board()
@@ -44,17 +47,26 @@ b.setupCard()
 turn = 1
 result_turn = []
 
+arr_stt = [1,2,3,4]
+random.shuffle(arr_stt)
+print(arr_stt)
+
+
 print("Lượt:",turn)
 result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04]))
 
 while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
-    b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-    b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
-    b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
-    b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+    for i in arr_stt:
+      if i == 1:
+        b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+      elif i == 2:
+        b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+      elif i == 3:
+        b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+      elif i == 4:
+        b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
     turn += 1
     a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])
-    # print(a)
     result_turn.append(a)
 
 data = pd.json_normalize(result_turn,max_level=0)
