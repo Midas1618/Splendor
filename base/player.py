@@ -205,7 +205,11 @@ class Player:
                 self.score += card_Noble.score
                 self.card_noble.append(card_Noble)
                 error.successColor(self.name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
-                board.deleteCardNoble(card_Noble)
+        for i in self.card_noble:
+            try:
+                board.deleteCardNoble(i)
+            except:
+                continue
         return board
 # Kiểm tra xem có úp được thẻ nữa hay không
     def checkUpsiteDown(self):
@@ -237,6 +241,7 @@ class Player:
 # Kiểm tra xem có lấy được 1 nguyên liệu hay không
     def checkOneStock(self, board, color_1):
         try:
+            
             if board.stocks[color_1] <= 3:
                 return False
             return True

@@ -3,6 +3,7 @@ from players import player1 as p1
 from players import player2 as p2
 from players import player3 as p3
 from players import player4 as p4
+from players import player5 as p5
 import pandas as pd
 import random
 pVictory = None
@@ -28,6 +29,8 @@ def save_excel(b ,arr):
   result[b.name + " Stocks"] = b.stocks.copy()
   for i in b.dict_Card_Stocks_Show.keys():
     result[b.name +" "+ i] = [j.id for j in b.dict_Card_Stocks_Show[i]]
+  for i in b.dict_Card_Stocks_UpsiteDown.keys():
+    result[b.name +"UpsiteDown"+ i] = [j.id for j in b.dict_Card_Stocks_UpsiteDown[i]]
   for i in arr:
     result[i.name + " Score"] = i.score
     result[i.name + " Stocks"] = i.stocks.copy()
@@ -40,40 +43,39 @@ def save_excel(b ,arr):
 
 
 # Khởi tạo bàn chơi
+def RunGame(Luot):
+    global pVictory
+    pVictory = None
+    b = board.Board()
+    b.LoadBase()
+    b.setupCard()
+    turn = 1
+    result_turn = []
 
-b = board.Board()
-b.LoadBase()
-b.setupCard()
-turn = 1
-result_turn = []
+    arr_stt = [1,2,3,4]
+    random.shuffle(arr_stt)
+    print("Lượt:",turn)
+    result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04]))
+    print(arr_stt)
+    while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
+        print("Lượt:",turn)
+        turn+=1
+        for i in arr_stt:
+          if i == 1:
+            b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+          elif i == 2:
+            b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+          elif i == 3:
+            b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+          elif i == 4:
+            b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+        a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])
+        result_turn.append(a)
+    print(pVictory.name)
+    data = pd.json_normalize(result_turn,max_level=0)
+    data.to_csv(Luot + ".csv", index=False)
 
-arr_stt = [1,2,3,4]
-random.shuffle(arr_stt)
-print(arr_stt)
-
-
-print("Lượt:",turn)
-result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04]))
-
-while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
-    for i in arr_stt:
-      if i == 1:
-        b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-      elif i == 2:
-        b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
-      elif i == 3:
-        b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
-      elif i == 4:
-        b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
-    turn += 1
-    a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])
-    result_turn.append(a)
-
-data = pd.json_normalize(result_turn,max_level=0)
-data.to_csv("test.csv", index=False)
-
-
-
+RunGame("1")
 
 
 

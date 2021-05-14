@@ -2,7 +2,6 @@ from base import player
 import random
 player_02 = player.Player("Trang", 0)
 
-
 def action(board, arr_player):
     return moiturn(board)
 
