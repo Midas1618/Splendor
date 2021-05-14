@@ -94,7 +94,7 @@ class Player:
                     self.stocks[i] = self.stocks[i] - dict_return[i]
                 return board.postStock(dict_return)
             else:
-                error.errorColor("Số lượng thẻ bỏ chưa đúng hoặc số thẻ trả bị âm, Cần sửa lại ngay")
+                error.errorColor(self.name + " Số lượng thẻ bỏ chưa đúng hoặc số thẻ trả bị âm, Cần sửa lại ngay")
                 return None
 # Kiểm tra thỏa mãn điều kiện trả thẻ hay chưa
 
