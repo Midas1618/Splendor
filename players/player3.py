@@ -1,235 +1,205 @@
 from base import player
 import random
-import operator
+player_03 = player.Player("Thao", 0)
 
-player_03 = player.Player("NA", 0)
+def action(board,arr_player):
+    if laythe(board,"I") != None:
+        return player_03.getCard(laythe(board,"I"), board)
+    if laythe(board,"II") != None:
+        return player_03.getCard(laythe(board,"II"), board)
+    if laythe(board,"III") != None:
+        return player_03.getCard(laythe(board,"III"), board)
+    stock1 = GetChoose1Stocks(board)
+    if stock1 != None:
+        return player_03.getOneStock(stock1,board,Luachonbothe(stock1,stock1))
+    stock3 = GetChoose3Stocks(board)
+    if stock3 != None:
+        return player_03.getThreeStocks(stock3[0],stock3[1],stock3[2],board,Luachonbothe(stock3[0],stock3[1],stock3[2]))
+    if Upthe(board) != None:
+        return player_03.getUpsideDown(Upthe(board),board, Luachonbothe("auto_color"))
+    return board
 
-def action(board, arr_player):
-    return moiturn(board)
-# list những thẻ có thể lấy ngay
-def listthecothemua(board):
-    thecothelay = []
-    if len(player_03.card_upside_down) > 0:
-        for the in player_03.card_upside_down:
-            if player_03.checkGetCard(the) == True:
-                thecothelay.append(the)
-    for the in board.dict_Card_Stocks_Show["III"]:
-        if player_03.checkGetCard(the) == True:
-            thecothelay.append(the)
-    for the in board.dict_Card_Stocks_Show["II"]:
-        if player_03.checkGetCard(the) == True:
-            thecothelay.append(the)
-    for the in board.dict_Card_Stocks_Show["I"]:
-        if player_03.checkGetCard(the) == True:
-            thecothelay.append(the)
-    return thecothelay
-
-# list những nguyên liệu có thể lấy 2
-def listnguyenlieulay2(board):
-    nguyenlieucothelay2 = []
-    for nguyenlieu in board.stocks.keys():
-        if nguyenlieu != "auto_color" and player_03.checkOneStock(board,nguyenlieu) == True:
-            nguyenlieucothelay2.append(nguyenlieu)
-    return nguyenlieucothelay2
-
-# danh sách những nguyên liệu còn trên bàn
-def listnguyenlieucon(board):
+# Loại bỏ thẻ thừa
+def checknguyenlieucon(board):
     nguyenlieucon = []
     for nguyenlieu in board.stocks.keys():
         if board.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color":
             nguyenlieucon.append(nguyenlieu)
     return nguyenlieucon
 
-# trong những thẻ có thể mua ngay turn này, thẻ nào nhiều điểm nhất
-def thelayngay(board):
-    diemcothelay = -1
-    thelayngay = None
-    for the in listthecothemua(board):
-        if the.score > 0 and the.score > diemcothelay:
-            diemcothelay = the.score
-            thelayngay = the
-    return thelayngay
-
-#hàm định giá điểm
-def tinhdiem(the,player_03):
-    sonlthieunhat = 0
-    for nguyenlieu in the.stocks.keys():
-        if the.stocks[nguyenlieu] - player_03.stocks[nguyenlieu] - player_03.stocks_const[nguyenlieu] > sonlthieunhat:
-            sonlthieunhat = the.stocks[nguyenlieu] -  player_03.stocks[nguyenlieu] - player_03.stocks_const[nguyenlieu]
-    diem = the.score/sonlthieunhat
-    return diem
-
-def danhsachthe(board):
-    danhsachthe = []
-    danhsachthe.extend(player_03.card_upside_down)
-    danhsachthe.extend(board.dict_Card_Stocks_Show["III"])
-    danhsachthe.extend(board.dict_Card_Stocks_Show["II"])
-    danhsachthe.extend(board.dict_Card_Stocks_Show["I"])
-    return danhsachthe
-
-# định giá điểm từng thẻ
-def dictthecodiem(board):
-    thecodiem = {}
-    nlcon = listnguyenlieucon(board)
-    for the in danhsachthe(board):
-        dictthieu = dictnguyenlieuthieu(the)
-        if sum(the.stocks.values()) > 10:
-            thecodiem[the] = 0
-            continue
-        if len(dictthieu) == 0:
-            turn = 1
-        else:
-            turn = max(list(dictthieu.values())) + 1
-        for nguyenlieu in dictthieu.keys():
-            if nguyenlieu not in nlcon:
-                turn = turn + 1
-        diem = (the.score + 0.2)/turn
-        thecodiem[the] = diem
-    return thecodiem
-
-#định giá thẻ trên bàn
-def dictthetrenban(board):
-    thecodiem = {}
-    nlcon = listnguyenlieucon(board)
-    for the in danhsachthe(board):
-        if the not in player_03.card_upside_down:
-            dictthieu = dictnguyenlieuthieu(the)
-            if sum(the.stocks.values()) > 10:
-                thecodiem[the] = 0
-                continue
-            if len(dictthieu) == 0:
-                turn = 1
+def Luachonbothe(*args):
+    dict_bo = {
+        "red":0,
+        "blue":0,
+        "white":0,
+        "green":0,
+        "black":0,
+        "auto_color": 0
+    }
+    #Copy Nguyên liệu ban đầu
+    dict_bd = player_03.stocks.copy()
+    #Thêm Nguyên liệu
+    for x in args:
+        dict_bd[x] += 1
+    #Kiểm tra nguyên liệu còn
+    danhsachcon = checknguyenlieucon(player_03)
+    #Thực hiện bỏ thẻ. Đk bỏ thẻ là bỏ lần lượt.
+    if sum(dict_bd.values()) > 10:
+        n = sum(dict_bd.values()) - 10
+        i = 0
+        while n != 0:
+            if dict_bd[danhsachcon[i]] != 0:
+                dict_bo[danhsachcon[i]] +=1
+                dict_bd[danhsachcon[i]] -=1
+                n -= 1
             else:
-                turn = max(list(dictthieu.values())) + 1
-            for nguyenlieu in dictthieu.keys():
-                if nguyenlieu not in nlcon:
-                    turn = turn + 1
-            diem = (the.score + 0.2)/turn
-            thecodiem[the] = diem
-    return thecodiem
-
-# chọn ra thẻ có điểm cao nhất
-def thetarget(board):
-    diemcaonhat = 0
-    thetarget = None
-    for the in dictthecodiem(board).keys():
-        if dictthecodiem(board)[the] > diemcaonhat:
-            diemcaonhat = dictthecodiem(board)[the]
-            thetarget = the
-    return thetarget
-
-# chọn ra thẻ tốt nhất ngoài danh sách cho trước
-def theduphong(board,listthedachon):
-    diemcaonhat = 0
-    theduphong = None
-    for the in dictthecodiem(board).keys():
-        if dictthecodiem(board)[the] > diemcaonhat and the not in listthedachon:
-            diemcaonhat = dictthecodiem(board)[the]
-            theduphong = the
-    return theduphong
-
-# tìm loại và số lượng nguyên liệu thiếu
-def dictnguyenlieuthieu(the):
-    nguyenlieuthieu = {}
-    for nguyenlieu in the.stocks.keys():
-        if the.stocks[nguyenlieu] > (player_03.stocks[nguyenlieu] + player_03.stocks_const[nguyenlieu]):
-            nguyenlieuthieu[nguyenlieu] = the.stocks[nguyenlieu] - (player_03.stocks[nguyenlieu] + player_03.stocks_const[nguyenlieu])
-    return nguyenlieuthieu    
-
-# chênh giữa nl cần nhiều nhất và nhiều nhì
-def nenlay2nl(the):
-    if len(dictnguyenlieuthieu(the)) == 1:
-        return True
-    chenhlech = 0
-    for luongnlthieu in dictnguyenlieuthieu(the).values():
-        if max(dictnguyenlieuthieu(the).values()) - luongnlthieu != 0 and (max(dictnguyenlieuthieu(the).values()) - luongnlthieu) > chenhlech:
-            chenhlech = max(dictnguyenlieuthieu(the).values()) - luongnlthieu
-    if chenhlech > 1:
-        return True
+                i += 1
+    return dict_bo
+    
+#kiểm tra xem có thể lấy nguyên liệu không (nếu có thì lấy 1 nguyên liệu, không thì lấy 3 nguyên liệu)
+def GetChoose1Stocks (board):
+    nguyenlieucothelay1 = []
+    for nguyenlieu in board.stocks.keys():
+        if nguyenlieu != "auto_color" and player_03.checkOneStock(board,nguyenlieu) == True:
+            nguyenlieucothelay1.append(nguyenlieu)
+    if  len(nguyenlieucothelay1)>0:
+        return nguyenlieucothelay1[0]
     else:
-        return False
-
-# tìm nguyên liệu cần nhất trong thẻ
-def nlcannhat(the):
-    sonlcan = 0
-    nlcannhat = None
-    for nguyenlieu in dictnguyenlieuthieu(the).keys():
-        if dictnguyenlieuthieu(the)[nguyenlieu] == max(list(dictnguyenlieuthieu(the).values())):
-            sonlcan = dictnguyenlieuthieu(the)[nguyenlieu]
-            nlcannhat = nguyenlieu
-            return nguyenlieu
-
-# chấm điểm nguyên liệu có thể lấy
-def listnguyenlieuuutien(board):
-    nguyenlieuvadiem = {}
-    a = {}
-    for nguyenlieu in listnguyenlieucon(board):
-        if nguyenlieu in dictnguyenlieuthieu(thetarget(board)).keys():
-            diem = dictnguyenlieuthieu(thetarget(board))[nguyenlieu]
-        else:
-            diem = board.stocks[nguyenlieu]/10
-        nguyenlieuvadiem[nguyenlieu] = diem
-    a = {k: v for k, v in sorted(nguyenlieuvadiem.items(), key=lambda item: item[1],reverse=True)}
-    return list(a.keys())
-
-# chấm điểm nguyên liệu trên tay (cao càng tệ)
-def listnguyenlieutrentay(board):
-    dictchuaxephang = {}
-    a = {}
-    for nguyenlieu in thetarget(board).stocks.keys():
-        diem = player_03.stocks[nguyenlieu] - thetarget(board).stocks[nguyenlieu]
-        dictchuaxephang[nguyenlieu] = diem
-    a = {k: v for k, v in sorted(dictchuaxephang.items(), key=lambda item: item[1],reverse=True)}
-    return list(a.keys())
-
-# tìm thẻ để úp
-def theseup(board):
-    diemcaonhat = 0
-    thetarget = None
-    for the in dictthetrenban(board).keys():
-        if dictthetrenban(board)[the] > diemcaonhat:
-            diemcaonhat = dictthetrenban(board)[the]
-            thetarget = the
-    return thetarget
-
-def moiturn(board):
-    target = thetarget(board)
-    if thelayngay(board) != None:
-        return player_03.getCard(thelayngay(board),board)
+        return None
+def GetChoose3Stocks (board):
+    nguyenlieucothelay3 =[]  
+    for nguyenlieu in board.stocks.keys():       
+        if board.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color":
+            nguyenlieucothelay3.append(nguyenlieu)
+    if len(nguyenlieucothelay3) > 2 and player_03.checkThreeStocks(board,nguyenlieucothelay3[0], nguyenlieucothelay3[1],nguyenlieucothelay3[2]) == True:
+        return nguyenlieucothelay3
     else:
-        if sum(player_03.stocks.values()) >8:
-            if player_03.checkUpsiteDown() == True:
-                if sum(player_03.stocks.values()) == 9:
-                    bo = {}
-                if sum(player_03.stocks.values()) == 10:
-                    bo = {listnguyenlieutrentay(board)[0]:1}
-                return player_03.getUpsideDown(theseup(board),board,bo)
-            else:
-                if len(listnguyenlieucon(board)) >2:
-                    if sum(player_03.stocks.values()) == 9:
-                        return player_03.getThreeStocks(listnguyenlieuuutien(board)[0],listnguyenlieuuutien(board)[1],listnguyenlieuuutien(board)[2],board,{listnguyenlieuuutien(board)[2]:1,listnguyenlieuuutien(board)[1]:1})
-                    if sum(player_03.stocks.values()) == 10:
-                        return player_03.getThreeStocks(listnguyenlieuuutien(board)[0],listnguyenlieuuutien(board)[1],listnguyenlieuuutien(board)[2],board,{listnguyenlieutrentay(board)[0]:1,listnguyenlieutrentay(board)[1]:1,listnguyenlieutrentay(board)[2]:1})
-                else:
-                    return board
-        if sum(player_03.stocks.values()) == 8:
-            if len(listnguyenlieucon(board)) >2:
-                return player_03.getThreeStocks(listnguyenlieuuutien(board)[0],listnguyenlieuuutien(board)[1],listnguyenlieuuutien(board)[2],board,{listnguyenlieuuutien(board)[2]:1})
-            else:
-                if player_03.checkUpsiteDown() == True:
+        return None
+# úp thẻ
+def Upthe (board):
+    if sum(player_03.stocks.values()) > 7:
+        return board.dict_Card_Stocks_Show["II"][0]
+    else:
+        return None
+    # if sum(player_03.stocks.values()) > 7:
+    #     if sum(player_03.stocks.values()) == 10:
+    #         bo = {}
+    #         for nguyenlieu in player_03.stocks.keys():
+    #             if player_03.stocks[nguyenlieu] >0:
+    #                 bo[nguyenlieu] = 1
+    #                 break
+    #         return player_03.getUpsideDown(board.dict_Card_Stocks_Show["II"][0],board,bo)
+    #     return player_03.getUpsideDown(board.dict_Card_Stocks_Show["II"][0],board,{})
 
-                    return player_03.getUpsideDown(theseup(board),board,{})
-                else:
-                    return board
-        else:
-            # số thẻ trên tay < 8
-            if player_03.checkOneStock(board,nlcannhat(target)) == True:
-                return player_03.getOneStock(nlcannhat(target),board,{})
-            else:
-                if len(listnguyenlieucon(board)) >2:
-                    return player_03.getThreeStocks(listnguyenlieuuutien(board)[0],listnguyenlieuuutien(board)[1],listnguyenlieuuutien(board)[2],board,{})
-                else:
-                    if player_03.checkUpsiteDown() == True:
-                        return player_03.getUpsideDown(theseup(board),board,{})
-                    else:
-                        return board
+# Lấy thẻ
+def laythe (board,loai):
+    for the in board.dict_Card_Stocks_Show[loai]:
+        if player_03.checkGetCard(the) == True:
+            return the
+
+
+
+
+# Xếp hạng các thẻ
+# def LuaChonTheUuTien (board):
+#     diem = 0
+#     theuutien = None
+#     for the in board.dict_Card_Stocks_Show["II"]:
+#         if the.type_stock == "White" or the.type_stock == "Black" or the.type_stock == "Red" and sum(board.stocks.keys()) < 11:
+#             if the.score > diem:
+#                 diem = the.score
+#                 theuutien = the
+#                 return theuutien      
+#         else:
+#             for the in board.dict_Card_Stocks_Show["I"]:
+#                 if the.type_stock == "White" or the.type_stock == "Black" or the.type_stock == "Red" and sum(board.stocks.keys()) < 11:
+#                     if the.score > diem:
+#                         diem = the.score
+#                         theuutien = the
+#                         return theuutien  
+            
+#     if sum(player_03.card_open) == 3:
+#             for the in board.dict_Card_Stocks_Show["III"]:
+#                 if the.type_stock == "White" or the.type_stock == "Black" or the.type_stock == "Red" and sum(board.stocks.keys()) < 11:
+#                     if the.score > diem:
+#                         diem = the.score
+#                         theuutien = the     
+#                         return theuutien
+#                 else:
+#                     for the in board.dict_Card_Stocks_Show["II"]:
+#                         if the.type_stock == "White" or the.type_stock == "Black" or the.type_stock == "Red" and sum(board.stocks.keys()) < 11:
+#                             if the.score > diem:
+#                                 diem = the.score
+#                                 theuutien = the
+#                                 return theuutien 
+#                         else:
+#                             for the in board.dict_Card_Stocks_Show["I"]:
+#                                 if the.type_stock == "White" or the.type_stock == "Black" or the.type_stock == "Red" and sum(board.stocks.keys()) < 11:
+#                                     if the.score > diem:
+#                                         diem = the.score
+#                                         theuutien = the
+#                                         return theuutien  
+
+#xếp hạng nguyên liệu
+# def nguyenlieucannhat(board):
+#     nguyenlieucannhat = None
+#     soluongcan = 0
+#     for nguyenlieu in board.stocks.keys():
+#         if board.stocks[nguyenlieu] > soluongcan:
+#             soluongcan = board.stocks[nguyenlieu]
+#             nguyenlieucannhat = nguyenlieu
+#     return nguyenlieucannhat
+
+
+# def nguyenlieucon(board):
+#     nguyenlieucon = []
+#     for nguyenlieu in board.stocks.keys():
+#         if board.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color" and nguyenlieu != nguyenlieucannhat(board):
+#             nguyenlieucon.append(nguyenlieu)
+#     return nguyenlieucon
+
+
+# def nguyenlieucannhi(board):
+#     luongnguyenlieu = 10
+#     nguyenlieuthu2 = None
+#     for nguyenlieu in nguyenlieucon(board):
+#         if board.stocks[nguyenlieu] > 0:
+#             return nguyenlieu
+#             luongnguyenlieu = -1
+#             break
+#         else:
+#             if board.stocks[nguyenlieu] < luongnguyenlieu:
+#                 luongnguyenlieu = board.stocks[nguyenlieu]
+#                 nguyenlieuthu2 = nguyenlieu
+#     if luongnguyenlieu != -1:
+#         return nguyenlieuthu2
+
+
+# def nguyenlieucanba(board):
+#     luongnguyenlieu = 10
+#     nguyenlieuthu3 = None
+#     for nguyenlieu in nguyenlieucon(board):
+#         if nguyenlieu != nguyenlieucannhi(board):
+#             if board.stocks[nguyenlieu] > 0:
+#                 return nguyenlieu
+#                 luongnguyenlieu = -1
+#                 break
+#             else:
+#                 if board.stocks[nguyenlieu] < luongnguyenlieu:
+#                     luongnguyenlieu = board.stocks[nguyenlieu]
+#                     nguyenlieuthu3 = nguyenlieu
+#     if luongnguyenlieu != -1:
+#         return nguyenlieuthu3
+
+
+
+# # Lấy thẻ
+# def Laythe (board,loai):
+#     for the in board.dict_Card_Stocks_Show[loai]:
+#         if player_03.checkGetCard(the) == True:
+#             return the
+    
+
+
+        
+

@@ -5,10 +5,10 @@ player_04 = player.Player("Hieu", 0)
 
 
 def action(board, arr_player):
-    return turn(board)
+    return turn(board, player_04)
 
 
-def turn(board):
+def turn(board, player_04):
     thecothelay = []
 
     if len(player_04.card_upside_down) > 0:
@@ -37,7 +37,7 @@ def turn(board):
         if board.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color":
             nguyenlieucon.append(nguyenlieu)
     
-
+    #action
     #Lấy thẻ
     if len(thecothelay) > 0:
         list_card_value = []
@@ -142,6 +142,7 @@ def turn(board):
                     bo[nguyenlieu] = 1
                     break
             return player_04.getUpsideDown(get_card_value(board), board, bo)
+    
     return board
 
 
@@ -219,12 +220,22 @@ def get_card_value(board):
         for card in list(board.dict_Card_Stocks_Show[type_card]):
             if card.score == 0:
                 list_card_process.append(card)
-                dict_card_value[card.id] = math.sqrt(
-                        sum(list(card.stocks.values()))+1.78)
+                sum = 0
+                for nguyenlieu in card.stocks.keys():
+                    if card.stocks[nguyenlieu]- player_04.stocks[nguyenlieu] > 0:
+                        sum += card.stocks[nguyenlieu]- player_04.stocks[nguyenlieu]
+                    else:
+                        sum += 0
+                dict_card_value[card.id] = math.sqrt(sum+1.78)
             else:
+                sum = 0
                 list_card_process.append(card)
-                dict_card_value[card.id] = sum(
-                    list(card.stocks.values()))/card.score
+                for nguyenlieu in card.stocks.keys():
+                    if card.stocks[nguyenlieu]- player_04.stocks[nguyenlieu] > 0:
+                        sum += card.stocks[nguyenlieu]- player_04.stocks[nguyenlieu]
+                    else:
+                        sum += 0
+                dict_card_value[card.id] = sum/card.score
     dict_card_process = {}
     values = list(dict_card_value.values())
     id = list(dict_card_value.values())
@@ -235,3 +246,14 @@ def get_card_value(board):
         id.remove(id[values.index(max(values))])
         values.remove(max(values))    
     return list_card_get[0]
+
+
+
+
+
+
+
+
+
+
+

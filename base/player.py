@@ -204,7 +204,7 @@ class Player:
                 card_Noble = board.dict_Card_Stocks_Show["Noble"][i]
                 self.score += card_Noble.score
                 self.card_noble.append(card_Noble)
-                error.successColor(self.name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
+                error.RecommendColor(self.name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
         for i in self.card_noble:
             try:
                 board.deleteCardNoble(i)

@@ -54,9 +54,16 @@ def RunGame(Luot):
 
     arr_stt = [1,2,3,4]
     random.shuffle(arr_stt)
-    print("Lượt:",turn)
+    for i in range(len(arr_stt)):
+        if arr_stt[i] == 1:
+          p1.player_01.name = p1.player_01.name +" "+ str(i+1)
+        elif arr_stt[i] == 2:
+          p2.player_02.name = p2.player_02.name +" "+ str(i+1)
+        elif arr_stt[i] == 3:
+          p3.player_03.name = p3.player_03.name +" "+ str(i+1)
+        elif arr_stt[i] == 4:
+          p4.player_04.name = p4.player_04.name +" "+ str(i+1)
     result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04]))
-    print(arr_stt)
     while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
         print("Lượt:",turn)
         turn+=1
@@ -74,8 +81,6 @@ def RunGame(Luot):
     print(pVictory.name)
     data = pd.json_normalize(result_turn,max_level=0)
     data.to_csv(Luot + ".csv", index=False)
-
-RunGame("1")
 
 
 
