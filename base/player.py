@@ -111,14 +111,13 @@ class Player:
             for i in Card.stocks.keys():
                 if self.stocks[i] + self.stocks_const[i] < Card.stocks[i]:
                     if self.stocks[i] + self.stocks_const[i] + auto_color >= Card.stocks[i]:
-                        auto_color = self.stocks[i] + \
-                            self.stocks_const[i] + auto_color - Card.stocks[i]
+                        auto_color = self.stocks[i] + self.stocks_const[i] + auto_color - Card.stocks[i]
                     else:
                         return False
             return True
         except AttributeError:
             error.errorColor("Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
-            return False
+        return False
 
 
 # Lật thẻ

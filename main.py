@@ -7,7 +7,6 @@ from players import player5 as p5
 import pandas as pd
 import random
 pVictory = None
-
 def Victory(arr):
     global pVictory
     arr_point = [i.score for i in arr]
@@ -40,7 +39,9 @@ def save_excel(b ,arr):
     result[i.name + " Upsite Down"] = [j.id for j in i.card_upside_down]
   return result
 
-
+def checkNone(b,player):
+  if b == None:
+    print("Lỗi của :",player.name)
 
 # Khởi tạo bàn chơi
 def RunGame(Luot):
@@ -70,18 +71,21 @@ def RunGame(Luot):
         for i in arr_stt:
           if i == 1:
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+            checkNone(b,p1.player_01)
           elif i == 2:
             b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+            checkNone(b,p2.player_02)
           elif i == 3:
             b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+            checkNone(b,p3.player_03)
           elif i == 4:
             b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+            checkNone(b,p4.player_04)
         a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])
         result_turn.append(a)
     print(pVictory.name)
     data = pd.json_normalize(result_turn,max_level=0)
     data.to_csv(Luot + ".csv", index=False)
-
-
-
+    print("So luong the quy toc con lai",len(b.dict_Card_Stocks_Show["Noble"]))
+RunGame("50")
 
