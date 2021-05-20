@@ -4,6 +4,7 @@ from base import error
 class Player:
     # Khởi tạo một người chơi
     def __init__(self, name, score):
+        self.message = ""
         self.name = name
         self.score = score
         self.stocks = {
@@ -35,6 +36,7 @@ class Player:
             self.stocks[color_1] += 1
             self.stocks[color_2] += 1
             self.stocks[color_3] += 1
+            self.message = self.name +" Get three stock: " + color_1 + "," + color_2 + "," +color_3+"."
             self.returnStock(dict_return, board)
             error.successColor(self.name +" Lấy 3 nguyên liệu thành công")
             return board.getStock({color_1: 1, color_2: 1, color_3: 1})
@@ -49,6 +51,7 @@ class Player:
         '''
         if self.checkOneStock(board, color_1):
             self.stocks[color_1] += 2
+            self.message = self.name +" Get One stock: " + color_1
             self.returnStock(dict_return, board)
             error.successColor(self.name + "Lấy 1 nguyên liệu thành công")
             return board.getStock({color_1: 2})
@@ -75,11 +78,13 @@ class Player:
             if show == True:
                 self.card_upside_down.append(Card)
                 board.deleteUpCard(key, Card)
+                self.message = self.name +" Get UpsiteDown id =" + str(Card.id)
             else:
                 self.card_upside_down.append(
                     board.dict_Card_Stocks_UpsiteDown[key][1])
                 board.deleteCardInUpsiteDown(
                     key, board.dict_Card_Stocks_UpsiteDown[key][1])
+                self.message = self.name +" Get UpsiteDown in Upsite Board type: " +key+" id = " + str(Card.id)
             error.successColor(self.name + " Úp thẻ " + str(Card.id) + " thành công")
             return board.getStock({"auto_color": auto_color})
 # Trả thẻ thừa
@@ -90,8 +95,11 @@ class Player:
         dict_return danh sách chọn các thẻ trả'''
         if sum(self.stocks.values()) > 10:
             if sum(dict_return.values()) == sum(self.stocks.values()) - 10 and self.CheckReturn(dict_return):
+                self.message += " Return stock: "
                 for i in dict_return.keys():
                     self.stocks[i] = self.stocks[i] - dict_return[i]
+                    if dict_return[i] != 0:
+                        self.message += i + ":" + str(dict_return[i])
                 return board.postStock(dict_return)
             else:
                 error.errorColor(self.name + " Số lượng thẻ bỏ chưa đúng hoặc số thẻ trả bị âm, Cần sửa lại ngay")
@@ -138,6 +146,7 @@ class Player:
                             "black": 0,
                             "auto_color": 0, }
             self.card_open.append(Card)
+            self.message = self.name + " Get Card = " + str(Card.id)
             self.score += Card.score
             for i in Card.stocks.keys():
                 stocks_late = self.stocks[i]
@@ -203,6 +212,7 @@ class Player:
                 card_Noble = board.dict_Card_Stocks_Show["Noble"][i]
                 self.score += card_Noble.score
                 self.card_noble.append(card_Noble)
+                self.message += "Nhan the quy toc id = " + str(card_Noble.id)
                 error.RecommendColor(self.name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
         for i in self.card_noble:
             try:

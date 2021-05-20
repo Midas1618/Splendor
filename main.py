@@ -39,7 +39,15 @@ def save_excel(b ,arr):
     result[i.name + " Upsite Down"] = [j.id for j in i.card_upside_down]
   return result
 
+df_message = pd.DataFrame({"Action":[]})
+arr_message = []
+def saveAction(t):
+  arr_message.append(t)
+
+
+
 def checkNone(b,player):
+  saveAction(player.message)
   if b == None:
     print("Lỗi của :",player.name)
 
@@ -86,6 +94,8 @@ def RunGame(Luot):
     print(pVictory.name)
     data = pd.json_normalize(result_turn,max_level=0)
     data.to_csv(Luot + ".csv", index=False)
+    df_message["Action"] = arr_message
+    df_message.to_csv("Action"+Luot+".csv",index=False) 
     print("So luong the quy toc con lai",len(b.dict_Card_Stocks_Show["Noble"]))
 RunGame("50")
 
