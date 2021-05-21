@@ -9,7 +9,6 @@ def getType(dict_type):
         if dict_type[j] == 1:
             return j
 
-
 class Board:
     def __init__(self):
         self.name = "Board"
@@ -35,19 +34,19 @@ class Board:
         }
     @property
     def stocks(self):
-        return self.__stocks
+        return self.__stocks.copy()
     @stocks.setter
     def setStocks(self,value):
         self.__stocks = value
     @property
     def dict_Card_Stocks_Show(self):
-        return self.__dict_Card_Stocks_Show
+        return self.__dict_Card_Stocks_Show.copy()
     @dict_Card_Stocks_Show.setter
     def setDict_Card_Stocks_Show(self,value):
         self.__dict_Card_Stocks_Show = value
     @property
     def dict_Card_Stocks_UpsiteDown(self):
-        return self.__dict_Card_Stocks_UpsiteDown
+        return self.__dict_Card_Stocks_UpsiteDown.copy()
     @dict_Card_Stocks_UpsiteDown.setter
     def setDict_Card_Stocks_UpsiteDown(self,value):
         self.__dict_Card_Stocks_UpsiteDown= value
@@ -59,13 +58,24 @@ class Board:
         sắp xếp ngẫu nhiên các thẻ trong bộ úp'''
         with open('Cards_Splendor.json') as datafile:
             data = json.load(datafile)
+        Ma = ""
+        stt = 1
         for i in data:
+            if stt <= 40:
+                Ma = "I_" + str(stt)
+            elif stt <= 70:
+                Ma = "II_" + str(stt - 40)
+            elif stt <= 90:
+                Ma = "III_" + str(stt - 70)
+            else : 
+                Ma = "Noble_"+ str(stt - 90)
+            stt+=1
             if i["type"] != "Noble":
-                c = card.Card_Stock(
+                c = card.Card_Stock(Ma,
                     getType(i["type_stock"]), i["score"], i["stock"])
                 self.__dict_Card_Stocks_UpsiteDown[i["type"]].append(c)
             else:
-                c = card.Card_Noble(i["score"], i["stock"])
+                c = card.Card_Noble(Ma,i["score"], i["stock"])
                 self.__dict_Card_Stocks_UpsiteDown["Noble"].append(c)
 
 

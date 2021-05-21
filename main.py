@@ -1,3 +1,4 @@
+from base.player import Player
 from base import board
 from players import player1 as p1
 from players import player2 as p2
@@ -6,6 +7,8 @@ from players import player4 as p4
 from players import player5 as p5
 import pandas as pd
 import random
+
+
 
 pVictory = None
 def Victory(arr):
@@ -51,10 +54,10 @@ def checkNone(b,player,turn):
   saveAction("Lượt: " + str(turn) +" "+player.message)
   if b == None:
     print("Lỗi của :",player.name)
-# b = board.Board()
-# b.LoadBase()
-# b.setupCard()
-# b.hien_the()
+b = board.Board()
+b.LoadBase()
+b.setupCard()
+b.hien_the()
 # p1.player_01.setStocks = {
 #             "red": 7,
 #             "blue": 7,
@@ -63,8 +66,17 @@ def checkNone(b,player,turn):
 #             "black": 7,
 #             "auto_color": 0,
 #         }
-# b = p1.player_01.getCard(b.dict_Card_Stocks_Show["I"][0],b)
-# print(p1.player_01.stocks)
+
+# the = b.dict_Card_Stocks_Show["I"][0]
+# max = -1
+# nguyenlieu = "red"
+# the.stocks["red"] = 10
+# # if the.stocks[nguyenlieu] > max:
+# #   the.stocks[nguyenlieu] = max
+# for i in a.stocks.key():
+#   a.stocks["red"] = 0
+
+# print(a.stocks)
 # b.hien_the()
 # Khởi tạo bàn chơi
 def RunGame(Luot):
@@ -111,5 +123,5 @@ def RunGame(Luot):
     df_message["Action"] = arr_message
     df_message.to_csv("Action"+Luot+".csv",index=False) 
     print("So luong the quy toc con lai",len(b.dict_Card_Stocks_Show["Noble"]))
-RunGame("51")
+# RunGame("51")
 

@@ -29,7 +29,6 @@ class Player:
     @property
     def name(self):
         return self.__name
-    @name.setter
     def setName(self,value):
         self.__name = value
 #Score   
@@ -42,14 +41,14 @@ class Player:
 #Stock 
     @property
     def stocks(self):
-        return self.__stocks
+        return self.__stocks.copy()
     @stocks.setter
     def setStocks(self,value):
         self.__stocks = value
 #Stocks Const   
     @property
     def stocks_const(self):
-        return self.__stocks_const
+        return self.__stocks_const.copy()
     @stocks_const.setter
     def setStocks_const(self,value):
         self.__stocks_const = value
@@ -121,7 +120,6 @@ class Player:
             if board.stocks["auto_color"] >= 1:
                 auto_color = 1
                 self.__stocks["auto_color"] += 1
-            self.returnStock(dict_return, board)
             # -------
             a = self.getPositionCard(board, Card)
             show = a["show"]
@@ -136,6 +134,7 @@ class Player:
                 board.deleteCardInUpsiteDown(
                     key, board.dict_Card_Stocks_UpsiteDown[key][1])
                 self.message = self.__name +" Get UpsiteDown in Upsite Board type: " +key+" id = " + str(Card.id)
+            self.returnStock(dict_return, board)
             error.successColor(self.__name + " Úp thẻ " + str(Card.id) + " thành công")
             return board.getStock({"auto_color": auto_color})
 # Trả thẻ thừa
@@ -287,6 +286,8 @@ class Player:
 
     def checkThreeStocks(self, board, color_1, color_2, color_3):
         try:
+            if color_1 == color_2 or color_1 == color_3 or color_2 == color_3:
+                return False
             if board.stocks[color_1] == 0:
                 return False
             elif board.stocks[color_2] == 0:
