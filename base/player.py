@@ -5,9 +5,9 @@ class Player:
     # Khởi tạo một người chơi
     def __init__(self, name, score):
         self.message = ""
-        self.name = name
-        self.score = score
-        self.stocks = {
+        self.__name = name
+        self.__score = score
+        self.__stocks = {
             "red": 0,
             "blue": 0,
             "green": 0,
@@ -15,16 +15,67 @@ class Player:
             "black": 0,
             "auto_color": 0,
         }
-        self.stocks_const = {
+        self.__stocks_const = {
             "red": 0,
             "blue": 0,
             "green": 0,
             "white": 0,
             "black": 0,
         }
-        self.card_open = []
-        self.card_upside_down = []
-        self.card_noble = []
+        self.__card_open = []
+        self.__card_upside_down = []
+        self.__card_noble = []
+#Name
+    @property
+    def name(self):
+        return self.__name
+    @name.setter
+    def setName(self,value):
+        self.__name = value
+#Score   
+    @property
+    def score(self):
+        return self.__score
+    @score.setter
+    def setScore(self,value):
+        self.__score = value
+#Stock 
+    @property
+    def stocks(self):
+        return self.__stocks
+    @stocks.setter
+    def setStocks(self,value):
+        self.__stocks = value
+#Stocks Const   
+    @property
+    def stocks_const(self):
+        return self.__stocks_const
+    @stocks_const.setter
+    def setStocks_const(self,value):
+        self.__stocks_const = value
+#card_open    
+    @property
+    def card_open(self):
+        return self.__card_open
+    @card_open.setter
+    def setCard_open(self,value):
+        self.__card_open = value
+#card_upside_down
+    @property
+    def card_upside_down(self):
+        return self.__card_upside_down
+    @card_upside_down.setter
+    def setCard_open(self,value):
+        self.__card_upside_down = value
+#card_noble
+    @property
+    def card_noble(self):
+        return self.__card_noble
+    @card_noble.setter
+    def setCard_noble(self,value):
+        self.__card_noble = value
+
+
 # Lấy 3 nguyên liệu
 
     def getThreeStocks(self, color_1, color_2, color_3, board, dict_return):
@@ -33,12 +84,12 @@ class Player:
           Màu sắc có kiểu dữ liệu là string.vd: "red", "blue","white"
         '''
         if self.checkThreeStocks(board, color_1, color_2, color_3):
-            self.stocks[color_1] += 1
-            self.stocks[color_2] += 1
-            self.stocks[color_3] += 1
-            self.message = self.name +" Get three stock: " + color_1 + "," + color_2 + "," +color_3+"."
+            self.__stocks[color_1] += 1
+            self.__stocks[color_2] += 1
+            self.__stocks[color_3] += 1
+            self.message = self.__name +" Get three stock: " + color_1 + "," + color_2 + "," +color_3+"."
             self.returnStock(dict_return, board)
-            error.successColor(self.name +" Lấy 3 nguyên liệu thành công")
+            error.successColor(self.__name +" Lấy 3 nguyên liệu thành công")
             return board.getStock({color_1: 1, color_2: 1, color_3: 1})
         else:
             return None
@@ -50,10 +101,10 @@ class Player:
           Màu sắc có kiểu dữ liệu là string.vd: "red"
         '''
         if self.checkOneStock(board, color_1):
-            self.stocks[color_1] += 2
-            self.message = self.name +" Get One stock: " + color_1
+            self.__stocks[color_1] += 2
+            self.message = self.__name +" Get One stock: " + color_1
             self.returnStock(dict_return, board)
-            error.successColor(self.name + "Lấy 1 nguyên liệu thành công")
+            error.successColor(self.__name + "Lấy 1 nguyên liệu thành công")
             return board.getStock({color_1: 2})
         else:
             return None
@@ -69,23 +120,23 @@ class Player:
             auto_color = 0
             if board.stocks["auto_color"] >= 1:
                 auto_color = 1
-                self.stocks["auto_color"] += 1
+                self.__stocks["auto_color"] += 1
             self.returnStock(dict_return, board)
             # -------
             a = self.getPositionCard(board, Card)
             show = a["show"]
             key = a["key"]
             if show == True:
-                self.card_upside_down.append(Card)
+                self.__card_upside_down.append(Card)
                 board.deleteUpCard(key, Card)
-                self.message = self.name +" Get UpsiteDown id =" + str(Card.id)
+                self.message = self.__name +" Get UpsiteDown id =" + str(Card.id)
             else:
-                self.card_upside_down.append(
+                self.__card_upside_down.append(
                     board.dict_Card_Stocks_UpsiteDown[key][1])
                 board.deleteCardInUpsiteDown(
                     key, board.dict_Card_Stocks_UpsiteDown[key][1])
-                self.message = self.name +" Get UpsiteDown in Upsite Board type: " +key+" id = " + str(Card.id)
-            error.successColor(self.name + " Úp thẻ " + str(Card.id) + " thành công")
+                self.message = self.__name +" Get UpsiteDown in Upsite Board type: " +key+" id = " + str(Card.id)
+            error.successColor(self.__name + " Úp thẻ " + str(Card.id) + " thành công")
             return board.getStock({"auto_color": auto_color})
 # Trả thẻ thừa
 
@@ -93,38 +144,38 @@ class Player:
         '''Trả thẻ nếu thừa\n
         amount là số lượng thẻ trả \n
         dict_return danh sách chọn các thẻ trả'''
-        if sum(self.stocks.values()) > 10:
-            if sum(dict_return.values()) == sum(self.stocks.values()) - 10 and self.CheckReturn(dict_return):
+        if sum(self.__stocks.values()) > 10:
+            if sum(dict_return.values()) == sum(self.__stocks.values()) - 10 and self.CheckReturn(dict_return):
                 self.message += " Return stock: "
                 for i in dict_return.keys():
-                    self.stocks[i] = self.stocks[i] - dict_return[i]
+                    self.__stocks[i] = self.__stocks[i] - dict_return[i]
                     if dict_return[i] != 0:
                         self.message += i + ":" + str(dict_return[i])
                 return board.postStock(dict_return)
             else:
-                error.errorColor(self.name + " Số lượng thẻ bỏ chưa đúng hoặc số thẻ trả bị âm, Cần sửa lại ngay")
+                error.errorColor(self.__name + " Số lượng thẻ bỏ chưa đúng hoặc số thẻ trả bị âm, Cần sửa lại ngay")
                 return None
 # Kiểm tra thỏa mãn điều kiện trả thẻ hay chưa
 
     def CheckReturn(self, dict_return):
         for i in dict_return.keys():
-            if self.stocks[i] - dict_return[i] < 0:
+            if self.__stocks[i] - dict_return[i] < 0:
                 return False
         return True
 # Kiểm tra xem có lật được thẻ hay không
 
     def checkGetCard(self, Card):
         try:
-            auto_color = self.stocks["auto_color"]
+            auto_color = self.__stocks["auto_color"]
             for i in Card.stocks.keys():
-                if self.stocks[i] + self.stocks_const[i] < Card.stocks[i]:
-                    if self.stocks[i] + self.stocks_const[i] + auto_color >= Card.stocks[i]:
-                        auto_color = self.stocks[i] + self.stocks_const[i] + auto_color - Card.stocks[i]
+                if self.__stocks[i] + self.__stocks_const[i] < Card.stocks[i]:
+                    if self.__stocks[i] + self.__stocks_const[i] + auto_color >= Card.stocks[i]:
+                        auto_color = self.__stocks[i] + self.__stocks_const[i] + auto_color - Card.stocks[i]
                     else:
                         return False
             return True
         except AttributeError:
-            error.errorColor("Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
+            error.errorColor("GetCard Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
         return False
 
 
@@ -145,38 +196,38 @@ class Player:
                             "white": 0,
                             "black": 0,
                             "auto_color": 0, }
-            self.card_open.append(Card)
-            self.message = self.name + " Get Card = " + str(Card.id)
-            self.score += Card.score
+            self.__card_open.append(Card)
+            self.message = self.__name + " Get Card = " + str(Card.id)
+            self.__score += Card.score
             for i in Card.stocks.keys():
-                stocks_late = self.stocks[i]
-                if stocks_late + self.stocks_const[i] < Card.stocks[i]:
-                    auto_color = self.stocks["auto_color"]
-                    self.stocks["auto_color"] = self.stocks["auto_color"] - (Card.stocks[i] - self.stocks[i] -
-                         self.stocks_const[i])
-                    self.stocks[i] = self.stocks[i] + auto_color + self.stocks_const[i] - Card.stocks[i]
-                    stock_return["auto_color"] = auto_color - self.stocks["auto_color"]
+                stocks_late = self.__stocks[i]
+                if stocks_late + self.__stocks_const[i] < Card.stocks[i]:
+                    auto_color = self.__stocks["auto_color"]
+                    self.__stocks["auto_color"] = self.__stocks["auto_color"] - (Card.stocks[i] - self.__stocks[i] -
+                         self.__stocks_const[i])
+                    self.__stocks[i] = self.__stocks[i] + (auto_color-self.__stocks["auto_color"]) + self.__stocks_const[i] - Card.stocks[i]
+                    stock_return["auto_color"] = auto_color - self.__stocks["auto_color"]
                     stock_return[i] = stocks_late
                 else:
-                    if self.stocks_const[i] >= Card.stocks[i]:
+                    if self.__stocks_const[i] >= Card.stocks[i]:
                         stock_return[i] = 0
                     else:
-                        self.stocks[i] = stocks_late + self.stocks_const[i] - Card.stocks[i]
-                        stock_return[i] = stocks_late - self.stocks[i]
-            self.stocks_const[Card.type_stock] += 1
+                        self.__stocks[i] = stocks_late + self.__stocks_const[i] - Card.stocks[i]
+                        stock_return[i] = stocks_late - self.__stocks[i]
+            self.__stocks_const[Card.type_stock] += 1
             # ------------
             a = self.getPositionCard(board, Card)
             mine = a["mine"]
             if mine == False:
                 board = board.deleteUpCard(a["key"], Card)
             else:
-                self.card_upside_down.remove(Card)
+                self.__card_upside_down.remove(Card)
             board = self.getNoble(board)
-            error.successColor(self.name + " Lật thẻ " + str(Card.id) + "thành công")
+            error.successColor(self.__name + " Lật thẻ " + str(Card.id) + "thành công")
             return board.postStock(stock_return)
 
     def getPositionCard(self, board, card):
-        for i in self.card_upside_down:
+        for i in self.__card_upside_down:
             if i.id == card.id:
                 return {
                     "mine": True,
@@ -204,17 +255,17 @@ class Player:
         for card_Noble in board.dict_Card_Stocks_Show["Noble"]:
             check = True
             for i in card_Noble.stocks.keys():
-                if self.stocks_const[i] < card_Noble.stocks[i]:
+                if self.__stocks_const[i] < card_Noble.stocks[i]:
                     check = False
             b.append(check)
         for i in range(len(b)):
             if b[i] == True:
                 card_Noble = board.dict_Card_Stocks_Show["Noble"][i]
-                self.score += card_Noble.score
-                self.card_noble.append(card_Noble)
+                self.__score += card_Noble.score
+                self.__card_noble.append(card_Noble)
                 self.message += "Nhan the quy toc id = " + str(card_Noble.id)
-                error.RecommendColor(self.name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
-        for i in self.card_noble:
+                error.RecommendColor(self.__name + "Nhận được " + str(card_Noble.score) + "điểm từ thẻ quý tộc" + str(card_Noble.id))
+        for i in self.__card_noble:
             try:
                 board.deleteCardNoble(i)
             except:
@@ -223,12 +274,12 @@ class Player:
 # Kiểm tra xem có úp được thẻ nữa hay không
     def checkUpsiteDown(self):
         try:
-            if len(self.card_upside_down) < 3:
+            if len(self.__card_upside_down) < 3:
                 return True
             else:
                 return False
         except AttributeError:
-            error.errorColor("Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
+            error.errorColor("Check UpSite Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
             return False
 
 
@@ -244,7 +295,7 @@ class Player:
                 return False
             return True
         except AttributeError:
-            error.errorColor("Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
+            error.errorColor("Check Three Stocks Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
             return False
 
 # Kiểm tra xem có lấy được 1 nguyên liệu hay không
@@ -255,5 +306,5 @@ class Player:
                 return False
             return True
         except AttributeError:
-            error.errorColor("Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
+            error.errorColor("Check One Stocks  Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
             return False

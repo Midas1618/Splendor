@@ -13,7 +13,7 @@ def getType(dict_type):
 class Board:
     def __init__(self):
         self.name = "Board"
-        self.stocks = {
+        self.__stocks = {
             "red": 7,
             "blue": 7,
             "green": 7,
@@ -21,18 +21,36 @@ class Board:
             "black": 7,
             "auto_color": 5,
         }
-        self.dict_Card_Stocks_Show = {
+        self.__dict_Card_Stocks_Show = {
             "I": [],
             "II": [],
             "III": [],
             "Noble": []
         }
-        self.dict_Card_Stocks_UpsiteDown = {
+        self.__dict_Card_Stocks_UpsiteDown = {
             "I": [],
             "II": [],
             "III": [],
             "Noble": []
         }
+    @property
+    def stocks(self):
+        return self.__stocks
+    @stocks.setter
+    def setStocks(self,value):
+        self.__stocks = value
+    @property
+    def dict_Card_Stocks_Show(self):
+        return self.__dict_Card_Stocks_Show
+    @dict_Card_Stocks_Show.setter
+    def setDict_Card_Stocks_Show(self,value):
+        self.__dict_Card_Stocks_Show = value
+    @property
+    def dict_Card_Stocks_UpsiteDown(self):
+        return self.__dict_Card_Stocks_UpsiteDown
+    @dict_Card_Stocks_UpsiteDown.setter
+    def setDict_Card_Stocks_UpsiteDown(self,value):
+        self.__dict_Card_Stocks_UpsiteDown= value
 
 # Khởi bàn chơi
     def LoadBase(self):
@@ -45,43 +63,43 @@ class Board:
             if i["type"] != "Noble":
                 c = card.Card_Stock(
                     getType(i["type_stock"]), i["score"], i["stock"])
-                self.dict_Card_Stocks_UpsiteDown[i["type"]].append(c)
+                self.__dict_Card_Stocks_UpsiteDown[i["type"]].append(c)
             else:
                 c = card.Card_Noble(i["score"], i["stock"])
-                self.dict_Card_Stocks_UpsiteDown["Noble"].append(c)
+                self.__dict_Card_Stocks_UpsiteDown["Noble"].append(c)
 
 
     def randomCard(self):
-        for i in self.dict_Card_Stocks_UpsiteDown.keys():
-            random.shuffle(self.dict_Card_Stocks_UpsiteDown[i])
+        for i in self.__dict_Card_Stocks_UpsiteDown.keys():
+            random.shuffle(self.__dict_Card_Stocks_UpsiteDown[i])
         
 
 # Cài đặt cho các thẻ trong bàn chơi
     def setupCard(self):
         '''Thiết lập thẻ cho bàn chơi'''
         self.randomCard()
-        for key in self.dict_Card_Stocks_Show.keys():
+        for key in self.__dict_Card_Stocks_Show.keys():
             for i in range(4):
-                self.dict_Card_Stocks_Show[key].append(
-                    self.dict_Card_Stocks_UpsiteDown[key][0])
-                self.dict_Card_Stocks_UpsiteDown[key].remove(
-                    self.dict_Card_Stocks_UpsiteDown[key][0])
-        self.dict_Card_Stocks_Show["Noble"].append(
-            self.dict_Card_Stocks_UpsiteDown["Noble"][0])
-        self.dict_Card_Stocks_UpsiteDown["Noble"].remove(
-            self.dict_Card_Stocks_UpsiteDown["Noble"][0])
+                self.__dict_Card_Stocks_Show[key].append(
+                    self.__dict_Card_Stocks_UpsiteDown[key][0])
+                self.__dict_Card_Stocks_UpsiteDown[key].remove(
+                    self.__dict_Card_Stocks_UpsiteDown[key][0])
+        self.__dict_Card_Stocks_Show["Noble"].append(
+            self.__dict_Card_Stocks_UpsiteDown["Noble"][0])
+        self.__dict_Card_Stocks_UpsiteDown["Noble"].remove(
+            self.__dict_Card_Stocks_UpsiteDown["Noble"][0])
 
 # Xóa thẻ trong trồng úp
     def deleteCardInUpsiteDown(self, key, card_stock):
         try:
-            self.dict_Card_Stocks_UpsiteDown[key].remove(card_stock)
+            self.__dict_Card_Stocks_UpsiteDown[key].remove(card_stock)
         except:
             pass      
         return self
     
     def deleteCardNoble(self, CardNoble):
         try:
-            self.dict_Card_Stocks_Show["Noble"].remove(CardNoble)
+            self.__dict_Card_Stocks_Show["Noble"].remove(CardNoble)
         except:
             pass      
         return self
@@ -89,7 +107,7 @@ class Board:
 # Thêm thẻ Nguyên liệu
     def appendUpCard(self, key, card_stock):
         try:
-            self.dict_Card_Stocks_Show[key].append(card_stock)
+            self.__dict_Card_Stocks_Show[key].append(card_stock)
             self.deleteCardInUpsiteDown(key, card_stock)
         except:
             error.RecommendColor("Hết thẻ rồi, Không thêm nguyên liệu được nữa đâu")
@@ -99,14 +117,14 @@ class Board:
     def deleteUpCard(self, key, card_stock):
         try:
             try:
-                a = self.dict_Card_Stocks_UpsiteDown[key][0]
+                a = self.__dict_Card_Stocks_UpsiteDown[key][0]
             except:
                 a = None
             if a != None:
-                self.dict_Card_Stocks_Show[key] = [a if i.id == card_stock.id else i for i in self.dict_Card_Stocks_Show[key] ]
+                self.__dict_Card_Stocks_Show[key] = [a if i.id == card_stock.id else i for i in self.__dict_Card_Stocks_Show[key] ]
                 self.deleteCardInUpsiteDown(key,a)
             else:
-                self.dict_Card_Stocks_Show[key].remove(card_stock)
+                self.__dict_Card_Stocks_Show[key].remove(card_stock)
         except:
             error.RecommendColor("Không thể xóa thẻ trên bàn vì chắc chẳng còn thẻ đâu")
             pass
@@ -115,22 +133,22 @@ class Board:
 
 # Lấy thông tin các thẻ trên bàn
     def getInforCards(self):
-        return self.dict_Card_Stocks_Show
+        return self.__dict_Card_Stocks_Show
 
 # Trả lại thẻ
     def getStock(self, dict_color):
         for i in dict_color.keys():
-            self.stocks[i] -= dict_color[i]
+            self.__stocks[i] -= dict_color[i]
         return self
 
     def postStock(self, dict_color):
         for i in dict_color:
-            self.stocks[i] += dict_color[i]
+            self.__stocks[i] += dict_color[i]
         return self
     
     def hien_the(self):
-        for i in self.dict_Card_Stocks_Show.keys():
+        for i in self.__dict_Card_Stocks_Show.keys():
             print(i,end=": ")
-            for j in self.dict_Card_Stocks_Show[i]:
+            for j in self.__dict_Card_Stocks_Show[i]:
                 print(j.id, end=" ")
             print()

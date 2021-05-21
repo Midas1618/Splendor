@@ -6,6 +6,7 @@ from players import player4 as p4
 from players import player5 as p5
 import pandas as pd
 import random
+
 pVictory = None
 def Victory(arr):
     global pVictory
@@ -46,11 +47,25 @@ def saveAction(t):
 
 
 
-def checkNone(b,player):
-  saveAction(player.message)
+def checkNone(b,player,turn):
+  saveAction("Lượt: " + str(turn) +" "+player.message)
   if b == None:
     print("Lỗi của :",player.name)
-
+# b = board.Board()
+# b.LoadBase()
+# b.setupCard()
+# b.hien_the()
+# p1.player_01.setStocks = {
+#             "red": 7,
+#             "blue": 7,
+#             "green": 7,
+#             "white": 7,
+#             "black": 7,
+#             "auto_color": 0,
+#         }
+# b = p1.player_01.getCard(b.dict_Card_Stocks_Show["I"][0],b)
+# print(p1.player_01.stocks)
+# b.hien_the()
 # Khởi tạo bàn chơi
 def RunGame(Luot):
     global pVictory
@@ -58,20 +73,19 @@ def RunGame(Luot):
     b = board.Board()
     b.LoadBase()
     b.setupCard()
-    turn = 1
+    turn = 0
     result_turn = []
-
     arr_stt = [1,2,3,4]
     random.shuffle(arr_stt)
     for i in range(len(arr_stt)):
         if arr_stt[i] == 1:
-          p1.player_01.name = p1.player_01.name +" "+ str(i+1)
+          p1.player_01.setName = p1.player_01.name +" "+ str(i+1)
         elif arr_stt[i] == 2:
-          p2.player_02.name = p2.player_02.name +" "+ str(i+1)
+          p2.player_02.setName = p2.player_02.name +" "+ str(i+1)
         elif arr_stt[i] == 3:
-          p3.player_03.name = p3.player_03.name +" "+ str(i+1)
+          p3.player_03.setName = p3.player_03.name +" "+ str(i+1)
         elif arr_stt[i] == 4:
-          p4.player_04.name = p4.player_04.name +" "+ str(i+1)
+          p4.player_04.setName = p4.player_04.name +" "+ str(i+1)
     result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04]))
     while Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04]) == None:
         print("Lượt:",turn)
@@ -79,16 +93,16 @@ def RunGame(Luot):
         for i in arr_stt:
           if i == 1:
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
-            checkNone(b,p1.player_01)
+            checkNone(b,p1.player_01,turn)
           elif i == 2:
             b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
-            checkNone(b,p2.player_02)
+            checkNone(b,p2.player_02,turn)
           elif i == 3:
             b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
-            checkNone(b,p3.player_03)
+            checkNone(b,p3.player_03,turn)
           elif i == 4:
             b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
-            checkNone(b,p4.player_04)
+            checkNone(b,p4.player_04,turn)
         a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04])
         result_turn.append(a)
     print(pVictory.name)
@@ -97,5 +111,5 @@ def RunGame(Luot):
     df_message["Action"] = arr_message
     df_message.to_csv("Action"+Luot+".csv",index=False) 
     print("So luong the quy toc con lai",len(b.dict_Card_Stocks_Show["Noble"]))
-RunGame("50")
+RunGame("51")
 

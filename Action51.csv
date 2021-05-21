@@ -1,0 +1,117 @@
+Action
+Run: 1 Hoang 1 Get UpsiteDown id =77
+Run: 1 Thao 2 Get One stock: red
+"Run: 1 Hieu 3 Get three stock: red,blue,green."
+Run: 1 Trang 4 Get One stock: red
+Run: 2 Hoang 1 Get UpsiteDown id =88
+Run: 2 Thao 2 Get One stock: blue
+"Run: 2 Hieu 3 Get three stock: red,blue,green."
+Run: 2 Trang 4 Get One stock: green
+Run: 3 Hoang 1 Get One stock: white
+"Run: 3 Thao 2 Get three stock: blue,green,black."
+Run: 3 Hieu 3 Get Card = 28
+Run: 3 Trang 4 Get One stock: blue
+Run: 4 Hoang 1 Get One stock: white
+"Run: 4 Thao 2 Get three stock: blue,green,black."
+"Run: 4 Hieu 3 Get three stock: red,blue,green."
+"Run: 4 Trang 4 Get three stock: red,white,black."
+Run: 5 Hoang 1 Get Card = 47
+Run: 5 Thao 2 Get Card = 10
+"Run: 5 Hieu 3 Get three stock: red,blue,white."
+Run: 5 Trang 4 Get Card = 71
+Run: 6 Hoang 1 Get One stock: white
+"Run: 6 Thao 2 Get three stock: blue,green,black."
+Run: 6 Hieu 3 Get One stock: black
+Run: 6 Trang 4 Get UpsiteDown id =80
+"Run: 7 Hoang 1 Get three stock: red,white,black."
+Run: 7 Thao 2 Get UpsiteDown id =15
+Run: 7 Hieu 3 Get Card = 12
+Run: 7 Trang 4 Get UpsiteDown id =53
+Run: 8 Hoang 1 Get One stock: red
+Run: 8 Thao 2 Get Card = 42
+Run: 8 Hieu 3 Get Card = 32
+Run: 8 Trang 4 Get UpsiteDown id =50
+Run: 9 Hoang 1 Get One stock: red
+"Run: 9 Thao 2 Get three stock: red,green,blue."
+"Run: 9 Hieu 3 Get three stock: red,blue,green."
+"Run: 9 Trang 4 Get three stock: white,blue,green."
+Run: 10 Hoang 1 Get Card = 54
+Run: 10 Thao 2 Get One stock: red
+Run: 10 Hieu 3 Get Card = 62
+"Run: 10 Trang 4 Get three stock: white,blue,green. Return stock: blue:1"
+Run: 11 Hoang 1 Get One stock: green
+"Run: 11 Thao 2 Get three stock: red,black,green. Return stock: red:1"
+"Run: 11 Hieu 3 Get three stock: red,blue,green."
+"Run: 11 Trang 4 Get three stock: white,blue,green. Return stock: blue:1"
+"Run: 12 Hoang 1 Get three stock: red,white,black."
+Run: 12 Thao 2 Get UpsiteDown id =8
+Run: 12 Hieu 3 Get Card = 11
+"Run: 12 Trang 4 Get three stock: white,blue,green. Return stock: blue:1"
+"Run: 13 Hoang 1 Get three stock: red,blue,black. Return stock: white:3"
+Run: 13 Thao 2 Get Card = 52
+"Run: 13 Hieu 3 Get three stock: red,blue,green."
+"Run: 13 Trang 4 Get three stock: blue,green,black. Return stock: blue:2green:1"
+Run: 14 Hoang 1 Get One stock: blue Return stock: black:2
+"Run: 14 Thao 2 Get three stock: white,blue,black."
+Run: 14 Hieu 3 Get Card = 29
+Run: 14 Trang 4 Get Card = 53
+Run: 15 Hoang 1 Get Card = 44
+"Run: 15 Thao 2 Get three stock: white,red,blue."
+"Run: 15 Hieu 3 Get three stock: red,blue,green."
+Run: 15 Trang 4 Get UpsiteDown id =56
+Run: 16 Hoang 1 Get One stock: white
+Run: 16 Thao 2 Get Card = 39
+"Run: 16 Hieu 3 Get three stock: red,blue,green."
+Run: 16 Trang 4 Get UpsiteDown id =56
+Run: 17 Hoang 1 Get One stock: white
+"Run: 17 Thao 2 Get three stock: white,black,green. Return stock: red:1"
+Run: 17 Hieu 3 Get Card = 38
+Run: 17 Trang 4 Get UpsiteDown id =56
+"Run: 18 Hoang 1 Get three stock: red,white,black. Return stock: white:1"
+Run: 18 Thao 2 Get Card = 19
+Run: 18 Hieu 3 Get Card = 13
+Run: 18 Trang 4 Get UpsiteDown id =56
+"Run: 19 Hoang 1 Get three stock: red,white,blue. Return stock: white:3"
+Run: 19 Thao 2 Get Card = 59
+"Run: 19 Hieu 3 Get three stock: red,blue,white."
+Run: 19 Trang 4 Get UpsiteDown id =56
+Run: 20 Hoang 1 Get One stock: white Return stock: red:2
+Run: 20 Thao 2 Get Card = 16
+Run: 20 Hieu 3 Get Card = 4
+"Run: 20 Trang 4 Get three stock: blue,green,red."
+Run: 21 Hoang 1 Get Card = 65
+"Run: 21 Thao 2 Get three stock: white,blue,red."
+Run: 21 Hieu 3 Get Card = 26
+Run: 21 Trang 4 Get One stock: blue
+Run: 22 Hoang 1 Get Card = 27
+Run: 22 Thao 2 Get One stock: black
+Run: 22 Hieu 3 Get Card = 40
+"Run: 22 Trang 4 Get three stock: blue,red,black. Return stock: red:1"
+Run: 23 Hoang 1 Get One stock: white
+Run: 23 Thao 2 Get Card = 74
+Run: 23 Hieu 3 Get Card = 24
+"Run: 23 Trang 4 Get three stock: blue,red,black. Return stock: red:2blue:1"
+Run: 24 Hoang 1 Get One stock: black
+"Run: 24 Thao 2 Get three stock: black,red,blue."
+Run: 24 Hieu 3 Get Card = 20
+"Run: 24 Trang 4 Get three stock: blue,red,black. Return stock: red:1blue:2"
+"Run: 25 Hoang 1 Get three stock: red,white,blue."
+Run: 25 Thao 2 Get Card = 68
+Run: 25 Hieu 3 Get Card = 35
+"Run: 25 Trang 4 Get three stock: blue,red,black. Return stock: red:1blue:2"
+Run: 26 Hoang 1 Get Card = 61
+Run: 26 Thao 2 Get Card = 55
+"Run: 26 Hieu 3 Get three stock: red,blue,white."
+Run: 26 Trang 4 Get Card = 50
+Run: 27 Hoang 1 Get One stock: red
+Run: 27 Thao 2 Get One stock: black
+Run: 27 Hieu 3 Get Card = 86
+Run: 27 Trang 4 Get UpsiteDown id =58
+Run: 28 Hoang 1 Get Card = 67
+Run: 28 Thao 2 Get One stock: black
+Run: 28 Hieu 3 Get Card = 46
+Run: 28 Trang 4 Get One stock: blue
+Run: 29 Hoang 1 Get One stock: red
+"Run: 29 Thao 2 Get three stock: white,black,red."
+Run: 29 Hieu 3 Get Card = 18Nhan the quy toc id = 97Nhan the quy toc id = 98
+"Run: 29 Trang 4 Get three stock: white,blue,red. Return stock: red:1"
