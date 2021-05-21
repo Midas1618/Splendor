@@ -105,17 +105,13 @@ def list_rank_color_for_upside_down(player_01):
     
     return rank_color_for_upside_down
 
-
-
-
-
 #Xếp hạng các màu token có thể lấy, ưu tiên giảm dần, trong trường hợp đang có thẻ úp
 def list_rank_color_can_get(board,player_01):
 
     rank_color_can_get = []
 
     for color in list_rank_color_for_upside_down(player_01):
-        if board.stocks[color] >0 :
+        if board.stocks[color] >0:
             rank_color_can_get.append(color)
     return rank_color_can_get
 
@@ -177,39 +173,37 @@ def list_rank_color_can_get_alt(board):
 
     rank_color_can_get_alt = []
 
-    # for color in board.stocks.keys():
-    #     if ( board.stocks[color] > 0 ) & (color != "auto_color"):
-    #         rank_color_can_get_alt.append(color)
+    for color in board.stocks.keys():
+        if ( board.stocks[color] > 0 ) & (color != "auto_color"):
+            rank_color_can_get_alt.append(color)
 
-    # return rank_color_can_get_alt
-
-    total_score_board = 0
-    for card in board.dict_Card_Stocks_Show["II"]:
-        total_score_board += card.score
-    for card in board.dict_Card_Stocks_Show["II"]:
-        total_score_board += card.score
-
-    color_valuation = { "red": 0, "blue": 0, "green": 0, "white": 0, "black": 0}
-    for color in color_valuation.keys():
-        for card in board.dict_Card_Stocks_Show["II"]:
-            color_valuation[color] += card.stocks[color]
-        for item in board.dict_Card_Stocks_Show["III"]:
-            color_valuation[color] += item.stocks[color]
-    
-    for color in color_valuation.keys():
-        if color_valuation[color] > 0:
-            color_valuation[color] = total_score_board / color_valuation[color]
-        if color_valuation[color] == 0:
-            del color_valuation[color]
-    
-    list_sorted_value = list(sorted(color_valuation.values(),reverse=True))
-
-    for value in list_sorted_value:
-        for color in color_valuation.keys():
-            if color_valuation[color] == value:
-                rank_color_can_get_alt.append(color)
-    
     return rank_color_can_get_alt
+
+    # total_score_board = 0
+    # for card in board.dict_Card_Stocks_Show["II"]:
+    #     total_score_board += card.score
+    # for card in board.dict_Card_Stocks_Show["II"]:
+    #     total_score_board += card.score
+
+    # color_valuation = { "red": 0, "blue": 0, "green": 0, "white": 0, "black": 0}
+    # for color in color_valuation.keys():
+    #     for card in board.dict_Card_Stocks_Show["II"]:
+    #         color_valuation[color] += card.stocks[color]
+    #     for item in board.dict_Card_Stocks_Show["III"]:
+    #         color_valuation[color] += item.stocks[color]
+    
+    # for color in color_valuation.keys():
+    #     if color_valuation[color] > 0:
+    #         color_valuation[color] = total_score_board / color_valuation[color]
+    
+    # list_sorted_value = list(sorted(color_valuation.values(),reverse=True))
+
+    # for value in list_sorted_value:
+    #     for color in color_valuation.keys():
+    #         if color_valuation[color] == value:
+    #             rank_color_can_get_alt.append(color)
+    
+    # return rank_color_can_get_alt
     
     
     
@@ -252,69 +246,69 @@ def dict_return_get_one_type_stock(board,player_01):
     
     dict_return = {}
 
-    if len(player_01.card_upside_down) > 0:
+    # if len(player_01.card_upside_down) > 0:
         
-        if sum(player_01.stocks.values()) == 9:
+    #     if sum(player_01.stocks.values()) == 9:
         
-            for color in list_rerank_color_to_return_afterget2(board,player_01):
-                if player_01.stocks[color] > 0:
-                    dict_return[color] = 1
-                    return dict_return
+    #         for color in list_rerank_color_to_return_afterget2(board,player_01):
+    #             if player_01.stocks[color] > 0:
+    #                 dict_return[color] = 1
+    #                 return dict_return
             
-            for color in list_rank_color_on_hand_descending(player_01):
-                if player_01.stocks[color] > 0:
-                    dict_return[color] = 1
-                    return dict_return
+    #         for color in list_rank_color_on_hand_descending(player_01):
+    #             if player_01.stocks[color] > 0:
+    #                 dict_return[color] = 1
+    #                 return dict_return
             
         
-        elif sum(player_01.stocks.values()) == 10:
+    #     elif sum(player_01.stocks.values()) == 10:
 
-            for color in list_rerank_color_to_return_afterget2(board,player_01):
+    #         for color in list_rerank_color_to_return_afterget2(board,player_01):
 
-                while sum(dict_return.values()) <2:
+    #             while sum(dict_return.values()) <2:
                 
-                    if player_01.stocks[color] >= 2:
-                        if sum(dict_return.values()) == 0:
-                            dict_return[color] = 2
-                            return dict_return
-                        else:
-                            dict_return[color] = 1
-                            return dict_return                        
+    #                 if player_01.stocks[color] >= 2:
+    #                     if sum(dict_return.values()) == 0:
+    #                         dict_return[color] = 2
+    #                         return dict_return
+    #                     else:
+    #                         dict_return[color] = 1
+    #                         return dict_return                        
                     
-                    if player_01.stocks[color] == 1:
-                        dict_return[color] = 1
+    #                 if player_01.stocks[color] == 1:
+    #                     dict_return[color] = 1
 
-            if sum(dict_return.values()) == 2:
-                return dict_return
+    #         if sum(dict_return.values()) == 2:
+    #             return dict_return
             
-            for color in list_rank_color_on_hand_descending(player_01):
+    #         for color in list_rank_color_on_hand_descending(player_01):
 
-                while sum(dict_return.values()) <2:
+    #             while sum(dict_return.values()) <2:
 
-                    if player_01.stocks[color] >=2:
-                        if sum(dict_return.values()) == 0:
-                            dict_return[color] = 2
-                            return dict_return
-                        else:
-                            dict_return[color] = 1
-                            return dict_return
+    #                 if player_01.stocks[color] >=2:
+    #                     if sum(dict_return.values()) == 0:
+    #                         dict_return[color] = 2
+    #                         return dict_return
+    #                     else:
+    #                         dict_return[color] = 1
+    #                         return dict_return
 
-                    if player_01.stocks[color] == 1:
-                        dict_return[color] = 1
+    #                 if player_01.stocks[color] == 1:
+    #                     dict_return[color] = 1
 
-            return dict_return            
+    #         return dict_return            
         
 
     if sum(player_01.stocks.values()) == 9:        
-        # for color in player_01.stocks.keys():
-        for color in list_rank_color_on_hand_descending(player_01):
+        for color in player_01.stocks.keys():
+        # for color in list_rank_color_on_hand_descending(player_01):
             if player_01.stocks[color] > 0:
                 dict_return[color] = 1
                 return dict_return
     
     elif sum(player_01.stocks.values()) == 10:
-        # for color in player_01.stocks.keys():
-        for color in list_rank_color_on_hand_descending(player_01):
+        for color in player_01.stocks.keys():
+        # for color in list_rank_color_on_hand_descending(player_01):
 
             while sum(dict_return.values()) <2:
 
@@ -339,20 +333,20 @@ def dict_return_get_three_stocks(player_01):
 
     if sum(player_01.stocks.values()) == 8:
 
-        # for color in player_01.stocks.keys():
-        #     if player_01.stocks[color] > 0:
-        #         dict_return[color] = 1
-        #         return dict_return
-
-        for color in list_rank_color_on_hand_descending(player_01):
+        for color in player_01.stocks.keys():
             if player_01.stocks[color] > 0:
                 dict_return[color] = 1
                 return dict_return
 
+        # for color in list_rank_color_on_hand_descending(player_01):
+        #     if player_01.stocks[color] > 0:
+        #         dict_return[color] = 1
+        #         return dict_return
+
     elif sum(player_01.stocks.values()) == 9:
 
-        # for color in player_01.stocks.keys():
-        for color in list_rank_color_on_hand_descending(player_01):
+        for color in player_01.stocks.keys():
+        # for color in list_rank_color_on_hand_descending(player_01):
 
             while sum(dict_return.values()) <2:
 
@@ -366,13 +360,13 @@ def dict_return_get_three_stocks(player_01):
 
                 if player_01.stocks[color] == 1:
                     dict_return[color] = 1
-            print(363)
-            return dict_return
+
+        return dict_return
     
     elif sum(player_01.stocks.values()) == 10:
 
-        # for color in player_01.stocks.keys():
-        for color in list_rank_color_on_hand_descending(player_01):
+        for color in player_01.stocks.keys():
+        # for color in list_rank_color_on_hand_descending(player_01):
 
             while sum(dict_return.values()) <3:
 
@@ -405,51 +399,11 @@ def dict_return_get_three_stocks(player_01):
                 
                 if player_01.stocks[color] == 1:                    
                     dict_return[color] = 1
-            print(402)
-            return dict_return
+
+        return dict_return
     
     else:
         return dict_return
-
-
-
-#dict_return general
-def dict_return_general(board,*args):
-    
-    
-    dict_return = {
-        "red":0,
-        "blue":0,
-        "white":0,
-        "green":0,
-        "black":0,
-        "auto_color": 0
-    }
-    #Copy Nguyên liệu ban đầu
-    dict_start = player_01.stocks.copy()
-    #Thêm Nguyên liệu
-    for x in args:
-        dict_start[x] += 1
-    #Kiểm tra nguyên liệu còn
-    list_sorted_values = list(sorted(dict_total_normal_stocks_on_hand(player_01).values(),reverse=True))
-    list_sorted_color = []
-    for value in list_sorted_values:
-        for color in dict_total_normal_stocks_on_hand(player_01):
-            if dict_total_normal_stocks_on_hand(player_01)[color] == value:
-                list_sorted_color.append(color)
-    #Thực hiện bỏ thẻ. Đk bỏ thẻ là bỏ lần lượt.
-    if sum(dict_start.values()) > 10:
-        n = sum(dict_start.values()) - 10
-        i = 0
-        
-        while n != 0:
-            if dict_start[list_sorted_color[i]] != 0:
-                dict_return[list_sorted_color[i]] +=1
-                dict_start[list_sorted_color[i]] -=1
-                n -= 1
-            else:
-                i += 1
-    return dict_return
 
     
 
@@ -459,8 +413,7 @@ def dict_return_general(board,*args):
 def moiturn(board,player_01):
     
     if len(list_cards_can_open(board,player_01)) > 0:
-        if card_to_buy_first(board,player_01) != None:
-            return player_01.getCard(card_to_buy_first(board,player_01),board)
+        return player_01.getCard(card_to_buy_first(board,player_01),board)
 
     for card in board.dict_Card_Stocks_Show["III"]:
 
@@ -468,22 +421,18 @@ def moiturn(board,player_01):
             if len(player_01.card_upside_down) <2:
 
                 if sum(player_01.stocks.values()) == 10:
-                    print(424)
                     return player_01.getUpsideDown(card,board,dict_return_get_upside_down(player_01))
                 
                 else:
-                    print(426)
                     return player_01.getUpsideDown(card,board,{})
         
-        if ( card.score == 4 ) & ( sum(card.stocks.values())  == 7 ) :
+        if card.score == 4 & sum(card.stocks.values()) == 7:
             if len(player_01.card_upside_down) <2:
 
                 if sum(player_01.stocks.values()) == 10:
-                    print(433)
                     return player_01.getUpsideDown(card,board,dict_return_get_upside_down(player_01))
                 
                 else:
-                    print(436)
                     return player_01.getUpsideDown(card,board,{})
         
     for card in board.dict_Card_Stocks_Show["II"]:
@@ -493,79 +442,68 @@ def moiturn(board,player_01):
             if len(player_01.card_upside_down) <2:
 
                 if sum(player_01.stocks.values()) == 10:
-                    print(445)
                     return player_01.getUpsideDown(card,board,dict_return_get_upside_down(player_01))
                 
                 else:
-                    print(448)
                     return player_01.getUpsideDown(card,board,{})
         
-        if ( card.score == 2 ) & ( sum(card.stocks.values()) == 5) :
+        if card.score == 2 & sum(card.stocks.values()) == 5:
 
             if len(player_01.card_upside_down) <2:
 
                 if sum(player_01.stocks.values()) == 10:
-                    print(455)
                     return player_01.getUpsideDown(card,board,dict_return_get_upside_down(player_01))
                 
                 else:
-                    print(458)
                     return player_01.getUpsideDown(card,board,{})
     
-    if len(player_01.card_upside_down) > 0:
+    # if len(player_01.card_upside_down) > 0:
 
-        for color in list_rank_color_for_upside_down(player_01):
+    #     for color in list_rank_color_for_upside_down(player_01):
 
-            if player_01.checkOneStock(board,color):
+    #         if player_01.checkOneStock(board,color):
 
-                if sum(player_01.stocks.values()) > 8:
-                    print(521)
-                    return player_01.getOneStock(color,board,dict_return_general(board,color,color))
+    #             if sum(player_01.stocks.values()) > 8:
 
-                else:
+    #                 return player_01.getOneStock(color,board,dict_return_get_one_type_stock(board,player_01))
+
+    #             else:
+    #                 return player_01.getOneStock(color,board,{})
+
+    #     # if len(list_rank_color_can_get(board,player_01)) >= 3:
+    #     #     return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_get_three_stocks(player_01)) 
+    #         # return player_01.getThreeStocks(Color1_has_upside_down(board,player_01),Color2_has_upside_down(board,player_01),Color3_has_upside_down(board,player_01),board,dict_return_get_three_stocks(player_01))
+
+    #     if len(list_rank_color_can_get_alt(board)) >= 3:
+    #         return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_get_three_stocks(player_01))
+
+    if sum(player_01.stocks.values()) < 8:
+
+        if len(list_rank_color_can_get_alt(board)) > 0:
+            for color in list_rank_color_can_get_alt(board):
+                if player_01.checkOneStock(board,color):
                     return player_01.getOneStock(color,board,{})
+            
+            if len(list_rank_color_can_get_alt(board)) >= 3:
+                return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,{})
 
-        if len(list_rank_color_can_get(board,player_01)) >= 3:
-            print(528)
-            return player_01.getThreeStocks(Color1_has_upside_down(board,player_01),Color2_has_upside_down(board,player_01),Color3_has_upside_down(board,player_01),board,dict_return_general(board,Color1_has_upside_down(board,player_01),Color2_has_upside_down(board,player_01),Color3_has_upside_down(board,player_01)))
+    elif sum(player_01.stocks.values()) == 8:    
 
-        # if len(list_rank_color_can_get_alt(board)) >= 3:
-        #     return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_get_three_stocks(player_01))
-
+        if len(list_rank_color_can_get_alt(board)) > 0:            
+            for color in list_rank_color_can_get_alt(board):
+                if player_01.checkOneStock(board,color):
+                    return player_01.getOneStock(color,board,{})
+            
+            if len(list_rank_color_can_get_alt(board)) >= 3:
+                return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_get_three_stocks(player_01))
     else:
-        if sum(player_01.stocks.values()) < 8:
-
-            if len(list_rank_color_can_get_alt(board)) > 0:
-                for item in list_rank_color_can_get_alt(board):
-                    if player_01.checkOneStock(board,item):
-                        print(485)
-                        return player_01.getOneStock(item,board,{})
-                
-                if len(list_rank_color_can_get_alt(board)) >= 3:
-                    print(537)
-                    return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,{})
-
-        elif sum(player_01.stocks.values()) == 8:    
-
-            if len(list_rank_color_can_get_alt(board)) > 0:            
-                for color in list_rank_color_can_get_alt(board):
-                    if player_01.checkOneStock(board,color):
-                        print(497)
-                        return player_01.getOneStock(color,board,{})
-                
-                if len(list_rank_color_can_get_alt(board)) >= 3:
-                    print(501)
-                    return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_general(board,list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2]))
-        else:
-            if len(list_rank_color_can_get_alt(board)) > 0:            
-                for color in list_rank_color_can_get_alt(board):
-                    if player_01.checkOneStock(board,color):
-                        print(507)
-                        return player_01.getOneStock(color,board,dict_return_general(board,color,color))
-                
-                if len(list_rank_color_can_get_alt(board)) >= 3:
-                    print(511)
-                    return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_general(board,list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2]))
+        if len(list_rank_color_can_get_alt(board)) > 0:            
+            for color in list_rank_color_can_get_alt(board):
+                if player_01.checkOneStock(board,color):
+                    return player_01.getOneStock(color,board,dict_return_get_one_type_stock(board,player_01))
+            
+            if len(list_rank_color_can_get_alt(board)) >= 3:
+                return player_01.getThreeStocks(list_rank_color_can_get_alt(board)[0],list_rank_color_can_get_alt(board)[1],list_rank_color_can_get_alt(board)[2],board,dict_return_get_three_stocks(player_01))
 
     return board
     

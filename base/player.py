@@ -286,6 +286,8 @@ class Player:
 
     def checkThreeStocks(self, board, color_1, color_2, color_3):
         try:
+            if color_1 == "auto_color" or color_2 == "auto_color" or color_3 == "auto_color":
+                return False
             if color_1 == color_2 or color_1 == color_3 or color_2 == color_3:
                 return False
             if board.stocks[color_1] == 0:
@@ -302,7 +304,8 @@ class Player:
 # Kiểm tra xem có lấy được 1 nguyên liệu hay không
     def checkOneStock(self, board, color_1):
         try:
-            
+            if color_1 == "auto_color":
+                return False
             if board.stocks[color_1] <= 3:
                 return False
             return True

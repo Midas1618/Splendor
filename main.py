@@ -48,16 +48,10 @@ arr_message = []
 def saveAction(t):
   arr_message.append(t)
 
-
-
 def checkNone(b,player,turn):
   saveAction("Lượt: " + str(turn) +" "+player.message)
   if b == None:
     print("Lỗi của :",player.name)
-b = board.Board()
-b.LoadBase()
-b.setupCard()
-b.hien_the()
 # p1.player_01.setStocks = {
 #             "red": 7,
 #             "blue": 7,
@@ -123,5 +117,5 @@ def RunGame(Luot):
     df_message["Action"] = arr_message
     df_message.to_csv("Action"+Luot+".csv",index=False) 
     print("So luong the quy toc con lai",len(b.dict_Card_Stocks_Show["Noble"]))
-# RunGame("51")
+RunGame("51")
 

@@ -15,131 +15,170 @@ def moiturn(board):
     NLcon = laynguyenlieucon(board)
     NLlay2 = nguyenlieucothelay2(board)
     if latthe(board,player_02) != None:
+        print(18)
         return player_02.getCard(latthe(board, player_02),board)
-    if thelay!= None:
+    if thelay!= None and thegiu != None:
+        print(21)
         for the in thegiu:
             if the.score != thelay.score and player_02.checkUpsiteDown() == True:
-                return player_02.getUpsideDown(thelay,board, boNL_Upsidedown(board,player_02,"auto_color"))  
-    if len(player_02.card_upside_down) != 0:
+                print(24)
+                return player_02.getUpsideDown(thelay,board, Luachonbothe(board,"auto_color"))  
+    
+    if len(player_02.card_upside_down) > 0:
+        print(28)
         for the in player_02.card_upside_down:
             if the.score == 3 and player_02.checkOneStock(board,the.type_stock) == True:
-                return player_02.getOneStock(the.type_stock,board,boNL_get1stock(board,player_02,the.type_stock,the.type_stock))
+                print(31)
+                return player_02.getOneStock(the.type_stock,board,Luachonbothe(board,the.type_stock,the.type_stock))
             if the.score == 5:
+                print(34)
                 for s in the.stocks.keys():
                     if the.stocks[s] == 7 and player_02.checkOneStock(board,s) == True :
-                        return player_02.getOneStock(s,board,boNL_get1stock(board,player_02,s,s))
+                        print(37)
+                        return player_02.getOneStock(s,board,Luachonbothe(board,s,s))
             if the.score == 4:
+                print(40)
                 for s in the.stocks.keys():
                     if the.stocks[s] == 7 and player_02.checkOneStock(board,s) == True:
-                        return player_02.getOneStock(s,board,boNL_get1stock(board,player_02,s,s))
+                        print(43)
+                        return player_02.getOneStock(s,board,Luachonbothe(board,s,s))
             if the.score == 2: 
+                print(46)
                 for s in the.stocks.keys():
                     if the.stocks[s] == 5 and player_02.checkOneStock(board,s) == True:
-                        return player_02.getOneStock(s,board,boNL_get1stock(board,player_02,s,s))
+                        print(49)
+                        return player_02.getOneStock(s,board,Luachonbothe(board,s,s))
             if the.score == 1: 
+                print(52)
                 for s in the.stocks.keys():
                     if the.stocks[s] == 4 and player_02.checkOneStock(board,s) == True:
-                        return player_02.getOneStock(s,board,boNL_get1stock(board,player_02,s,s))
-            if len(NLlay) > 2 and player_02.checkThreeStocks(board,NLlay[0],NLlay[1],NLlay[2])==True:
-                return player_02.getThreeStocks(NLlay[0],NLlay[1],NLlay[2],board,boNL_get3stocks(board,player_02,NLlay[0],NLlay[1],NLlay[2]))
-            if len(NLlay) == 2 and len(NLcon) > 0:
-                for thefail in NLfail:
-                    if thefail not in NLlay and thefail in NLcon and player_02.checkThreeStocks(board,NLlay[0],NLlay[1],thefail)==True:
-                        return player_02.getThreeStocks(NLlay[0],NLlay[1],thefail,board,boNL_get3stocks(NLlay[0],NLlay[1],thefail,board,player_02))
-                for the in NLcon:
-                    if the not in NLlay and player_02.checkThreeStocks(board,NLlay[0],NLlay[1],the):
-                        return player_02.getThreeStocks(NLlay[0],NLlay[1],the,board,boNL_get3stocks(board,player_02,NLlay[0],NLlay[1],the))
-            if len(NLlay) == 1 and len(NLcon) > 1:
-                for the in NLcon:
-                    the0trung = []
-                    if the != NLlay[0]:
-                        the0trung.append(the)
-                if len(the0trung)>1 and player_02.checkThreeStocks(board, NLlay[0],the0trung[0],the0trung[1]):
-                    return player_02.getThreeStocks(NLlay[0],the0trung[0],the0trung[1],board,boNL_get3stocks(board,player_02,NLlay[0],the0trung[0],the0trung[1]))
-    if theup(board)!= None:
-        return player_02.getUpsideDown(theup(board),board,boNL_Upsidedown(board,player_02,"auto_color"))
-    if len(player_02.card_upside_down) == 0:
-        if len(NLlay2) >0:
-            return player_02.getOneStock(NLlay2[0],board,boNL_get1stock(board,player_02,NLlay2[0],NLlay2[0]))
-        else:
-            return player_02.getThreeStocks(NLcon[0],NLcon[1],NLcon[2],board,boNL_get3stocks(board,player_02,NLcon[0],NLcon[1],NLcon[2]))
-    else:
-        return board
-
-def theup(board):
-    NL = []
-    for nguyenlieu in board.dict_Card_Stocks_Show["III"][0].stocks.keys():
-        max = 0
-        for the in player_02.card_upside_down:
-            if the.stocks[nguyenlieu] > max:
-                the.stocks[nguyenlieu] = max
-        if max > player_02.stocks[nguyenlieu]:
-            NL.append(nguyenlieu)
-    for n in NL:
-        for the1 in board.dict_Card_Stocks_Show["III"]:
-            if the1.type_stock == n:
-                return the1
+                        print(55)
+                        return player_02.getOneStock(s,board,Luachonbothe(board,s,s))
+            if NLlay != None and NLfail != None:
+                print(58)
+                if len(NLlay) > 2 and player_02.checkThreeStocks(board,NLlay[0],NLlay[1],NLlay[2])==True:
+                    print(60)
+                    return player_02.getThreeStocks(NLlay[0],NLlay[1],NLlay[2],board,Luachonbothe(board,NLlay[0],NLlay[1],NLlay[2]))
+                if len(NLlay) == 2 and len(NLcon)>0:
+                    print(63)
+                    for thefail in NLfail:
+                        if thefail not in NLlay and thefail in NLcon and player_02.checkThreeStocks(board,NLlay[0],NLlay[1],thefail)==True:
+                            print(66)
+                            return player_02.getThreeStocks(NLlay[0],NLlay[1],thefail,board,Luachonbothe(board,NLlay[0],NLlay[1],thefail))
+                    for the in NLcon:
+                        if the not in NLlay and player_02.checkThreeStocks(board,NLlay[0],NLlay[1],the):
+                            print(70)
+                            return player_02.getThreeStocks(NLlay[0],NLlay[1],the,board,Luachonbothe(board,NLlay[0],NLlay[1],the))
+                if len(NLlay) == 1 and len(NLcon) > 1:
+                    print(73)
+                    for the in NLcon:
+                        the0trung = []
+                        if the != NLlay[0]:
+                            print(77)
+                            the0trung.append(the)
+                    if len(the0trung)>1 and player_02.checkThreeStocks(board, NLlay[0],the0trung[0],the0trung[1]):
+                        print(80)
+                        return player_02.getThreeStocks(NLlay[0],the0trung[0],the0trung[1],board,Luachonbothe(board,NLlay[0],the0trung[0],the0trung[1]))
+    if theup(board)!= None and player_02.checkUpsiteDown()==True:
+        print(83)
+        return player_02.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))
+    if len(player_02.card_upside_down) == 0 and NLlay2 != None and NLcon != None:
+        if len(NLlay2) >1 and player_02.checkOneStock(board,NLlay2[0]):
+            return player_02.getOneStock(NLlay2[0],board,Luachonbothe(board,NLlay2[0],NLlay2[0]))
+        if len(NLcon) > 2 and player_02.checkThreeStocks(board,NLcon[0],NLcon[1],NLcon[2]):
+            return player_02.getThreeStocks(NLcon[0],NLcon[1],NLcon[2],board,Luachonbothe(board,NLcon[0],NLcon[1],NLcon[2]))
+    return board
+def theup(board):   
+    if len(board.dict_Card_Stocks_Show["I"]) > 0:
+        print(102)
+        if NLcan(board)!= None and len(NLcan(board)) > 0:
+            print(104)
+            for NL in NLcan(board):
+                for the1 in board.dict_Card_Stocks_Show["I"]:
+                    if the1.type_stock == NL:
+                        print(108)
+                        return the1
                     
 def latthe(board,player_02):
     if len(player_02.card_upside_down) > 0:
+        print(113)
         for the in player_02.card_upside_down:
-            if player_02.checkGetCard(the):
+            if player_02.checkGetCard(the) == True:
+                print(116)
                 return the
-    for thelat in List_card(board):
-        if player_02.checkGetCard(thelat) == True:
-            return thelat
+    else: 
+        for thelat in List_card(board):
+            if player_02.checkGetCard(thelat) == True:
+                print(121)
+                return thelat
 
 def NLcan(board):
     List_NLcan = []
     dict_NLcan = {}
     for nguyenlieu in board.dict_Card_Stocks_Show["III"][0].stocks.keys():
-        sum_NL = 0
-        for the in player_02.card_upside_down:
-            sum_NL += the.stocks[nguyenlieu]
-        if sum_NL > player_02.stocks[nguyenlieu]:
-            dict_NLcan[nguyenlieu] = sum_NL
+        if len(player_02.card_upside_down) > 0:
+            print(129)
+            sum_NL = 0
+            for the in player_02.card_upside_down:
+                sum_NL += the.stocks[nguyenlieu]
+            if sum_NL > player_02.stocks[nguyenlieu]:
+                print(134)
+                dict_NLcan[nguyenlieu] = sum_NL
     {k: v for k, v in sorted(dict_NLcan.items(), key=lambda item: item[1],reverse=True)}
     return list(dict_NLcan.keys())
-                      
+                
 def NLkocan(board):
     List_NL0can = []
     for nguyenlieu in board.dict_Card_Stocks_Show["III"][0].stocks.keys():
-        max = 0
-        for the in player_02.card_upside_down:
-            if the.stocks[nguyenlieu] > max:
-                the.stocks[nguyenlieu] = max
-        if max < player_02.stocks[nguyenlieu]:
-            List_NL0can.append(nguyenlieu)
-            
-    return List_NL0can
+        if len(player_02.card_upside_down) > 0:
+            print(143)
+            sum_NL = 0
+            for the in player_02.card_upside_down:
+                sum_NL += the.stocks[nguyenlieu]
+            if sum_NL <= player_02.stocks[nguyenlieu]:
+                print(148)
+                List_NL0can.append(nguyenlieu) 
+            return List_NL0can    
+              
+    
 def card_target(board):
     for card in List_card(board):
         if card.score == 3 and sum(card.stocks.values()) == 6:
+            print(156)
             return card
         if card.score == 5 and sum(card.stocks.values()) == 10:
+            print(159)
             for color in card.stocks.keys():
                 if card.stocks[color] == 3:
+                    print(162)
                     return card
         if card.score == 4 and sum(card.stocks.values()) == 7:
+            print(165)
             for color in card.stocks.keys():
                 if card.stocks[color] == 7:
+                    print(168)
                     return card
         if card.score == 2:
+            print(171)
             for color in card.stocks.keys():
                 if card.stocks[color] == 5:
+                    print(174)
                     return card
         if card.score == 1:
+            print(177)
             for color in card.stocks.keys():
                 if card.stocks[color] == 4 :
+                    print(180)
                     return card
 def card_holding(board):
     DS = []
     if len(player_02.card_open)>0:
+        print(185)
         DS.extend(player_02.card_open)
-        if len(player_02.card_upside_down):
+        if len(player_02.card_upside_down)>0:
+            print(188)
             DS.extend(player_02.card_upside_down)
-    return DS
-        
+        return DS
     
 def List_card(board):
     List = []
@@ -159,38 +198,44 @@ def color_target(board):
         T = 0
         for the in TheII_III (board):
             T += the.stocks[nguyenlieu]
+        if T > 0:
+            T = max
             NLMax = nguyenlieu
     return nguyenlieu
 
 def laynguyenlieucon(board):
     nguyenlieucon = []
     dict_NLcon = {}
-    for nguyenlieu in board.stocks.keys():
-        if nguyenlieu != "auto_color" and board.stocks[nguyenlieu] > 0:
-            dict_NLcon[nguyenlieu] = board.stocks[nguyenlieu]
-    {k: v for k, v in sorted(dict_NLcon.items(), key=lambda item: item[1])}
-    return list(dict_NLcon.keys())
+    if len(board.stocks.keys()) > 0:
+        print(219)
+        for nguyenlieu in board.stocks.keys():
+            if nguyenlieu != "auto_color" and board.stocks[nguyenlieu] > 0:
+                print(222)
+                dict_NLcon[nguyenlieu] = board.stocks[nguyenlieu]
+        {k: v for k, v in sorted(dict_NLcon.items(), key=lambda item: item[1])}
+        return list(dict_NLcon.keys())
   
 
 def nguyenlieucothelay2 (board):
     arr_NLlay2 = []
     if len(board.stocks.keys()) > 0:
+        print(231)
         for nguyenlieu in board.stocks.keys():
             if nguyenlieu != "auto_color" and player_02.checkOneStock(board,nguyenlieu) == True:
+                print(234)
                 arr_NLlay2.append(nguyenlieu)
         return arr_NLlay2
-    else:
-        return board
 def stocks_holding(board,player_02):
     dict_NLgiu = {}
     if len(player_02.stocks.keys()) > 0:
+        print(240)
         for s in player_02.stocks.keys():
             dict_NLgiu[s] = player_02.stocks[s]
         {k: v for k, v in sorted(dict_NLgiu.items(), key=lambda item: item[1])}
-    return list(dict_NLgiu.keys())       
+        return list(dict_NLgiu.keys())       
             
 
-def boNL_get3stocks(board,player_02,*args):
+def Luachonbothe(board,*args):
     dict_bo = {
         "red":0,
         "blue":0,
@@ -199,62 +244,22 @@ def boNL_get3stocks(board,player_02,*args):
         "black":0,
         "auto_color": 0
     }
-    dict_bd = player_02.stocks
+    dict_bd = player_02.stocks.copy()
     for x in args:
         dict_bd[x] += 1
-    danhsachcon = laynguyenlieucon(player_02)
-    a = stocks_holding(board,player_02)
-    boNL = {}
-    if len(player_02.stocks.keys()) == 10:
-        boNL[a[0]] = 1
-        boNL[a[1]] = 1
-        boNL[a[2]] = 1
-
-    if len(player_02.stocks.keys()) == 9:
-        boNL[a[0]] = 1
-        boNL[a[1]] = 1
-        
-    if len(player_02.stocks.keys()) == 8:
-        boNL[a[0]]= 1
-    return boNL
-
-def boNL_get1stock(board,player_02,*args):
-    dict_bo = {
-        "red":0,
-        "blue":0,
-        "white":0,
-        "green":0,
-        "black":0,
-        "auto_color": 0
-    }
-    dict_bd = player_02.stocks
-    for x in args:
-        dict_bd[x] += 1
-    danhsachcon = laynguyenlieucon(player_02)
-    a = stocks_holding(board,player_02)
-    boNL = {}
-    if len(player_02.stocks.keys()) == 10:
-        boNL[a[0]] = 1
-        boNL[a[1]] = 1
-    if len(player_02.stocks.keys()) == 9:
-        boNL[a[0]]= 1
-    return boNL
-
-def boNL_Upsidedown(board,player_02,*args):
-    dict_bo = {
-        "red":0,
-        "blue":0,
-        "white":0,
-        "green":0,
-        "black":0,
-        "auto_color": 0
-    }
-    dict_bd = player_02.stocks
-    for x in args:
-        dict_bd[x] += 1
-    danhsachcon = laynguyenlieucon(player_02)
-    a = stocks_holding(board,player_02)
-    boNL = {}
-    if len(player_02.stocks.keys()) == 10:
-        boNL[a[0]] = 1
-    return boNL
+    if stocks_holding(board,player_02) != None:
+        danhsachcon = stocks_holding(board,player_02)
+        if sum(dict_bd.values()) > 10:
+            print(261)
+            n = sum(dict_bd.values()) - 10
+            i = 0
+            while n != 0:
+                print(266)
+                if dict_bd[danhsachcon[i]] != 0:
+                    print(268)
+                    dict_bo[danhsachcon[i]] +=1
+                    dict_bd[danhsachcon[i]] -=1
+                    n -= 1
+                else:
+                    i += 1
+        return dict_bo
