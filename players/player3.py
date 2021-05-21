@@ -10,7 +10,7 @@ def action(board, arr_player):
     if laythe(board,"I") != None:
         return player_03.getCard(laythe(board,"I"), board)
     else:
-        print(player_03.stocks.values())
+        #####print(player_03.stocks.values())
         if sum(player_03.stocks.values()) >8:
             if player_03.checkUpsiteDown() == True:
                 if sum(player_03.stocks.values()) == 9:
@@ -18,7 +18,7 @@ def action(board, arr_player):
                 if sum(player_03.stocks.values()) == 10:
                     return player_03.getUpsideDown(theseup(board),board,Luachonbothe("auto_color"))
             else:
-                print(player_03.stocks.values())
+                #####print(player_03.stocks.values())
                 if len(dsnguyenlieuconlaitrenbanlaitrenban(board)) >2:
                     if sum(player_03.stocks.values()) == 9:
                         return player_03.getThreeStocks(nguyenlieuutien(board)[0],nguyenlieuutien(board)[1],nguyenlieuutien(board)[2],board,Luachonbothe(nguyenlieuutien(board)[0],nguyenlieuutien(board)[1],nguyenlieuutien(board)[2]))
