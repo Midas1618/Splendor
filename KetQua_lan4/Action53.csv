@@ -1,0 +1,113 @@
+Action
+Lượt: 1 QueenOfGame Get UpsiteDown id =II_19
+"Lượt: 1 KING Get three stock: red,blue,green."
+Lượt: 1 TheGod Get One stock: red
+"Lượt: 1 KingOfDestruction Get three stock: red,blue,green."
+Lượt: 2 QueenOfGame Get UpsiteDown id =III_7
+"Lượt: 2 KING Get three stock: red,blue,green."
+"Lượt: 2 TheGod Get three stock: red,black,blue."
+"Lượt: 2 KingOfDestruction Get three stock: red,blue,green."
+Lượt: 3 QueenOfGame Get UpsiteDown id =III_6
+"Lượt: 3 KING Get three stock: blue,green,white."
+Lượt: 3 TheGod Get UpsiteDown id =III_18
+"Lượt: 3 KingOfDestruction Get three stock: blue,green,white."
+Lượt: 4 QueenOfGame Get One stock: white
+Lượt: 4 KING Get Card = I_5
+Lượt: 4 TheGod Get One stock: black
+Lượt: 4 KingOfDestruction Get Card = I_9
+Lượt: 5 QueenOfGame Get Card = I_17
+"Lượt: 5 KING Get three stock: red,blue,green."
+Lượt: 5 TheGod Get UpsiteDown id =I_24
+"Lượt: 5 KingOfDestruction Get three stock: red,blue,green."
+Lượt: 6 QueenOfGame Get One stock: white
+Lượt: 6 KING Get Card = I_28
+Lượt: 6 TheGod Get UpsiteDown id =I_22
+"Lượt: 6 KingOfDestruction Get three stock: blue,green,white."
+Lượt: 7 QueenOfGame Get One stock: white
+"Lượt: 7 KING Get three stock: green,white,black."
+Lượt: 7 TheGod Get Card = II_23
+Lượt: 7 KingOfDestruction Get Card = I_13
+"Lượt: 8 QueenOfGame Get three stock: white,red,black."
+Lượt: 8 KING Get Card = I_30
+Lượt: 8 TheGod Get One stock: red
+Lượt: 8 KingOfDestruction Get Card = III_1
+Lượt: 9 QueenOfGame Get Card = II_19
+"Lượt: 9 KING Get three stock: red,blue,green."
+"Lượt: 9 TheGod Get three stock: red,black,blue."
+"Lượt: 9 KingOfDestruction Get three stock: blue,green,white."
+Lượt: 10 QueenOfGame Get One stock: white
+"Lượt: 10 KING Get three stock: blue,green,white."
+Lượt: 10 TheGod Get One stock: black
+"Lượt: 10 KingOfDestruction Get three stock: blue,green,white."
+Lượt: 11 QueenOfGame Get One stock: white
+Lượt: 11 KING Get UpsiteDown id =II_10 Return stock: red:1
+Lượt: 11 TheGod Get Card = I_14
+"Lượt: 11 KingOfDestruction Get three stock: red,black,green."
+Lượt: 12 QueenOfGame Get One stock: white
+Lượt: 12 KING Get Card = II_10
+"Lượt: 12 TheGod Get three stock: black,blue,green. Return stock: red:1"
+Lượt: 12 KingOfDestruction Get Card = I_6
+"Lượt: 13 QueenOfGame Get three stock: white,blue,black."
+"Lượt: 13 KING Get three stock: red,blue,white."
+Lượt: 13 TheGod Get Card = I_24
+"Lượt: 13 KingOfDestruction Get three stock: blue,red,black."
+"Lượt: 14 QueenOfGame Get three stock: white,black,green."
+Lượt: 14 KING Get Card = I_18
+Lượt: 14 TheGod Get Card = I_16
+Lượt: 14 KingOfDestruction Get Card = II_9
+Lượt: 15 QueenOfGame Get UpsiteDown id =II_20 Return stock: red:1
+Lượt: 15 KING Get Card = I_34
+Lượt: 15 TheGod Get One stock: red
+Lượt: 15 KingOfDestruction Get Card = I_33
+Lượt: 16 QueenOfGame Get Card = I_27
+Lượt: 16 KING Get Card = I_40
+"Lượt: 16 TheGod Get three stock: red,blue,black."
+"Lượt: 16 KingOfDestruction Get three stock: red,blue,white."
+"Lượt: 17 QueenOfGame Get three stock: white,red,blue."
+Lượt: 17 KING Get Card = I_8
+Lượt: 17 TheGod Get UpsiteDown id =I_21 Return stock: red:1
+Lượt: 17 KingOfDestruction Get Card = I_4
+Lượt: 18 QueenOfGame Get Card = I_1
+Lượt: 18 KING Get Card = I_37
+Lượt: 18 TheGod Get Card = I_35
+Lượt: 18 KingOfDestruction Get Card = I_11
+Lượt: 19 QueenOfGame Get One stock: white
+Lượt: 19 KING Get Card = I_15
+Lượt: 19 TheGod Get Card = I_7
+"Lượt: 19 KingOfDestruction Get three stock: black,red,white."
+Lượt: 20 QueenOfGame Get Card = III_6
+Lượt: 20 KING Get Card = I_19
+"Lượt: 20 TheGod Get three stock: red,black,blue."
+Lượt: 20 KingOfDestruction Get Card = I_26
+"Lượt: 21 QueenOfGame Get three stock: red,black,white."
+Lượt: 21 KING Get Card = I_12
+Lượt: 21 TheGod Get Card = I_32
+Lượt: 21 KingOfDestruction Get Card = I_10
+"Lượt: 22 QueenOfGame Get three stock: red,black,white."
+Lượt: 22 KING Get Card = I_23
+"Lượt: 22 TheGod Get three stock: red,green,blue."
+Lượt: 22 KingOfDestruction Get Card = I_20
+Lượt: 23 QueenOfGame Get One stock: white Return stock: red:1
+Lượt: 23 KING Get Card = I_2Nhan the quy toc id = Noble_2
+Lượt: 23 TheGod Get Card = II_13
+Lượt: 23 KingOfDestruction Get Card = I_31
+Lượt: 24 QueenOfGame Get UpsiteDown id =II_30 Return stock: green:1
+Lượt: 24 KING Get Card = II_28
+Lượt: 24 TheGod Get Card = II_16
+Lượt: 24 KingOfDestruction Get Card = II_4Nhan the quy toc id = Noble_1
+Lượt: 25 QueenOfGame Get One stock: red Return stock: white:2
+Lượt: 25 KING Get Card = II_24Nhan the quy toc id = Noble_5
+Lượt: 25 TheGod Get Card = I_29
+Lượt: 25 KingOfDestruction Get Card = II_5
+Lượt: 26 QueenOfGame Get Card = II_20
+Lượt: 26 KING Get Card = I_38
+Lượt: 26 TheGod Get Card = I_36
+Lượt: 26 KingOfDestruction Get Card = I_25
+Lượt: 27 QueenOfGame Get One stock: black
+Lượt: 27 KING Get Card = I_39
+Lượt: 27 TheGod Get Card = I_21
+Lượt: 27 KingOfDestruction Get Card = II_25
+Lượt: 28 QueenOfGame Get One stock: black
+Lượt: 28 KING Get Card = III_16
+Lượt: 28 TheGod Get Card = I_22
+Lượt: 28 KingOfDestruction Get Card = I_3

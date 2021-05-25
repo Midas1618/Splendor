@@ -28,6 +28,7 @@ def Victory(arr):
       return None
 
 def save_excel(b ,arr):
+
   result = {}
   result[b.name + " Stocks"] = b.stocks.copy()
   for i in b.dict_Card_Stocks_Show.keys():
@@ -35,6 +36,7 @@ def save_excel(b ,arr):
   for i in b.dict_Card_Stocks_UpsiteDown.keys():
     result[b.name +"UpsiteDown"+ i] = [j.id for j in b.dict_Card_Stocks_UpsiteDown[i]]
   for i in arr:
+    print(i.name, i.score)
     result[i.name + " Score"] = i.score
     result[i.name + " Stocks"] = i.stocks.copy()
     result[i.name + " Stocks Const"] = i.stocks_const.copy()
@@ -117,5 +119,4 @@ def RunGame(Luot):
     df_message["Action"] = arr_message
     df_message.to_csv("Action"+Luot+".csv",index=False) 
     print("So luong the quy toc con lai",len(b.dict_Card_Stocks_Show["Noble"]))
-RunGame("51")
-
+RunGame("99")

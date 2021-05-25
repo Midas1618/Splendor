@@ -1,0 +1,125 @@
+Action
+Lượt: 1 Thao Get One stock: blue
+Lượt: 1 Hoang Get One stock: black
+"Lượt: 1 Hieu Get three stock: red,blue,green."
+Lượt: 1 Trang Get One stock: red
+Lượt: 2 Thao Get One stock: blue
+Lượt: 2 Hoang Get One stock: black
+"Lượt: 2 Hieu Get three stock: red,blue,green."
+Lượt: 2 Trang Get One stock: green
+"Lượt: 3 Thao Get three stock: white,red,green."
+Lượt: 3 Hoang Get One stock: white
+Lượt: 3 Hieu Get Card = I_33
+Lượt: 3 Trang Get One stock: green
+"Lượt: 4 Thao Get three stock: white,red,black."
+"Lượt: 4 Hoang Get three stock: black,white,blue."
+"Lượt: 4 Hieu Get three stock: red,green,white."
+"Lượt: 4 Trang Get three stock: red,green,white."
+Lượt: 5 Thao Get UpsiteDown id =I_32 Return stock: red:1
+"Lượt: 5 Hoang Get three stock: black,white,blue."
+"Lượt: 5 Hieu Get three stock: red,green,white."
+Lượt: 5 Trang Get Card = II_28
+Lượt: 6 Thao Get Card = I_18
+Lượt: 6 Hoang Get UpsiteDown id =II_6
+Lượt: 6 Hieu Get Card = I_24
+Lượt: 6 Trang Get One stock: red
+"Lượt: 7 Thao Get three stock: black,white,green."
+Lượt: 7 Hoang Get One stock: green Return stock: black:2
+"Lượt: 7 Hieu Get three stock: red,blue,green."
+"Lượt: 7 Trang Get three stock: red,blue,green."
+Lượt: 8 Thao Get Card = II_16
+"Lượt: 8 Hoang Get three stock: blue,green,black. Return stock: black:3"
+"Lượt: 8 Hieu Get three stock: blue,green,white."
+"Lượt: 8 Trang Get three stock: blue,green,white."
+Lượt: 9 Thao Get UpsiteDown id =II_17
+Lượt: 9 Hoang Get One stock: black Return stock: green:2
+Lượt: 9 Hieu Get Card = I_22
+Lượt: 9 Trang Get Card = I_2
+"Lượt: 10 Thao Get three stock: white,black,red."
+"Lượt: 10 Hoang Get three stock: red,blue,green. Return stock: black:3"
+"Lượt: 10 Hieu Get three stock: red,green,white."
+Lượt: 10 Trang Get Card = I_2
+Lượt: 11 Thao Get Card = II_24
+Lượt: 11 Hoang Get UpsiteDown id =II_4 Return stock: blue:1
+Lượt: 11 Hieu Get Card = I_34
+"Lượt: 11 Trang Get three stock: red,blue,green."
+Lượt: 12 Thao Get One stock: black
+"Lượt: 12 Hoang Get three stock: red,blue,black. Return stock: white:3"
+Lượt: 12 Hieu Get Card = I_10
+Lượt: 12 Trang Get UpsiteDown id =I_7
+"Lượt: 13 Thao Get three stock: white,black,green."
+"Lượt: 13 Hoang Get three stock: red,green,black. Return stock: blue:3"
+"Lượt: 13 Hieu Get three stock: blue,white,black."
+Lượt: 13 Trang Get UpsiteDown id =I_39 Return stock: red:1
+Lượt: 14 Thao Get Card = II_8
+Lượt: 14 Hoang Get UpsiteDown id =II_9 Return stock: red:1
+Lượt: 14 Hieu Get Card = I_15
+Lượt: 14 Trang Get UpsiteDown id =II_15
+Lượt: 15 Thao Get Card = I_4
+Lượt: 15 Hoang Get Card = II_6
+"Lượt: 15 Hieu Get three stock: red,blue,green."
+Lượt: 15 Trang Get One stock: black Return stock: blue:2
+Lượt: 16 Thao Get One stock: white
+"Lượt: 16 Hoang Get three stock: red,blue,green."
+Lượt: 16 Hieu Get Card = I_11
+Lượt: 16 Trang Get Card = I_7
+"Lượt: 17 Thao Get three stock: black,white,blue."
+"Lượt: 17 Hoang Get three stock: blue,green,black."
+Lượt: 17 Hieu Get Card = I_35
+Lượt: 17 Trang Get UpsiteDown id =I_19
+Lượt: 18 Thao Get Card = II_25
+Lượt: 18 Hoang Get UpsiteDown id =II_7 Return stock: red:1
+Lượt: 18 Hieu Get Card = I_8
+Lượt: 18 Trang Get Card = I_19
+"Lượt: 19 Thao Get three stock: white,blue,black."
+"Lượt: 19 Hoang Get three stock: red,blue,green. Return stock: black:3"
+Lượt: 19 Hieu Get Card = I_31
+Lượt: 19 Trang Get Card = I_39
+Lượt: 20 Thao Get Card = I_36
+"Lượt: 20 Hoang Get three stock: blue,green,black. Return stock: red:3"
+Lượt: 20 Hieu Get Card = I_23
+Lượt: 20 Trang Get UpsiteDown id =II_19
+Lượt: 21 Thao Get One stock: black
+Lượt: 21 Hoang Get Card = II_4
+Lượt: 21 Hieu Get Card = I_21
+Lượt: 21 Trang Get UpsiteDown id =I_17
+"Lượt: 22 Thao Get three stock: white,blue,red."
+Lượt: 22 Hoang Get UpsiteDown id =II_27
+Lượt: 22 Hieu Get Card = I_12
+"Lượt: 22 Trang Get three stock: black,white,red."
+"Lượt: 23 Thao Get three stock: green,blue,white. Return stock: red:1"
+"Lượt: 23 Hoang Get three stock: red,blue,green."
+Lượt: 23 Hieu Get Card = I_16
+Lượt: 23 Trang Get Card = II_15
+Lượt: 24 Thao Get Card = II_17
+Lượt: 24 Hoang Get Card = II_27
+Lượt: 24 Hieu Get Card = I_5
+Lượt: 24 Trang Get UpsiteDown id =I_28
+Lượt: 25 Thao Get Card = II_3
+Lượt: 25 Hoang Get UpsiteDown id =II_2
+Lượt: 25 Hieu Get Card = II_21
+Lượt: 25 Trang Get Card = I_28
+"Lượt: 26 Thao Get three stock: blue,green,white."
+Lượt: 26 Hoang Get One stock: blue
+Lượt: 26 Hieu Get Card = II_13
+Lượt: 26 Trang Get UpsiteDown id =II_20
+Lượt: 27 Thao Get Card = II_11
+"Lượt: 27 Hoang Get three stock: red,blue,green."
+Lượt: 27 Hieu Get Card = I_38
+Lượt: 27 Trang Get Card = I_17
+Lượt: 28 Thao Get Card = I_25
+"Lượt: 28 Hoang Get three stock: red,blue,green. Return stock: green:1"
+Lượt: 28 Hieu Get Card = I_29
+Lượt: 28 Trang Get UpsiteDown id =II_10
+Lượt: 29 Thao Get Card = II_12
+Lượt: 29 Hoang Get Card = II_9
+Lượt: 29 Hieu Get Card = I_20
+Lượt: 29 Trang Get One stock: white
+Lượt: 30 Thao Get Card = II_1
+Lượt: 30 Hoang Get UpsiteDown id =II_30
+Lượt: 30 Hieu Get Card = I_26Nhan the quy toc id = Noble_9
+"Lượt: 30 Trang Get three stock: red,blue,black."
+Lượt: 31 Thao Get Card = II_22Nhan the quy toc id = Noble_8
+Lượt: 31 Hoang Get Card = II_5
+Lượt: 31 Hieu Get Card = I_30
+Lượt: 31 Trang Get Card = II_20
