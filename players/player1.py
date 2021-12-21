@@ -5,7 +5,9 @@ player_01 = player.Player("KING", 0)
 
 
 def action(board, arr_player):
-    return turn(board, player_01)
+    
+    return player_01.getOneTwoStock("red","blue",board,{})
+    # return turn(board, player_01)
 
 def turn(board, player_01):
     thecothelay = listthecothemua(board)    

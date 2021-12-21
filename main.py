@@ -100,7 +100,9 @@ def RunGame(Luot):
         turn+=1
         for i in arr_stt:
           if i == 1:
+            print(b.stocks)
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+            print(b.stocks)
             checkNone(b,p1.player_01,turn)
           elif i == 2:
             b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])

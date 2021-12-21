@@ -73,9 +73,51 @@ class Player:
     @card_noble.setter
     def setCard_noble(self,value):
         self.__card_noble = value
+    def checkNguyenLieuTrenBanChoi(self,board, color):
+        if board.stocks[color]>0:
+            return 1
+        return 0
 
 
-# Lấy 3 nguyên liệu
+# Lấy 1,2 nguyên liệu
+    def getOneTwoStock(self, color_1, color_2="Null", board=None, dict_return={}):
+        
+        dict_board = {}
+
+        if self.checkOneTwoStock(board, color_1, color_2):
+            sl_color_1 = self.checkNguyenLieuTrenBanChoi(board, color_1)
+            self.__stocks[color_1] += sl_color_1
+            dict_board[color_1] = sl_color_1
+            
+            if color_2 != "Null":
+                sl_color_2 = self.checkNguyenLieuTrenBanChoi(board, color_2)
+                self.__stocks[color_2] += sl_color_2
+                dict_board[color_2] = sl_color_2
+
+            self.message = self.__name +" Get 1,2 stock: " + color_1 + "," + color_2 + "."
+            self.returnStock(dict_return, board)
+            error.successColor(self.__name +" Lấy 1,2 nguyên liệu thành công")
+            return board.getStock(dict_board)
+        else:
+            return None
+
+    def checkOneTwoStock(self, board, color_1, color_2):
+        try:
+            if color_1 == "auto_color" or color_2 == "auto_color":
+                return False
+            if color_1 == color_2:
+                return False
+            if board.stocks[color_1] == 0:
+                return False
+            if color_2 != "Null":
+                if board.stocks[color_2] == 0:
+                    return False
+            return True
+        except AttributeError:
+            error.errorColor("Check Three Stocks Có tham số nào đó truyền vào bị rỗng nên không thực hiện được hàm")
+            return False
+
+
 
     def getThreeStocks(self, color_1, color_2, color_3, board, dict_return):
         '''
