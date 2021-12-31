@@ -1,6 +1,6 @@
 from base import player
 import random
-player_04 = player.Player("QueenOfGame", 0)
+player_02 = player.Player("QueenOfGame", 0)
     
 
 #Scan thẻ target trên bàn
@@ -42,8 +42,8 @@ def list_target_cards(board):
                         continue
                 target_cards_rank.append(card)
     target_cards_rank_upgrade = []
-    if len(player_04.card_upside_down) > 0:
-        for item in player_04.card_upside_down:
+    if len(player_02.card_upside_down) > 0:
+        for item in player_02.card_upside_down:
             for card in target_cards_rank:
                 if card.stocks[item.type_stock] > 0:
                     target_cards_rank_upgrade.append(card)
@@ -87,10 +87,10 @@ def list_color_on_board(board):
 #Sắp xếp thứ tự ưu tiên các thẻ đang úp
 def list_holding_cards():
     A = []
-    if len(player_04.card_upside_down) > 0:
+    if len(player_02.card_upside_down) > 0:
         #Xét nếu có thẻ mà có màu giúp support mở thẻ khác --> ưu tiên thẻ đó trước
-        for item in player_04.card_upside_down:
-            holding_cards = player_04.card_upside_down.copy()  
+        for item in player_02.card_upside_down:
+            holding_cards = player_02.card_upside_down.copy()  
             holding_cards.remove(item)
             for card in holding_cards:
                 if card.stocks[item.type_stock] > 0:
@@ -100,7 +100,7 @@ def list_holding_cards():
             # ##print(A[0].type_stock)
         score = [3, 5, 4, 2, 1]
         for i in score:
-            for item in player_04.card_upside_down:
+            for item in player_02.card_upside_down:
                 if item.score == i:
                     A.append(item)
     return A
@@ -111,15 +111,15 @@ def list_color_for_holdings(board):
     dict_start = {"red" : 0, "white": 0, "blue": 0, "green": 0,"black": 0}
     item = None
     #Màu nguyên liệu ưu tiên cho thẻ úp ưu tiên nhất    
-    if len(player_04.card_upside_down) > 0:
+    if len(player_02.card_upside_down) > 0:
         # ##print(98)
         # ##print(list_holding_cards()[0].type_stock)
         item = list_holding_cards()[0]
         a = 0
         for color in list(item.stocks.keys()):
-            if ( item.stocks[color] - player_04.stocks[color] - player_04.stocks_const[color] ) > a:
+            if ( item.stocks[color] - player_02.stocks[color] - player_02.stocks_const[color] ) > a:
                 if board.stocks[color] > 0: 
-                    a = item.stocks[color] - player_04.stocks[color] - player_04.stocks_const[color]
+                    a = item.stocks[color] - player_02.stocks[color] - player_02.stocks_const[color]
                     if len(list_color_holding) > 0:                    
                         list_color_holding.insert(0,color)
                     else:
@@ -130,7 +130,7 @@ def list_color_for_holdings(board):
                         list_color_holding.append(color)
         # ##print(list_color_holding)
         #Màu nguyên liệu ưu tiên cho thẻ các thẻ úp khác
-        if len(player_04.card_upside_down) > 1:
+        if len(player_02.card_upside_down) > 1:
             # ##print(117)
             # ##print(list_holding_cards()[1].type_stock)
             list_cards = list_holding_cards().copy()
@@ -140,7 +140,7 @@ def list_color_for_holdings(board):
                     dict_start[color] += card.stocks[color] 
             # ##print(dict_start)
             for color in dict_start.keys():
-                dict_start[color] -= ( player_04.stocks[color] + player_04.stocks_const[color] )
+                dict_start[color] -= ( player_02.stocks[color] + player_02.stocks_const[color] )
             # ##print(dict_start)
             list_values = sorted(list(dict_start.values()),reverse=True)
             # ##print(list_values)
@@ -210,12 +210,12 @@ def get_important_token(board):
     dict_important_token['green'] = 0
     dict_important_token['white'] = 0
     dict_important_token['black'] = 0
-    for card in player_04.card_upside_down:
-        dict_important_token['red'] += card.stocks['red'] - player_04.stocks_const['red'] - player_04.stocks['red']
-        dict_important_token['blue'] += card.stocks['blue'] - player_04.stocks_const['blue'] - player_04.stocks['blue']
-        dict_important_token['green'] += card.stocks['green'] - player_04.stocks_const['green'] - player_04.stocks['green']
-        dict_important_token['white'] += card.stocks['white'] - player_04.stocks_const['white'] - player_04.stocks['white']
-        dict_important_token['black'] += card.stocks['black'] - player_04.stocks_const['black'] - player_04.stocks['black']
+    for card in player_02.card_upside_down:
+        dict_important_token['red'] += card.stocks['red'] - player_02.stocks_const['red'] - player_02.stocks['red']
+        dict_important_token['blue'] += card.stocks['blue'] - player_02.stocks_const['blue'] - player_02.stocks['blue']
+        dict_important_token['green'] += card.stocks['green'] - player_02.stocks_const['green'] - player_02.stocks['green']
+        dict_important_token['white'] += card.stocks['white'] - player_02.stocks_const['white'] - player_02.stocks['white']
+        dict_important_token['black'] += card.stocks['black'] - player_02.stocks_const['black'] - player_02.stocks['black']
     list_token = list(dict_important_token.keys())
     list_number_token = list(dict_important_token.values())
     dict_token_important = {}
@@ -231,14 +231,14 @@ def get_important_token(board):
 #List màu token đang cầm, ưu tiên bỏ trước, trong trường hợp đang có thẻ úp
 def list_color_return_when_holding(board):
     color_return = []
-    for color in player_04.stocks.keys():
-        if player_04.stocks[color] > 0 and color != "auto_color":
+    for color in player_02.stocks.keys():
+        if player_02.stocks[color] > 0 and color != "auto_color":
             if color not in list_color_for_holdings(board):
                 color_return.append(color)
     list = list_color_for_holdings(board).copy()
     list.reverse()
     for color in list:
-        if player_04.stocks[color] > 0 and color not in color_return:
+        if player_02.stocks[color] > 0 and color not in color_return:
             color_return.append(color)
     return color_return
 
@@ -255,7 +255,7 @@ def Luachonbothe(board,*args):
         "black":0,
         "auto_color": 0
     }
-    dict_bd = player_04.stocks.copy()
+    dict_bd = player_02.stocks.copy()
     for x in args:
         dict_bd[x] += 1
     danhsachcon = list_color_return_when_holding(board).copy()
@@ -285,7 +285,7 @@ def dict_return(board,*args):
         "black":0,
         "auto_color": 0
     }
-    dict_bd = player_04.stocks.copy()
+    dict_bd = player_02.stocks.copy()
     for x in args:
         dict_bd[x] += 1
     color_list = list_color_no_target(board).copy()
@@ -309,13 +309,13 @@ def dict_return(board,*args):
 def list_cards_target_can_buy(board):
     cards_target_can_buy = []
     for card in list_holding_cards():
-        if player_04.checkGetCard(card):
+        if player_02.checkGetCard(card):
             cards_target_can_buy.append(card)
     for card in list_target_cards(board):
-        if player_04.checkGetCard(card):
+        if player_02.checkGetCard(card):
             cards_target_can_buy.append(card)
     if target_support_cards(board) != None:
-        if player_04.checkGetCard(card):
+        if player_02.checkGetCard(card):
             cards_target_can_buy.append(card)
     return cards_target_can_buy
 
@@ -325,36 +325,36 @@ def list_cards_on_board_can_buy(board):
     type = ["III", "II", "I"]
     for i in type:
         for card in board.dict_Card_Stocks_Show[i]:
-            if player_04.checkGetCard(card):
+            if player_02.checkGetCard(card):
                 cards_on_board_can_buy.append(card)
     return cards_on_board_can_buy
 
 #Kiểm tra xem trong thẻ úp hoặc thẻ trên tay đã có thẻ 5 điểm chưa
 def check_any_card_5score_onhand():
-    for card in player_04.card_upside_down:
+    for card in player_02.card_upside_down:
         if card.score == 5:
             return True
-    for card in player_04.card_open:
+    for card in player_02.card_open:
         if card.score == 5:
             return True
     return False
 
 #Kiểm tra xem trong thẻ úp hoặc thẻ trên tay đã có thẻ 4 điểm chưa
 def check_any_card_4score_onhand():
-    for card in player_04.card_upside_down:
+    for card in player_02.card_upside_down:
         if card.score == 4:
             return True
-    for card in player_04.card_open:
+    for card in player_02.card_open:
         if card.score == 4:
             return True
     return False
 
 #Kiểm tra xem trong thẻ úp hoặc thẻ trên tay đã có thẻ 3 điểm chưa
 def check_any_card_3score_onhand():
-    for card in player_04.card_upside_down:
+    for card in player_02.card_upside_down:
         if card.score == 3:
             return True
-    for card in player_04.card_open:
+    for card in player_02.card_open:
         if card.score == 3:
             return True
     return False
@@ -364,10 +364,10 @@ def theup(board):
     NL = []
     for nguyenlieu in board.dict_Card_Stocks_Show["III"][0].stocks.keys():
         max = 0
-        for the in player_04.card_upside_down:
+        for the in player_02.card_upside_down:
             if the.stocks[nguyenlieu] > max:
                 the.stocks[nguyenlieu] = max
-        if max > player_04.stocks[nguyenlieu]:
+        if max > player_02.stocks[nguyenlieu]:
             NL.append(nguyenlieu)
     for n in NL:
         for the1 in board.dict_Card_Stocks_Show["III"]:
@@ -422,253 +422,253 @@ def color_3_support(board):
 def action(board, arr_player):
 
     if len(list_cards_target_can_buy(board)) > 0:
-        return player_04.getCard(list_cards_target_can_buy(board)[0],board)
+        return player_02.getCard(list_cards_target_can_buy(board)[0],board)
     
     if len(list_target_cards(board)) > 0:
-        if player_04.checkUpsiteDown():                            
+        if player_02.checkUpsiteDown():                            
             ##print(431)
             ##print(list_target_cards(board)[0].type_stock)
-            return player_04.getUpsideDown(list_target_cards(board)[0],board, Luachonbothe(board,"auto_color"))
+            return player_02.getUpsideDown(list_target_cards(board)[0],board, Luachonbothe(board,"auto_color"))
 
-    if len(player_04.card_upside_down) > 0:
-        if sum(player_04.stocks.values()) <= 8:            
+    if len(player_02.card_upside_down) > 0:
+        if sum(player_02.stocks.values()) <= 8:            
             if len(list_color_for_holdings(board)) > 0:
-                if player_04.checkOneStock(board,list_color_for_holdings(board)[0]):
+                if player_02.checkOneStock(board,list_color_for_holdings(board)[0]):
                     ##print(439)
                     ##print(list_color_for_holdings(board))
-                    return player_04.getOneStock(list_color_for_holdings(board)[0],board,Luachonbothe(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[0]))
+                    return player_02.getOneStock(list_color_for_holdings(board)[0],board,Luachonbothe(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[0]))
             
             if len(list_color_for_holdings(board)) > 2:
-                if player_04.checkThreeStocks(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],list_color_for_holdings(board)[2]):
+                if player_02.checkThreeStocks(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],list_color_for_holdings(board)[2]):
                     ##print(445)
                     ##print(list_color_for_holdings(board))
-                    return player_04.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],list_color_for_holdings(board)[2],
+                    return player_02.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],list_color_for_holdings(board)[2],
                                                     board,
                                                     Luachonbothe(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],list_color_for_holdings(board)[2]))
             if len(list_color_for_holdings(board)) == 2 :               
-                if player_04.checkOneStock(board,list_color_for_holdings(board)[1]):
+                if player_02.checkOneStock(board,list_color_for_holdings(board)[1]):
                     ##print(452)
                     ##print(list_color_for_holdings(board)[1])
-                    return player_04.getOneStock(list_color_for_holdings(board)[1],board,Luachonbothe(board,list_color_for_holdings(board)[1],list_color_for_holdings(board)[1]))
+                    return player_02.getOneStock(list_color_for_holdings(board)[1],board,Luachonbothe(board,list_color_for_holdings(board)[1],list_color_for_holdings(board)[1]))
                 if color_3(board) != None:
                     ##print(455)
                     ##print(list_color_for_holdings(board))
                     ##print(color_3(board))
                     ##print(board.stocks)
-                    return player_04.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3(board),
+                    return player_02.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3(board),
                                                     board,
                                                     Luachonbothe(board,
                                                     list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3(board)))
                                             
             if len(list_color_for_holdings(board)) == 1 :
                 if len(list_color_no_target(board)) >= 2:
-                    if player_04.checkThreeStocks(board,list_color_for_holdings(board)[0],list_color_no_target(board)[0],list_color_no_target(board)[1]):
+                    if player_02.checkThreeStocks(board,list_color_for_holdings(board)[0],list_color_no_target(board)[0],list_color_no_target(board)[1]):
                         ##print(467)
                         ##print(list_color_for_holdings(board)[0])
                         ##print(list_color_no_target(board))                        
-                        return player_04.getThreeStocks(list_color_for_holdings(board)[0],list_color_no_target(board)[0],list_color_no_target(board)[1],
+                        return player_02.getThreeStocks(list_color_for_holdings(board)[0],list_color_no_target(board)[0],list_color_no_target(board)[1],
                                                     board,
                                                     Luachonbothe(board,list_color_for_holdings(board)[0],list_color_no_target(board)[0],list_color_no_target(board)[1]))
                 if target_support_cards(board) != None:
                     if len(color_card_support(board)) > 2:
                         ##print(475)
                         ##print(color_card_support(board)[0],color_card_support(board)[1],color_card_support(board)[2])
-                        if player_04.checkThreeStocks(board,color_card_support(board)[0],color_card_support(board)[1],color_card_support(board)[2]):
-                            return player_04.getThreeStocks(color_card_support(board)[0],color_card_support(board)[1],color_card_support(board)[2],board,
+                        if player_02.checkThreeStocks(board,color_card_support(board)[0],color_card_support(board)[1],color_card_support(board)[2]):
+                            return player_02.getThreeStocks(color_card_support(board)[0],color_card_support(board)[1],color_card_support(board)[2],board,
                                                         Luachonbothe(board,color_card_support(board)[0],color_card_support(board)[1],color_card_support(board)[2]))                                            
                     for color in color_card_support(board):
-                        if player_04.checkOneStock(board,color):
+                        if player_02.checkOneStock(board,color):
                             ##print(482)
                             ##print(color)
-                            return player_04.getOneStock(color,board,Luachonbothe(board,color,color))
+                            return player_02.getOneStock(color,board,Luachonbothe(board,color,color))
                     if len(color_card_support(board)) == 2:
                         if color_3_support(board) != None:
                             ##print(487)
-                            if player_04.checkThreeStocks(board,color_card_support(board)[0],color_card_support(board)[1],color_3_support(board)):
-                                return player_04.getThreeStocks(color_card_support(board)[0],color_card_support(board)[1],color_3_support(board),board,
+                            if player_02.checkThreeStocks(board,color_card_support(board)[0],color_card_support(board)[1],color_3_support(board)):
+                                return player_02.getThreeStocks(color_card_support(board)[0],color_card_support(board)[1],color_3_support(board),board,
                                                                 Luachonbothe(board,color_card_support(board)[0],color_card_support(board)[1],color_3_support(board)))
                         for color in color_card_support(board):
-                            if player_04.checkOneStock(board,color):
+                            if player_02.checkOneStock(board,color):
                                 ##print(493)
                                 ##print(color)
-                                return player_04.getOneStock(color,board,Luachonbothe(board,color,color))                
-                    if player_04.checkUpsiteDown():
+                                return player_02.getOneStock(color,board,Luachonbothe(board,color,color))                
+                    if player_02.checkUpsiteDown():
                         ##print(497)
                         ##print(target_support_cards(board).type_stock)
-                        return player_04.getUpsideDown(target_support_cards(board),board,{})
+                        return player_02.getUpsideDown(target_support_cards(board),board,{})
                 if theup(board) != None:
-                    if player_04.checkUpsiteDown():
+                    if player_02.checkUpsiteDown():
                         ##print(502)
                         ##print(theup(board).type_stock)                    
-                        return player_04.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))
+                        return player_02.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))
                 if target_support_cards(board) != None:
-                    if player_04.checkGetCard(target_support_cards(board)):
+                    if player_02.checkGetCard(target_support_cards(board)):
                         ##print(507)
                         ##print(target_support_cards(board)).type_stock
-                        return player_04.getCard(target_support_cards(board),board)
+                        return player_02.getCard(target_support_cards(board),board)
                 if theup(board) != None:                
-                    if player_04.checkGetCard(theup(board)):
+                    if player_02.checkGetCard(theup(board)):
                         ##print(512)
                         ##print(theup(board).type_stock)
-                        return player_04.getCard(theup(board),board)
+                        return player_02.getCard(theup(board),board)
                 if len(list_color_no_target(board)) >= 3:
-                    if player_04.checkThreeStocks(board,list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2]):
+                    if player_02.checkThreeStocks(board,list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2]):
                         ##print(517)
                         ##print(list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2])
-                        return player_04.getThreeStocks(list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2],
+                        return player_02.getThreeStocks(list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2],
                                                         board,
                                                         Luachonbothe(board,list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2]))
                 if len(list_color_no_target(board)) > 0:
                     for color in list_color_no_target(board):
-                        if player_04.checkOneStock(board,color):
+                        if player_02.checkOneStock(board,color):
                             ##print(525)
                             ##print(color)
-                            return player_04.getOneStock(color,board,{})            
+                            return player_02.getOneStock(color,board,{})            
 
-        if sum(player_04.stocks.values()) == 9:
+        if sum(player_02.stocks.values()) == 9:
             for color in list_color_for_holdings(board):
-                if player_04.checkOneStock(board,color):
+                if player_02.checkOneStock(board,color):
                     ##print(532)
                     ##print(color)
-                    return player_04.getOneStock(color,board,Luachonbothe(board,color,color))
-            if player_04.checkUpsiteDown():
+                    return player_02.getOneStock(color,board,Luachonbothe(board,color,color))
+            if player_02.checkUpsiteDown():
                 if len(list_target_cards(board)) > 0:
                     ##print(537)
-                    return player_04.getUpsideDown(list_target_cards(board)[0],board, Luachonbothe(board,"auto_color"))
+                    return player_02.getUpsideDown(list_target_cards(board)[0],board, Luachonbothe(board,"auto_color"))
                 if target_support_cards(board) != None:
                     ##print(540)
-                    return player_04.getUpsideDown(target_support_cards(board),board,{})
+                    return player_02.getUpsideDown(target_support_cards(board),board,{})
                 if theup(board) != None:
                     ##print(543)
-                    return player_04.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))                                 
+                    return player_02.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))                                 
             if len(list_color_for_holdings(board)) == 2:
                 if color_3_on_board(board) != None:
                     ##print(547)
                     ##print(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board))
-                    return player_04.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board),
+                    return player_02.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board),
                                                 board,
                                                 Luachonbothe(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board)))        
             if target_support_cards(board) != None:
-                if player_04.checkGetCard(target_support_cards(board)):
+                if player_02.checkGetCard(target_support_cards(board)):
                     ##print(554)
                     ##print(target_support_cards(board).type_stock)
-                    return player_04.getCard(target_support_cards(board),board)
+                    return player_02.getCard(target_support_cards(board),board)
             if theup(board) != None:
-                if player_04.checkGetCard(theup(board)):
+                if player_02.checkGetCard(theup(board)):
                     ##print(559)
                     ##print(theup(board).type_stock)
-                    return player_04.getCard(theup(board),board)
-        if sum(player_04.stocks.values()) == 10:
+                    return player_02.getCard(theup(board),board)
+        if sum(player_02.stocks.values()) == 10:
             if target_support_cards(board) != None:
-                if player_04.checkUpsiteDown():
+                if player_02.checkUpsiteDown():
                     ##print(566)
                     ##print(target_support_cards(board).type_stock)
-                    return player_04.getUpsideDown(target_support_cards(board),board,Luachonbothe(board,"auto_color"))
+                    return player_02.getUpsideDown(target_support_cards(board),board,Luachonbothe(board,"auto_color"))
             if theup(board) != None:
-                if player_04.checkUpsiteDown():
+                if player_02.checkUpsiteDown():
                     ##print(568)
                     ##print(theup(board).type_stock)
-                    return player_04.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))            
+                    return player_02.getUpsideDown(theup(board),board,Luachonbothe(board,"auto_color"))            
             if target_support_cards(board) != None:
-                if player_04.checkGetCard(target_support_cards(board)):
+                if player_02.checkGetCard(target_support_cards(board)):
                     ##print(573)
                     ##print(target_support_cards(board).type_stock)
-                    return player_04.getCard(target_support_cards(board),board)
+                    return player_02.getCard(target_support_cards(board),board)
             if theup(board) != None:
-                if player_04.checkGetCard(theup(board)):
+                if player_02.checkGetCard(theup(board)):
                     ##print(578)
                     ##print(theup(board).type_stock)
-                    return player_04.getCard(theup(board),board)
+                    return player_02.getCard(theup(board),board)
             if len(list_color_for_holdings(board)) > 0:
                 for color in list_color_for_holdings(board):
-                    if player_04.checkOneStock(board,color):
+                    if player_02.checkOneStock(board,color):
                         ##print(477)
                         ##print(color)
-                        return player_04.getOneStock(color,board,Luachonbothe(board,color,color))
+                        return player_02.getOneStock(color,board,Luachonbothe(board,color,color))
             if len(list_color_for_holdings(board)) == 2:
                 if color_3_on_board(board) != None:
-                    if player_04.checkThreeStocks(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board)):
+                    if player_02.checkThreeStocks(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board)):
                         ##print(589)
                         ##print(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board))                    
-                        return player_04.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board),
+                        return player_02.getThreeStocks(list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board),
                                                     board,
                                                     Luachonbothe(board,list_color_for_holdings(board)[0],list_color_for_holdings(board)[1],color_3_on_board(board)))                      
         
         if len(list_cards_on_board_can_buy(board)) > 0:
             for card in list_cards_on_board_can_buy(board):
                 if card.score > 0:
-                    if player_04.checkGetCard(list_cards_on_board_can_buy(board)[0]):
+                    if player_02.checkGetCard(list_cards_on_board_can_buy(board)[0]):
                         ##print(589)
                         ##print(card.type_stock)
-                        return player_04.getCard(card,board)
+                        return player_02.getCard(card,board)
             for card in list_cards_on_board_can_buy(board):
-                if player_04.checkGetCard(card):
+                if player_02.checkGetCard(card):
                     ##print(602)
                     ##print(card.type_stock)
-                    return player_04.getCard(card,board)
+                    return player_02.getCard(card,board)
         if len(list_color_on_board(board)) > 0:
             for color in list_color_on_board(board):
-                if player_04.checkOneStock(board, color):
+                if player_02.checkOneStock(board, color):
                     ##print(609)
                     ##print(color)
-                    return player_04.getOneStock(color,board,Luachonbothe(board,color,color))
+                    return player_02.getOneStock(color,board,Luachonbothe(board,color,color))
             if len(list_color_on_board(board)) > 2:
-                if player_04.checkThreeStocks(board,list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2]):
+                if player_02.checkThreeStocks(board,list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2]):
                     ##print(615)
                     ##print(list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2])
-                    return player_04.getThreeStocks(list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2],
+                    return player_02.getThreeStocks(list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2],
                                                     board,
                                                     Luachonbothe(board,
                                                     list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2]))
 
-    if len(player_04.card_upside_down) == 0:
+    if len(player_02.card_upside_down) == 0:
 
         if len(list_color_on_board(board)) > 0:
             for color in list_color_on_board(board):
-                if player_04.checkOneStock(board, color):
+                if player_02.checkOneStock(board, color):
                     ##print(241)
-                    return player_04.getOneStock(color,board,dict_return(board,color,color))
+                    return player_02.getOneStock(color,board,dict_return(board,color,color))
             if len(list_color_on_board(board)) > 2:
                 ##print(243)
-                if player_04.checkThreeStocks(board,list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2]):
-                    return player_04.getThreeStocks(list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2],
+                if player_02.checkThreeStocks(board,list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2]):
+                    return player_02.getThreeStocks(list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2],
                                                     board,
                                                     dict_return(board,
                                                     list_color_on_board(board)[0],list_color_on_board(board)[1],list_color_on_board(board)[2]))
             if len(list_color_on_board(board)) == 2:
                 if color_3(board) != None:
                     ##print(251)
-                    return player_04.getThreeStocks(list_color_on_board(board)[0],list_color_on_board(board)[1],color_3_on_board(board),
+                    return player_02.getThreeStocks(list_color_on_board(board)[0],list_color_on_board(board)[1],color_3_on_board(board),
                                                     board,
                                                     dict_return(board,
                                                     list_color_on_board(board)[0],list_color_on_board(board)[1],color_3_on_board(board)))      
 
-        if sum(player_04.stocks.values()) <= 8:
+        if sum(player_02.stocks.values()) <= 8:
             for color in list_color_no_target(board):
-                if player_04.checkOneStock(board,color):
+                if player_02.checkOneStock(board,color):
                     ##print(317)
-                    return player_04.getOneStock(color,board,{})
+                    return player_02.getOneStock(color,board,{})
             if len(list_color_no_target(board)) >= 3:
                 ##print(320)
-                return player_04.getThreeStocks(list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2],
+                return player_02.getThreeStocks(list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2],
                                                 board,
                                                 dict_return(board,list_color_no_target(board)[0],list_color_no_target(board)[1],list_color_no_target(board)[2]))
         
-        if sum(player_04.stocks.values()) == 9:
+        if sum(player_02.stocks.values()) == 9:
             for color in list_color_no_target(board):
-                if player_04.checkOneStock(board,color):
+                if player_02.checkOneStock(board,color):
                     ##print(328)
-                    return player_04.getOneStock(color,board,dict_return(board,color,color))
+                    return player_02.getOneStock(color,board,dict_return(board,color,color))
     
     if theup(board) != None:
-        if player_04.checkGetCard(theup(board)):
-            return player_04.getCard(theup(board),board)
+        if player_02.checkGetCard(theup(board)):
+            return player_02.getCard(theup(board),board)
     
     if len(list_cards_on_board_can_buy(board)) > 0:
         for card in list_cards_on_board_can_buy(board):
             if card.score > 0:
-                return player_04.getCard(card,board)
-        return player_04.getCard(card,board)
+                return player_02.getCard(card,board)
+        return player_02.getCard(card,board)
     # ##print(board.stocks)
     return board    
 

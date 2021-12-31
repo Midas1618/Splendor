@@ -2,6 +2,7 @@
 from base import player
 import random
 import math
+
 player_04 = player.Player("KingOfDestruction", 0)
 def action(board, arr_player):
     return turn(board, player_04)

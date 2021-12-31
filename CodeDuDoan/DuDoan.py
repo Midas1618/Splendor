@@ -92,7 +92,4 @@ def DuDoan(DataRaw):
   return df_moi.idxmax(axis=1).loc[0]
 
 def caculater(const_nl,best_const,noble,stocks,board_const,score,turn,loai1,loai2,loai3):
-  return const_nl + score
-
-  
-  
+  return const_nl + score/turn

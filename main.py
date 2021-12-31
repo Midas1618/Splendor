@@ -1,10 +1,10 @@
 from numpy.core.fromnumeric import take
 from base.player import Player
 from base import board
-from players import player5_Phong as p1
-from players import player6_HungThom as p2
-from players import player7_MA as p3
-from players import player2_Trang as p4
+from players import player1_Hieu as p1
+from players import player2_Trang as p2
+from players import player3_NA as p3
+from players import player4_Hieu as p4
 import pandas as pd
 import random
 from CodeDuDoan import DuDoan
@@ -45,12 +45,12 @@ def save_excel(b ,arr,turn):
 # def saveAction(t):
 #   arr_message.append(t)
 
-# def checkNone(b,player,turn):
-#   saveAction("Lượt: " + str(turn) +" "+player.message)
-#   if b == None:
-#     print("Lỗi của :",player.name)
+def checkNone(b,player,turn):
+  # saveAction("Lượt: " + str(turn) +" "+player.message)
+  if b == None:
+    print("Lỗi của :",player.name)
 
-def RunGame():
+def RunGame(Luot):
     b = board.Board()
     b.LoadBase()
     b.setupCard()
@@ -70,25 +70,42 @@ def RunGame():
     # result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04]))
     p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     while p.name == "0":
+        if turn > 40:
+          break
         turn+=1
         # print("Luot: ", turn)
         for i in arr_stt:
           if i == 1:
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
+            checkNone(b,p1.player_01,turn)
           elif i == 2:
             b = p2.action(b, [p1.player_01, p3.player_03, p4.player_04])
+            checkNone(b,p2.player_02,turn)
           elif i == 3:
-            b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04],turn)
+            b = p3.action(b, [p1.player_01, p2.player_02, p4.player_04])
+            checkNone(b,p3.player_03,turn)
           else:
             b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
+            checkNone(b,p4.player_04,turn)
         if turn > 0 and turn <=30:
           a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04],turn)
           result_turn.append(a)
-        if turn == 17:
+        if turn == 20:
           w = DuDoan.DuDoan(pd.json_normalize([a],max_level=0))
         p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     data = pd.json_normalize(result_turn,max_level=0)
+    data.to_csv(str(Luot) + ".csv",index=False)
     print("So vong choi: ",turn)
+    file_name = str(Luot) + ".csv"
+    file_card_point = pd.read_csv("file_card_point.csv")
+    if '1' in pVictory.name:
+        df_file = pd.read_csv(file_name)
+        open_card = df_file[f'{pVictory.name} Open'][len(df_file)-1].replace("'",'').replace('[','').replace(']','').split(', ')
+        list_card = list(file_card_point['ID'])
+        for card in open_card:
+            index = list_card.index(card)
+            file_card_point['Score'][index] = float(float(file_card_point['Score'][index]) + 1)
+        file_card_point.to_csv('file_card_point.csv', index= False)
     # data["win"] = [p.name for i in range(6)]
     return data,w
 
@@ -96,17 +113,17 @@ pVictory = Player("0", 0)
 arr_scale = [0,0,0,0]
 def check():
   for i in arr_scale:
-    if i < 100:
+    if i < 1000:
       return True
   return False
 data_last = pd.DataFrame({})
-lan = 0
+lan,loi = 0,0
 dudoan = 0
 while True:
     data_last = pd.DataFrame({})
     lan +=1
     print(lan)
-    if lan == 100:
+    if lan == 1000:
       break
     pVictory = Player("0", 0)
     p1.player_01 = p1.player.Player("1", 0)
@@ -114,17 +131,24 @@ while True:
     p3.player_03 = p3.player.Player("3", 0)
     p4.player_04 = p4.player.Player("4", 0)
     try:
-      t,winWill = RunGame()
+      t,winWill = RunGame(lan)
       print("Win That: ",pVictory.name, "WinDoan: ", winWill)
       if pVictory.name == winWill:
         dudoan+=1
-      if arr_scale[int(pVictory.name)-1] < 100:
+      if arr_scale[int(pVictory.name)-1] < 1000:
         data_last = data_last.append(t)
         arr_scale[int(pVictory.name)-1]+=1
-        data_last.to_csv("DataTrain/"+str(lan) + ".csv",index=False)
+      
+        # file_name = str(Luot) + ".csv"
+        # if pVictory.name == 'test_12/18':
+        #     df_file = pd.read_csv(file_name)
+        #     open_card = list(df_file['test_12/8 Open'][-1:-1])
+        #     print(open_card)
         print(arr_scale)
     except:
       lan-=1
+      loi+=1
+print("Loi:",loi)
 print("So tran doan dung: ",dudoan)
 
 

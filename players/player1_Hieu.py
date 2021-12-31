@@ -1,370 +1,214 @@
 from base import player
-import random
+import numpy as np
 import math
-player_01 = player.Player("KING", 0)
-
-
+from scipy.stats import hmean
+import pandas as pd
+player_01 = player.Player("3", 0)
+#DONE
 def action(board, arr_player):
-    # return player_01.getOneTwoStock("red","blue",board,{})
-    return turn(board, player_01)
+    file_card_point = pd.read_csv('file_card_point.csv')
+    return turn(board, player_01, file_card_point)
 
-def turn(board, player_01):
-    thecothelay = listthecothemua(board)    
-    nguyenlieucothelay2 = listnguyenlieulay2(board)
-    nguyenlieucon = listnguyenlieucon(board)    
-    #action
+def turn(board, player, file_card_point):
+    '''hàm này trả ra action trong turn '''
+    the_co_the_lay = list_card_can_buy(board, player)
 
-    #Lấy thẻ
-    if len(thecothelay) > 0:
-        list_card_value = []
-        for card in thecothelay:
-            #lấy thẻ có điểm
-            if card.score > 1:
-                card_value = sum(list(card.stocks.values()))/card.score
-                list_card_value.append([card, card_value])
-        if len(list_card_value) > 0:
-            card_get = list_card_value[0][0]
-            card_value = list_card_value[0][1]
-            for item in list_card_value:
-                if item[1] < card_value:
-                    card_get = item[0]
-                    card_value = item[1]
-            return player_01.getCard(card_get, board)
-        else:
-            #lấy thẻ để lấy noble
-            thecothelay = get_card_to_get_noble(board)
-            if thecothelay != None:
-                for card in thecothelay:
-                    if card.score == 0:
-                        card_value = math.sqrt(sum(list(card.stocks.values())) + 1.78)
-                        list_card_value.append([card, card_value])
-                    elif card.score > 0:
-                        card_value = sum(list(card.stocks.values()))/card.score
-                        list_card_value.append([card, card_value])
-                # if len(list_card_value) > 0:
-                card_get = list_card_value[0][0]
-                card_value = list_card_value[0][1]
-                for item in list_card_value:
-                    if item[1] < card_value:
-                        card_get = item[0]
-                        card_value = item[1]
-                
-                return player_01.getCard(card_get, board)
-            else:
-                #lấy thẻ rẻ nhất còn lại
-                thecothelay = listthecothemua(board)
-                for card in thecothelay:
-                    if card.score == 0:
-                        card_value = math.sqrt(sum(list(card.stocks.values())) + 1.78)
-                        list_card_value.append([card, card_value])
-                    else:
-                        card_value = sum(list(card.stocks.values()))/card.score
-                        list_card_value.append([card, card_value])
-                card_get = list_card_value[0][0]
-                card_value = list_card_value[0][1]
-                for item in list_card_value:
-                    if item[1] < card_value:
-                        card_get = item[0]
-                        card_value = item[1]
-                return player_01.getCard(card_get, board)
-      
-    # không lấy được thẻ thì lấy token
-    if sum(list(player_01.stocks.values())) <= 7:
-        dict_token_important = get_important_token(board)
-        # if len(dict_token_important) > 0:
-            # for token in list(dict_token_important.keys()):
-            #     if token not in nguyenlieucon:
-            #         del dict_token_important[token]
-        if len(dict_token_important) >= 3:
-            return player_01.getThreeStocks(list(dict_token_important.keys())[0],
-                                    list(dict_token_important.keys())[1],
-                                    list(dict_token_important.keys())[2], board, {})
-        elif len(dict_token_important) > 0 and len(nguyenlieucothelay2) > 0:
+    target_card = create_target_card(board, player, file_card_point)
+    if target_card in the_co_the_lay:
+        return player.getCard(target_card, board)
 
-            for token in list(dict_token_important.keys()):
-                if token not in nguyenlieucothelay2:
-                    del dict_token_important[token]
-            type_card = list(dict_token_important.keys())[0]
-            value = list(dict_token_important.values())[0]
-            for typecard in list(dict_token_important.keys()):
-                # if dict_token_important[typecard] > value:
-                #     value = dict_token_important[typecard]
-                #     type_card = typecard
-                if player_01.checkOneStock(board, typecard) == True:
-                    # print('sai1')
-                    return player_01.getOneStock(type_card, board, {})
-        else:
-            dict_token_choose = get_Three_Most_Token(board)
-            for token in list(dict_token_choose.keys()):
-                if token not in nguyenlieucon:
-                    del dict_token_choose[token]
+    pick_token = value_function2(board, player_01)
+    dict_value_stock_const = value_function1(board, player_01)
+    value_get_card = [-1, -1]
 
-            if len(dict_token_choose) >= 3:
-                return player_01.getThreeStocks(list(dict_token_choose.keys())[0],
-                                        list(dict_token_choose.keys())[1],
-                                        list(dict_token_choose.keys())[2], board, {})
-            else:
-                if len(nguyenlieucothelay2) > 0:
-                    dict_token_choose = get_Three_Most_Token(board)
-                    for token in list(dict_token_choose.keys()):
-                        if token not in nguyenlieucothelay2:
-                            del dict_token_choose[token]
-                    # if len(dict_token_choose)
-                    if len(dict_token_choose) > 0:
-                        print('sai2')
-                        return player_01.getOneStock(list(dict_token_choose.keys())[0], board, {})    
-                    else:
-                        if player_01.checkUpsiteDown() == True:
-                            return player_01.getUpsideDown(get_card_value(board), board, {})
-
-    if sum(player_01.stocks.values()) > 7:
-        #nếu có 8 token
-        if sum(player_01.stocks.values()) < 9:
-            dict_token_important = get_important_token(board)
-            if len(dict_token_important) > 0:
-                for token in list(dict_token_important.keys()):
-                    if token not in nguyenlieucothelay2:
-                        del dict_token_important[token]
-            if len(dict_token_important) > 0:
-                type_card = list(dict_token_important.keys())[0]
-                value = list(dict_token_important.values())[0]
-                for typecard in list(dict_token_important.keys()):
-                    if player_01.checkOneStock(board, type_card) == True:
-                        return player_01.getOneStock(type_card, board,{})
-            #nếu ko lấy được 2token cùng loại thì sẽ auto úp thẻ
-            if player_01.checkUpsiteDown() == True: 
-                return player_01.getUpsideDown(get_card_value(board), board, {})
-        #nếu có 9 token
-        elif sum(player_01.stocks.values()) == 9:
-            if player_01.checkUpsiteDown() == True: 
-                return player_01.getUpsideDown(get_card_value(board), board, {})
-        else:
-            bo = {}
-            dict_token_not_important = get_token_return(board)
-            list_value = list(dict_token_not_important.values())
-            list_type_token = list(dict_token_not_important.keys())
-            list_token_return = []
-            count = 0
-            while count < len(dict_token_not_important):
-                count += 1
-                min_value = min(list_value)
-                list_token_return.append(list_type_token[list_value.index(min_value)])
-            
-            for nguyenlieu in list_token_return:
-                if player_01.stocks[nguyenlieu] > 0:
-                    bo[nguyenlieu] = 1
-                    break
-            if player_01.checkUpsiteDown() == True: 
-                return player_01.getUpsideDown(get_card_value(board), board, bo)
+    if len(the_co_the_lay) > 0:
+        value_get_card = [Q_function(board, player_01, 'get_card', the_co_the_lay[0], [], dict_value_stock_const), the_co_the_lay[0]]
+        for card in the_co_the_lay[1:]:
+            val_get_card = Q_function(board, player_01, 'get_card', card, [], dict_value_stock_const)
+            if val_get_card > value_get_card[0]:
+                value_get_card = [val_get_card, card]
+    
+    if value_get_card[0] >= sum(item[1] for item in pick_token):
+        return player_01.getCard(value_get_card[1], board)
+    else:
+        if len(pick_token) > 1:
+            dict_bo = create_dict_return(board, player_01, sum(player_01.stocks.values()) + 3 - 10)
+            return player_01.getThreeStocks(pick_token[0][0], pick_token[1][0], pick_token[2][0], board, dict_bo)
+        elif len(pick_token) > 0:
+            return player_01.getOneStock(pick_token[0][0], board, create_dict_return(board, player_01, sum(player_01.stocks.values()) + 2 - 10))
     return board
 
-def get_Three_Most_Token(board):
-    token_can_get = list_token_can_get(board)
-    dict_most_token = {}
-    dict_most_token['red'] = 0
-    dict_most_token['blue'] = 0
-    dict_most_token['green'] = 0
-    dict_most_token['white'] = 0
-    dict_most_token['black'] = 0
+#DONE
+def check_probability_get_card(card, player):
+    dict_stock_need = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    for type_stock in dict_stock_need.keys():
+        dict_stock_need[type_stock] = max(min(card.stocks[type_stock] - player.stocks[type_stock] - player.stocks_const[type_stock], card.stocks[type_stock]),0)
+    stock_need = sum(dict_stock_need.values())
+    probability_get_card = (sum(card.stocks.values()) - sum(dict_stock_need.values()))/sum(card.stocks.values())
+    return probability_get_card
 
-    for i in board.dict_Card_Stocks_Show.keys():
-        for card in board.dict_Card_Stocks_Show[i]:
-            dict_most_token['red'] += card.stocks['red']
-            dict_most_token['blue'] += card.stocks['blue']
-            dict_most_token['green'] += card.stocks['green']
-            dict_most_token['white'] += card.stocks['white']
-            dict_most_token['black'] += card.stocks['black']
+#DONE
+def create_target_card(board, player, file_card_point):
+    '''
+    hàm này trả ra danh sách thẻ mình hướng đến, có thể là 1 hoặc n thẻ, hoặc list thẻ theo thứ tự
+    '''
+    list_card_show = board.dict_Card_Stocks_Show['I'] + board.dict_Card_Stocks_Show['II'] + board.dict_Card_Stocks_Show['III']
+    list_card_point = create_list_card_point(board, player, file_card_point)
+    probability_card = np.array(list_card_point)/np.sum(np.array(list_card_point))    
+    #nếu muốn lấy nhiều thẻ hơn, sửa thành np.random.choice(list_card_show, number_card, probability_card)
+    target_card = np.random.choice(list_card_show,p=probability_card)
+    return target_card
 
-    list_token = list(dict_most_token.keys())
-    list_number_token = list(dict_most_token.values())
-    dict_token_choose = {}
-    count = 0
+#DOING
+def create_list_card_point(board, player, file_card_point):
+    '''
+    hàm này cập nhật lại giá trị của thẻ dựa trên kết quả tích lũy các ván chơi và thêm sự đánh giá tình hình hiện tại, cần viết thêm vì cái này chưa có gì
+    '''
+    list_card_show = board.dict_Card_Stocks_Show['I'] + board.dict_Card_Stocks_Show['II'] + board.dict_Card_Stocks_Show['III']
+    list_card_point = []
+    for card in list_card_show:
+        #đoạn này cần thêm yếu tố đánh giá nội tại của người chơi đối với các thẻ
+        card_point = float(file_card_point[file_card_point["ID"]==card.id]["Score"])
+        # card_point = 1
+        list_card_point.append(card_point)
+    return list_card_point
 
-    while count < len(list_token):
-        count += 1
-        # for token in list_token:
-        if list_token[list_number_token.index(max(list_number_token))] in token_can_get:
-            dict_token_choose[list_token[list_number_token.index(max(list_number_token))]] = max(list_number_token)
+#DOING
+def create_dict_return(board, player, number_bo):
+    '''
+    hàm này tạo ra dict token cần trả lại khi số token có quá 10
+    '''
+    dict_value_stock1 = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    dict_value_stock2 = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    list_card_show = board.dict_Card_Stocks_Show['I'] + board.dict_Card_Stocks_Show['II'] + board.dict_Card_Stocks_Show['III'] + player.card_upside_down
+    for card in list_card_show:
+        A = sum(card.stocks.values())/2
+        B = card.score
+        D = B**(1/A)
+        C = 0
+        for type_stock in dict_value_stock1.keys():
+            C += min(player.stocks_const[type_stock] + player.stocks[type_stock], card.stocks[type_stock])
+        for type_stock in dict_value_stock1.keys():
+            if D > 0:
+                if card.stocks[type_stock] > 0 and player.stocks[type_stock] > 0:
+                    dict_value_stock1[type_stock] = dict_value_stock1[type_stock] + D**(C-A) - D**(C - 1 - A) 
+                if card.stocks[type_stock] > 0 and player.stocks[type_stock] > 1:
+                    dict_value_stock2[type_stock] = dict_value_stock2[type_stock] + D**(C-A) - D**(C - 2 - A)
+    for type_stock in dict_value_stock1.keys():
+        if player.stocks[type_stock] == 0:
+            dict_value_stock1[type_stock] = 100
+    id = 0
+    pick_return = sorted(dict_value_stock1.items(), key = lambda x : x[1])
+    dict_bo = {}
+    while number_bo > 0:
+        dict_bo[pick_return[id][0]] = 1
+        id += 1
+        number_bo -= 1
+    return dict_bo
+
+#DOING
+def value_function1(board, player):
+    '''
+    hàm này tính giá trị của cái loại thẻ trong việc lấy thẻ noble
+    '''
+    dict_value_stock_const = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    for card in board.dict_Card_Stocks_Show['Noble']:
+        A = sum(card.stocks.values())/2
+        B = 3
+        D = B**(1/A)
+        C = 0
+        for type_stock in dict_value_stock_const.keys():
+            C += min(player.stocks_const[type_stock], card.stocks[type_stock])
+        for type_stock in dict_value_stock_const.keys():
+            if card.stocks[type_stock] > 0:
+                dict_value_stock_const[type_stock] = dict_value_stock_const[type_stock] + D**(C + 1 - A)
+    return dict_value_stock_const
+
+#DOING
+def value_function2(board, player):
+    '''
+    tính giá trị của các token khi được bốc 3 loại token hay 1 loại token, cần xem xét thêm trường hợp bàn không đủ 3 loại token thì thế nào
+    '''
+    dict_value_stock1 = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    dict_value_stock2 = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    dict_number_card_stock = {'red':1, 'blue':1, 'green':1, 'white':1, 'black':1}
+    list_card_show = board.dict_Card_Stocks_Show['I'] + board.dict_Card_Stocks_Show['II'] + board.dict_Card_Stocks_Show['III'] + player.card_upside_down
+    for card in list_card_show:
+        C1 = 0
+        for type_stock in dict_value_stock1.keys():
+            C1 += min(player.stocks[type_stock] + player.stocks_const[type_stock], card.stocks[type_stock])
+        A = sum(card.stocks.values())/2
+        B = card.score*C1/sum(card.stocks.values())
+        D = B**(1/A)
         
-        list_token.remove(list_token[list_number_token.index(max(list_number_token))])
-        list_number_token.remove(max(list_number_token))
-    return dict_token_choose
-
-def get_token_return(board):
-    token_can_return = player_01.stocks
-    dict_important_token = {}
-    dict_important_token['red'] = 0
-    dict_important_token['blue'] = 0
-    dict_important_token['green'] = 0
-    dict_important_token['white'] = 0
-    dict_important_token['black'] = 0
-    for card in player_01.card_upside_down:
-        dict_important_token['red'] += card.stocks['red'] - player_01.stocks_const['red'] - player_01.stocks['red']
-        dict_important_token['blue'] += card.stocks['blue'] - player_01.stocks_const['blue'] - player_01.stocks['blue']
-        dict_important_token['green'] += card.stocks['green'] - player_01.stocks_const['green'] - player_01.stocks['green']
-        dict_important_token['white'] += card.stocks['white'] - player_01.stocks_const['white'] - player_01.stocks['white']
-        dict_important_token['black'] += card.stocks['black'] - player_01.stocks_const['black'] - player_01.stocks['black']
-    list_token = list(dict_important_token.keys())
-    list_number_token = list(dict_important_token.values())
-    dict_token_not_important = {}
-    count = 0
-    while count < len(list_token):
-        if list_token[list_number_token.index(max(list_number_token))] in token_can_return:
-            dict_token_not_important[list_token[list_number_token.index(min(list_number_token))]] = min(list_number_token)
-        list_token.remove(list_token[list_number_token.index(min(list_number_token))])
-        list_number_token.remove(min(list_number_token))
-    return dict_token_not_important
-
-def get_important_token(board):
-    token_can_get = list_token_can_get(board)
-    dict_important_token = {}
-    dict_important_token['red'] = 0
-    dict_important_token['blue'] = 0
-    dict_important_token['green'] = 0
-    dict_important_token['white'] = 0
-    dict_important_token['black'] = 0
-    for card in player_01.card_upside_down:
-        dict_important_token['red'] += card.stocks['red'] - player_01.stocks_const['red'] - player_01.stocks['red']
-        dict_important_token['blue'] += card.stocks['blue'] - player_01.stocks_const['blue'] - player_01.stocks['blue']
-        dict_important_token['green'] += card.stocks['green'] - player_01.stocks_const['green'] - player_01.stocks['green']
-        dict_important_token['white'] += card.stocks['white'] - player_01.stocks_const['white'] - player_01.stocks['white']
-        dict_important_token['black'] += card.stocks['black'] - player_01.stocks_const['black'] - player_01.stocks['black']
-    list_token = list(dict_important_token.keys())
-    list_number_token = list(dict_important_token.values())
-    dict_token_important = {}
-    count = 0
-    while count < len(list_token):
-        if list_token[list_number_token.index(max(list_number_token))] in token_can_get:
-            dict_token_important[list_token[list_number_token.index(max(list_number_token))]] = max(list_number_token)
-        list_token.remove(list_token[list_number_token.index(max(list_number_token))])
-        list_number_token.remove(max(list_number_token))
-    return dict_token_important
-    
-def get_card_to_get_noble(board):
-    dict_important_card = {}
-    dict_important_card['red'] = 0
-    dict_important_card['blue'] = 0
-    dict_important_card['green'] = 0
-    dict_important_card['white'] = 0
-    dict_important_card['black'] = 0
-    dict_card_value = {}
-    thecothelay = listthecothemua(board)
-    target_noble = []
-    #tính xem với các thẻ noble thì cần mua thêm bao nhiêu thẻ các loại để lấy được thẻ noble
-    for card in board.dict_Card_Stocks_UpsiteDown['Noble']:
-        dict_card_to_get = {}
-        for type_card in card.stocks.keys():
-            dict_card_to_get[type_card] = max(card.stocks[type_card] - player_01.stocks_const[type_card], 0)
-        if sum(list(dict_card_to_get.values())) > 2:
-            continue
+        for type_stock in dict_value_stock1.keys():
+            if card.stocks[type_stock] > 0 and board.stocks[type_stock] > 0:
+                dict_number_card_stock[type_stock] = dict_number_card_stock[type_stock] + 1
+                if B > 0:
+                    dict_value_stock1[type_stock] = dict_value_stock1[type_stock] + D**(C1 + 1 - A)
+                    if board.stocks[type_stock] > 3:
+                        dict_value_stock2[type_stock] = dict_value_stock2[type_stock] + D**(C1+ 2 - A)
+    for type_stock in dict_value_stock1.keys():
+        dict_value_stock1[type_stock] /= dict_number_card_stock[type_stock]
+        dict_value_stock2[type_stock] /= dict_number_card_stock[type_stock]
+    pick3 = sorted(dict_value_stock1.items(),reverse= True, key = lambda x : x[1])[:3]
+    pick2 = sorted(dict_value_stock1.items(), reverse= True, key = lambda x : x[1])[0]
+    # print(pick3)
+    # print(pick2)
+    if pick2[1] > sum(item[1] for item in pick3):
+        return [pick2]
+    else:
+        if board.stocks[pick3[2][0]] > 0:
+            return pick3
         else:
-            dict_card_value[card] = dict_card_to_get
-            target_noble.append(sum(list(dict_card_to_get.values())))
-    #chỉ hướng đến các thẻ noble còn thiếu dưới 3 thẻ
-    list_card_noble = list(dict_card_value.keys())
-    noble_should_get = []
-    while len(target_noble) > 0:
-        index_card = target_noble.index(min(target_noble))
-        noble_should_get.append(list_card_noble[index_card])
-        target_noble.remove(min(target_noble))
-        list_card_noble.remove(list_card_noble[index_card])
-    if len(noble_should_get) > 0:
-        list_card_should_get = []
-        for the in thecothelay:
-            if the.type_stock in list(dict_card_value[noble_should_get[0]].keys()):
-                list_card_should_get.append(the)
+            return {}
 
-        return list_card_should_get
+#DOING
+def value_function3(board, player):
+    '''
+    hàm này tính giá trị của việc úp thẻ, cần tối ưu thêm
+    '''
+    list_card_show = board.dict_Card_Stocks_Show['I'] + board.dict_Card_Stocks_Show['II'] + board.dict_Card_Stocks_Show['III']
+    dict_value_stock1 = {'red':0, 'blue':0, 'green':0, 'white':0, 'black':0}
+    choice = [list_card_show[0], -100]
+    if len(player.card_upside_down) == 3:
+        return choice
+    gold = min(1,board.stocks['auto_color'])
+    for card in list_card_show:
+        C1 = 0
+        for type_stock in dict_value_stock1.keys():
+            C1 += min(player.stocks[type_stock] + player.stocks_const[type_stock], card.stocks[type_stock])
+        A = sum(card.stocks.values())/2
+        B = card.score*C1/sum(card.stocks.values())
+        if B > 0:
+            D = B**(1/A)
+            val = D**(C1+gold-A) - D**(C1-A) + C1*card.score/(2*A)
+            try:
+                if val > choice[1]:
+                    choice = [card, val]
+            except:
+                choice = [card, val]
 
-def get_card_value(board):
-    dict_card_value = {}
-    list_card_process = []
-    list_card_get = []
-    list_type_card = ['III', 'II', 'I']
-    for type_card in list_type_card:
-        for card in list(board.dict_Card_Stocks_Show[type_card]):
-            if card.score == 0:
-                list_card_process.append(card)
-                sum = 1
-                for token in list(card.stocks.keys()):
-                    if card.stocks[token] - player_01.stocks[token] - player_01.stocks_const[token]  > 0:
-                        sum += card.stocks[token] - player_01.stocks[token] - player_01.stocks_const[token]
-                    else:
-                        sum += 0
-                dict_card_value[card.id] = math.sqrt(sum+3)
-            else:
-                sum = 1
-                list_card_process.append(card)
-                for token in card.stocks.keys():
-                    if card.stocks[token] - player_01.stocks[token] - player_01.stocks_const[token] > 0:
-                        sum += card.stocks[token]- player_01.stocks[token] - player_01.stocks_const[token]
-                    else:
-                        sum += 0
-                dict_card_value[card] = sum/card.score
-    dict_card_process = {}
-    values = list(dict_card_value.values())
-    count = 0
-    list_card = list_card_process
-    while count < len(list_card_process):
-        count += 1
-        list_card_get.append(list_card_process[values.index(min(values))])
-        list_card.remove(list_card[values.index(min(values))])
-        values.remove(max(values))    
-    return list_card_get[0]
-
-def listthecothemua(board):
-    thecothelay = []
-    if len(player_01.card_upside_down) > 0:
-        for the in player_01.card_upside_down:
-            if player_01.checkGetCard(the) == True:
-                thecothelay.append(the)
-    for the in board.dict_Card_Stocks_Show["III"]:
-        if player_01.checkGetCard(the) == True:
-            thecothelay.append(the)
-    for the in board.dict_Card_Stocks_Show["II"]:
-        if player_01.checkGetCard(the) == True:
-            thecothelay.append(the)
-    for the in board.dict_Card_Stocks_Show["I"]:
-        if player_01.checkGetCard(the) == True:
-            thecothelay.append(the)
-    return thecothelay
-
-def listnguyenlieulay2(board):
-    nguyenlieucothelay2 = []
-    for nguyenlieu in board.stocks.keys():
-        if nguyenlieu != "auto_color" and player_01.checkOneStock(board,nguyenlieu) == True:
-            nguyenlieucothelay2.append(nguyenlieu)
-    return nguyenlieucothelay2
-
-def listnguyenlieucon(board):
-    nguyenlieucon = []
-    for nguyenlieu in board.stocks.keys():
-        if board.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color":
-            nguyenlieucon.append(nguyenlieu)
-    return nguyenlieucon
-
-def target_noble_card(board, player_01):
-    list_noble_card = board.dict_Card_Stocks_Show['Noble']
-    dict_card_value = {}
-    for card in list_noble_card:
-        dict_thieu = {}
-        for type_card in card.stocks.keys():
-            if player_01.stocks_const[type_card] > card.stocks.keys():
-                dict_thieu[type_card] = 0
-            else:
-                dict_thieu[type_card] = card.stocks.keys() - player_01.stocks_const[type_card]
-        dict_card_value[card] = sum(list(dict_thieu.values()))
-
-def virtual_player(board, player_01):
-    player_virtual = player_01
-    thecothelay = listthecothemua(board)    
-    nguyenlieucothelay2 = listnguyenlieulay2(board)
-    nguyenlieucon = listnguyenlieucon(board)     
-
-#hàm list_token_can_get ngon
-def list_token_can_get(board):
-    nguyenlieucon = []
-    for nguyenlieu in board.stocks.keys():
-        if board.stocks[nguyenlieu] > 0 and nguyenlieu != "auto_color":
-            nguyenlieucon.append(nguyenlieu)
-    return nguyenlieucon
+    return choice
+#DOING
+def Q_function(board, player, action, card, pick_token, dict_value_stock_const):
+    '''
+    hàm này tính giá trị đanh giá người chơi theo quy ước, cần sửa thêm để tối ưu
+    '''
+    Q_value = 0
+    if action == 'get_card':
+        Q_value = player.score +  sum(player.stocks_const.values()) + dict_value_stock_const[card.type_stock] + 2 + 2*card.score
+    elif action == 'get_token':
+        Q_value = player.score +  sum(player.stocks_const.values()) + sum(item[1] for item in pick_token)
+    return Q_value
+#DONE
+def list_card_can_buy(board, player):
+    '''
+    hàm này đưa ra danh sách các thẻ ăn được ngay
+    '''
+    the_co_thelay = []
+    list_card_show = board.dict_Card_Stocks_Show['I'] + board.dict_Card_Stocks_Show['II'] + board.dict_Card_Stocks_Show['III'] + player.card_upside_down
+    for the in list_card_show:
+        if player.checkGetCard(the) == True:
+            the_co_thelay.append(the)
+    return the_co_thelay
