@@ -263,7 +263,7 @@ def moiturn(board):
     if hanhdong(board) == None:
         return board
     a = hanhdong(board)
-    print("Action :",a)
+    # print("Action :",a)
     # print(player_03.stocks)
     if a[0] == "3":
         return player_03.getThreeStocks(listnlcon(board)[0], listnlcon(board)[1], listnlcon(board)[2], board, Luachonbothe(board, listnlcon(board)[0], listnlcon(board)[1], listnlcon(board)[2]))
