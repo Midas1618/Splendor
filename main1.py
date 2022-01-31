@@ -1,13 +1,14 @@
 from numpy.core.fromnumeric import take
 from base.player import Player
 from base import board
-from players import player1_Hieu as p1
-from players import player2_Trang as p2
-from players import player5_Phong as p3
-from players import player4_Hieu as p4
+from players import p1 as p1
+from players import p2 as p2
+from players import p3 as p3
+from players import p4 as p4
 import pandas as pd
 import random
-from CodeDuDoan import DuDoan
+import json
+import time
 
 def Victory(arr):
     global pVictory
@@ -40,10 +41,6 @@ def save_excel(b ,arr,turn):
   result["Turn"] = turn
   return result
 
-# df_message = pd.DataFrame({"Action":[]})
-# arr_message = []
-# def saveAction(t):
-#   arr_message.append(t)
 
 def checkNone(b,player,turn):
   # saveAction("Lượt: " + str(turn) +" "+player.message)
@@ -67,14 +64,8 @@ def RunGame(Luot):
           p3.player_03.setName = p3.player_03.name +" "+ str(i+1)
         elif arr_stt[i] == 4:
           p4.player_04.setName = p4.player_04.name +" "+ str(i+1)
-    result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04],turn))
     p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     while p.name == "0":
-        print("Vòng: ",turn,end=" ")
-        if turn > 40:
-          break
-        turn+=1
-        # print("Luot: ", turn)
         for i in arr_stt:
           if i == 1:
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
@@ -88,36 +79,46 @@ def RunGame(Luot):
           else:
             b = p4.action(b, [p1.player_01, p2.player_02, p3.player_03])
             checkNone(b,p4.player_04,turn)
-        if turn > 0 and turn <=30:
-          a = save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04],turn)
-          result_turn.append(a)
-        if turn == 20:
-          w = DuDoan.DuDoan(pd.json_normalize([a],max_level=0))
         p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
-        print(" Done!!!")
-    data = pd.json_normalize(result_turn,max_level=0)
-    data.to_csv(str(Luot) + ".csv",index=False)
-    print("So vong choi: ",turn)
-    # file_name = str(Luot) + ".csv"
-    # file_card_point = pd.read_csv("file_card_point.csv")
-    # if '1' in pVictory.name:
-    #     df_file = pd.read_csv(file_name)
-    #     open_card = df_file[f'{pVictory.name} Open'][len(df_file)-1].replace("'",'').replace('[','').replace(']','').split(', ')
-    #     list_card = list(file_card_point['ID'])
-    #     for card in open_card:
-    #         index = list_card.index(card)
-    #         file_card_point['Score'][index] = float(float(file_card_point['Score'][index]) + 1)
-    #     file_card_point.to_csv('file_card_point.csv', index= False)
-    # data["win"] = [p.name for i in range(6)]
-    return data,w
+    return p.name
 
-pVictory = Player("0", 0)
-p1.player_01 = p1.player.Player("1", 0)
-p2.player_02 = p2.player.Player("2", 0)
-p3.player_03 = p3.player.Player("3", 0)
-p4.player_04 = p4.player.Player("4", 0)
-t,winWill = RunGame(1234)
-print("Win That: ",pVictory.name, "WinDoan: ", winWill)
+for van in range(100):
+  try:
+    t = time.time()
+    pVictory = Player("0", 0)
+    p1.player_01 = p1.player.Player("1", 0)
+    p2.player_02 = p2.player.Player("2", 0)
+    p3.player_03 = p3.player.Player("3", 0)
+    p4.player_04 = p4.player.Player("4", 0)
+    p = RunGame(1234)
+    f = open("p"+p + "learning.json")
+    learning  = json.load(f)
+    score = 0
+    for luot in learning:
+        score += 1
+        for code in luot.keys():
+            data = pd.read_csv('Knwldg/'+ code[:2] + "/" + code[2:8] + "/"+ code[8:13] + "/"+ code[13:19] + "/"+ code[19:] +".csv")
+            data[luot[code]] += score
+            data.to_csv('Knwldg/'+ code[:2] + "/" + code[2:8] + "/"+ code[8:13] + "/"+ code[13:19] + "/"+ code[19:] +".csv",index = False)
+    with open("p4learning.json","w") as outfile:
+        json.dump([],outfile)
+    with open("p3learning.json","w") as outfile:
+        json.dump([],outfile)
+    with open("p2learning.json","w") as outfile:
+        json.dump([],outfile)
+    with open("p1learning.json","w") as outfile:
+        json.dump([],outfile)
+    print(p,"thắng trong",time.time()-t,"giây")
+  except:
+    with open("p4learning.json","w") as outfile:
+        json.dump([],outfile)
+    with open("p3learning.json","w") as outfile:
+        json.dump([],outfile)
+    with open("p2learning.json","w") as outfile:
+        json.dump([],outfile)
+    with open("p1learning.json","w") as outfile:
+        json.dump([],outfile)
+    print("skip lỗi")
 
 
 
