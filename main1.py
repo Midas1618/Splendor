@@ -9,6 +9,21 @@ import pandas as pd
 import random
 import json
 import time
+def start():
+    start = []
+    for a in range (1,41):
+        card = "I_"+str(a)
+        start.append(card)
+    for a in range(1,31):
+        card = "II_"+str(a)
+        start.append(card)
+    for a in range(1,21):
+        card = "III_" + str(a)
+        start.append(card)
+    a = pd.DataFrame()
+    a["basic"] = start
+    a["turn"] = 0
+    return a
 
 def Victory(arr):
     global pVictory
@@ -66,6 +81,9 @@ def RunGame(Luot):
           p4.player_04.setName = p4.player_04.name +" "+ str(i+1)
     p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     while p.name == "0":
+        turn += 1
+        if turn > 42:
+          return None
         for i in arr_stt:
           if i == 1:
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
@@ -82,8 +100,8 @@ def RunGame(Luot):
         p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     return p.name
 
-for van in range(100):
-  try:
+for van in range(1000):
+  # try:
     t = time.time()
     pVictory = Player("0", 0)
     p1.player_01 = p1.player.Player("1", 0)
@@ -91,34 +109,26 @@ for van in range(100):
     p3.player_03 = p3.player.Player("3", 0)
     p4.player_04 = p4.player.Player("4", 0)
     p = RunGame(1234)
-    f = open("p"+p + "learning.json")
-    learning  = json.load(f)
-    score = 0
-    for luot in learning:
-        score += 1
-        for code in luot.keys():
-            data = pd.read_csv('Knwldg/'+ code[:2] + "/" + code[2:8] + "/"+ code[8:13] + "/"+ code[13:19] + "/"+ code[19:] +".csv")
-            data[luot[code]] += score
-            data.to_csv('Knwldg/'+ code[:2] + "/" + code[2:8] + "/"+ code[8:13] + "/"+ code[13:19] + "/"+ code[19:] +".csv",index = False)
-    with open("p4learning.json","w") as outfile:
-        json.dump([],outfile)
-    with open("p3learning.json","w") as outfile:
-        json.dump([],outfile)
-    with open("p2learning.json","w") as outfile:
-        json.dump([],outfile)
-    with open("p1learning.json","w") as outfile:
-        json.dump([],outfile)
-    print(p,"thắng trong",time.time()-t,"giây")
-  except:
-    with open("p4learning.json","w") as outfile:
-        json.dump([],outfile)
-    with open("p3learning.json","w") as outfile:
-        json.dump([],outfile)
-    with open("p2learning.json","w") as outfile:
-        json.dump([],outfile)
-    with open("p1learning.json","w") as outfile:
-        json.dump([],outfile)
-    print("skip lỗi")
+    learning = pd.read_csv(p+ "l.csv")
+    learning = learning.drop(["basic","turn"],1)
+    learned = pd.read_csv("Knwldg.csv")
+    for code in learning:
+        if code in learned.head():
+            learned[code] += learning[code]
+        else:
+            learned[code] = learning[code]
+    learned.to_csv("Knwldg.csv",index=False)
+    start().to_csv("1l.csv",index = False)
+    start().to_csv("2l.csv",index = False)
+    start().to_csv("3l.csv",index = False)
+    start().to_csv("4l.csv",index = False)
+    print(p,"thắng ván",van,"trong",time.time()-t,"giây")
+  # except:
+  #   start().to_csv("1l.csv",index = False)
+  #   start().to_csv("2l.csv",index = False)
+  #   start().to_csv("3l.csv",index = False)
+  #   start().to_csv("4l.csv",index = False)
+  #   print("skip lỗi")
 
 
 
