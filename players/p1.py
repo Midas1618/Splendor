@@ -4,12 +4,9 @@ import pandas as pd
 import random
 import operator
 import json
-player_01 = player.Player("player_01", 0)
 import pathlib
-import numpy as np
-# pathlib.Path('/my/directory').mkdir(parents=True, exist_ok=True) 
-
-
+player_01 = player.Player("1", 0)
+ 
 #code creation
 def codes(board,player_01):
     codes = []
@@ -23,11 +20,40 @@ def codes(board,player_01):
             code += str(board.stocks[nl])
         a = str(player_01.score)
         if len(a) < 2:
-            a = "0" + a 
+            a = "a" + a 
         code += a 
         codes.append(code)
     return codes
  
+#basic df
+def basic():
+    basic = {}
+    for a in range (1,41):
+        card = "I_"+str(a)
+        basic[card] = 1
+    for a in range(1,31):
+        card = "II_"+str(a)
+        basic[card] = 1
+    for a in range(1,21):
+        card = "III_" + str(a)
+        basic[card] = 1
+    basic = pd.DataFrame([basic])
+    return basic
+ 
+#start df
+def start():
+    start = {}
+    for a in range (1,41):
+        card = "I_"+str(a)
+        start[card] = 0
+    for a in range(1,31):
+        card = "II_"+str(a)
+        start[card] = 0
+    for a in range(1,21):
+        card = "III_" + str(a)
+        start[card] = 0
+    start = pd.DataFrame([start])
+    return start
  
 #pools of cards
 def pools(board,player_01):
@@ -42,23 +68,31 @@ def pools(board,player_01):
         cards.append(card.id)
     return cards
  
+#create mind
+def mind(board,player_01):
+    ds_codes = codes(board,player_01)
+    mind = start()
+    for code in ds_codes:
+        try:
+            a = pd.read_csv('Knwldg/'+ code[:2] + "/" + code[-2:] + "/" + code[2:8] + "/" + code[8:13] + "/" + code[13:19] + ".csv")
+        except:
+            pathlib.Path('Knwldg/'+ code[:2] + "/" + code[-2:] + "/" + code[2:8] + "/" + code[8:13]).mkdir(parents=True, exist_ok=True) 
+            a = basic()
+            a.to_csv('Knwldg/'+ code[:2] + "/" + code[-2:] + "/" + code[2:8] + "/" + code[8:13] + "/" + code[13:19] + ".csv")        
+        for card in mind:
+            mind[card] += a[card]
+    return mind
  
 #decision
-def decision(board,data,pools,loai):
-    current_mind = data
+def decision(board,mind,pools):
+    rates = []
+    current_mind = mind
     current_pools = pools
-    use = current_mind[current_mind['basic'].isin(pools)]
-    list_de_chon = list(use["basic"])
-    list_rate = list(use["mind"])
-    for the in loai:
-        vi_tri = list_de_chon.index(the)
-        list_rate.pop(vi_tri)
-        list_de_chon.pop(vi_tri)
-    if len(list_de_chon) == 0:
-        return None
-    chosen = random.choices(list_de_chon,list_rate)[0]
-    #  chosen
-    # print(pools)
+    for card in current_pools:
+        rates.append(int(current_mind[card]))
+    chosen = random.choices(current_pools,weights=rates)[0]
+    # while chosen in loai:
+    #     chosen = random.choices(current_pools,weights=rates)[0]
     for card in board.dict_Card_Stocks_Show["I"]:
         if card.id == chosen:
             return card
@@ -72,7 +106,7 @@ def decision(board,data,pools,loai):
         if card.id == chosen:
             return card
  
-def act(target,board,player_01,data,pools_c):
+def act(target,board,player_01,mind_c,pools_c):
     missing = {}
     for nl in target.stocks.keys():
         thieu = target.stocks[nl] - player_01.stocks[nl] - player_01.stocks_const[nl]
@@ -97,7 +131,7 @@ def act(target,board,player_01,data,pools_c):
                     else:
                         state = False
                         while state == False:
-                            target_2 = decision(board,data,pools_c,[])
+                            target_2 = decision(board,mind_c,pools_c)
                             state = target_2 not in player_01.card_upside_down
                         return "down",target_2
                 else:
@@ -128,42 +162,37 @@ def act(target,board,player_01,data,pools_c):
     return None,None
  
 def action(board, arr_player):
-    # print(1)
+    # print(player_01.score)
     ds_codes = codes(board,player_01)
-    mind = pd.DataFrame(np.zeros(90))
-    data = pd.read_csv('Knwldg.csv')
-    for code in ds_codes:
-        try:
-            a = data[code]
-        except:
-            a = pd.DataFrame(np.ones(90))
-            data[code] = a
-        mind += a
-    data["mind"] = mind
+    # print(codes(board,player_01))
+    # print(basic())
+    # print(pools(board,player_01))
+    # print(mind(board,player_01))
+    # print(decision(board,player_01))
+    mind_c = mind(board,player_01)
     pools_c = pools(board,player_01)
+    # target = decision(board,mind_c,pools_c)
+    # loai = []
     ac = None
-    # time = 0
-    loai =[]
-    while ac == None and len(loai) < 12:
-        target = decision(board,data,pools_c,loai)
-        if target == None:
-            return board
-        loai.append(target.id)
-        ac,b = act(target,board,player_01,data,pools_c)
-        # time += 1
-    # print(target.id)
-    learning = pd.read_csv("1l.csv")
-    turn = list(learning["turn"])[0]
-    turn += 1
-    vi_tri = list(learning["basic"]).index(target.id)
-    saving = np.zeros(90)
-    saving[vi_tri] = turn
-    # print(saving)
+    time = 0
+    while ac == None and time < 16:
+        target = decision(board,mind_c,pools_c)
+        ac,b = act(target,board,player_01,mind_c,pools_c)
+        time += 1
+        # print("player 1 nghĩ lần ",time)
+    try:
+        f = open("p1learning.json")
+        dahoc = json.load(f)
+    except:
+        dahoc = []
+    saving = {}
     for code in ds_codes:
-        # print(code)
-        learning[code] = saving
-    learning["turn"] = turn
-    learning.to_csv("1l.csv",index = False)
+        saving[code] = target.id
+    # print(saving)
+    dahoc.append(saving)
+    # print(dahoc)
+    with open("p1learning.json","w") as outfile:
+        json.dump(dahoc,outfile)
     if ac == "up":
         return player_01.getCard(b,board)
     if ac == "down":
@@ -176,9 +205,5 @@ def action(board, arr_player):
         return player_01.getOneTwoStock(b[0],"Null",board,{})
     return board
  
- 
- 
- 
- 
- 
+
 

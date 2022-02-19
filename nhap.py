@@ -1,23 +1,25 @@
-# import pathlib
-# pathlib.Path('Knwldg').mkdir(parents=True, exist_ok=True) 
+import os
+import pathlib
 import pandas as pd
-def start():
-    start = []
-    for a in range (1,41):
-        card = "I_"+str(a)
-        start.append(card)
-    for a in range(1,31):
-        card = "II_"+str(a)
-        start.append(card)
-    for a in range(1,21):
-        card = "III_" + str(a)
-        start.append(card)
-    a = pd.DataFrame()
-    a["basic"] = start
-    a["turn"] = 0
-    return a
-start().to_csv("1l.csv",index = False)
-start().to_csv("2l.csv",index = False)
-start().to_csv("3l.csv",index = False)
-start().to_csv("4l.csv",index = False)
-start().to_csv("Knwldg.csv",index = False)
+import json
+# # directory = "Knwldg"
+# # parent_dir = "C:/Users/Admin/Desktop/Splendor-master/"
+# # path = os.path.join(parent_dir, directory)
+# # os.mkdir(path)
+# code = "100011200000154144300"
+
+# # print(code[:2],code[-2:],code[2:8],code[8:13],code[13:19])
+# try:
+#     a = pd.read_csv('Knwldg/'+ code[:2] + "/" + code[-2] + "/" + code[2:8] + "/" + code[8:13] + "/" + code[13:19] + ".csv")
+# except:
+#     pathlib.Path('Knwldg/'+ code[:2] + "/" + code[-2] + "/" + code[2:8] + "/" + code[8:13]).mkdir(parents=True, exist_ok=True) 
+#     a = pd.DataFrame({})
+#     a.to_csv('Knwldg/'+ code[:2] + "/" + code[-2] + "/" + code[2:8] + "/" + code[8:13] + "/" + code[13:19] + ".csv")
+with open("p4learning.json", "w") as outfile:
+    json.dump([], outfile)
+with open("p3learning.json", "w") as outfile:
+    json.dump([], outfile)
+with open("p2learning.json", "w") as outfile:
+    json.dump([], outfile)
+with open("p1learning.json", "w") as outfile:
+    json.dump([], outfile)

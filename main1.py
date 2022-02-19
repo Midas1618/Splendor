@@ -7,23 +7,11 @@ from players import p3 as p3
 from players import p4 as p4
 import pandas as pd
 import random
+from CodeDuDoan import DuDoan
 import json
 import time
-def start():
-    start = []
-    for a in range (1,41):
-        card = "I_"+str(a)
-        start.append(card)
-    for a in range(1,31):
-        card = "II_"+str(a)
-        start.append(card)
-    for a in range(1,21):
-        card = "III_" + str(a)
-        start.append(card)
-    a = pd.DataFrame()
-    a["basic"] = start
-    a["turn"] = 0
-    return a
+import os
+import pathlib
 
 def Victory(arr):
     global pVictory
@@ -56,9 +44,7 @@ def save_excel(b ,arr,turn):
   result["Turn"] = turn
   return result
 
-
 def checkNone(b,player,turn):
-  # saveAction("Lượt: " + str(turn) +" "+player.message)
   if b == None:
     print("Lỗi của :",player.name)
 
@@ -79,11 +65,13 @@ def RunGame(Luot):
           p3.player_03.setName = p3.player_03.name +" "+ str(i+1)
         elif arr_stt[i] == 4:
           p4.player_04.setName = p4.player_04.name +" "+ str(i+1)
+    result_turn.append(save_excel(b ,[p1.player_01, p2.player_02, p3.player_03, p4.player_04],turn))
     p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     while p.name == "0":
-        turn += 1
-        if turn > 42:
-          return None
+        # print("Vòng: ",turn,end=" ")
+        # if turn > 40:
+        #   break
+        turn+=1
         for i in arr_stt:
           if i == 1:
             b = p1.action(b, [p2.player_02, p3.player_03, p4.player_04])
@@ -100,37 +88,47 @@ def RunGame(Luot):
         p = Victory([p1.player_01, p2.player_02, p3.player_03, p4.player_04])
     return p.name
 
-for van in range(1000):
-  # try:
+pVictory = Player("0", 0)
+p1.player_01 = p1.player.Player("1", 0)
+p2.player_02 = p2.player.Player("2", 0)
+p3.player_03 = p3.player.Player("3", 0)
+p4.player_04 = p4.player.Player("4", 0)
+
+for van in range(1):
+  try:
     t = time.time()
     pVictory = Player("0", 0)
     p1.player_01 = p1.player.Player("1", 0)
     p2.player_02 = p2.player.Player("2", 0)
     p3.player_03 = p3.player.Player("3", 0)
     p4.player_04 = p4.player.Player("4", 0)
-    p = RunGame(1234)
-    learning = pd.read_csv(p+ "l.csv")
-    learning = learning.drop(["basic","turn"],1)
-    learned = pd.read_csv("Knwldg.csv")
-    for code in learning:
-        if code in learned.head():
-            learned[code] += learning[code]
-        else:
-            learned[code] = learning[code]
-    learned.to_csv("Knwldg.csv",index=False)
-    start().to_csv("1l.csv",index = False)
-    start().to_csv("2l.csv",index = False)
-    start().to_csv("3l.csv",index = False)
-    start().to_csv("4l.csv",index = False)
-    print(p,"thắng ván",van,"trong",time.time()-t,"giây")
-  # except:
-  #   start().to_csv("1l.csv",index = False)
-  #   start().to_csv("2l.csv",index = False)
-  #   start().to_csv("3l.csv",index = False)
-  #   start().to_csv("4l.csv",index = False)
-  #   print("skip lỗi")
-#hello
-
-
-
-
+    p = RunGame(1)
+    print(p,"thắng ván",van)
+    f = open("p"+ p + "learning.json")
+    learning  = json.load(f)
+    score = 0
+    for luot in learning:
+        score += 1
+        for code in luot.keys():
+            data = pd.read_csv('Knwldg/'+ code[:2] + "/" + code[-2:] + "/" + code[2:8] + "/" + code[8:13] + "/" + code[13:19] + ".csv")
+            data[luot[code]] += score
+            data.to_csv('Knwldg/'+ code[:2] + "/" + code[-2:] + "/" + code[2:8] + "/" + code[8:13] + "/" + code[13:19] + ".csv",index = False)
+    with open("p4learning.json", "w") as outfile:
+        json.dump([], outfile)
+    with open("p3learning.json", "w") as outfile:
+        json.dump([], outfile)
+    with open("p2learning.json", "w") as outfile:
+        json.dump([], outfile)
+    with open("p1learning.json", "w") as outfile:
+        json.dump([], outfile)
+    print("thời gian chạy là",time.time() - t)
+  except:
+    with open("p4learning.json", "w") as outfile:
+        json.dump([], outfile)
+    with open("p3learning.json", "w") as outfile:
+        json.dump([], outfile)
+    with open("p2learning.json", "w") as outfile:
+        json.dump([], outfile)
+    with open("p1learning.json", "w") as outfile:
+        json.dump([], outfile)
+    print("skip lỗi")
